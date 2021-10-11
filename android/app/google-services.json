@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "777357024319",
+    "project_id": "good-seed-f3e7f",
+    "storage_bucket": "good-seed-f3e7f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:777357024319:android:c096ffd5b76d22f55dac8a",
+        "android_client_info": {
+          "package_name": "com.goodseed"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "777357024319-3o65tb6efsqerrcuari4s41apbqstion.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB5XoK8GZ3ON17yS8VM29FEj6p1qhMJf3s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "777357024319-3o65tb6efsqerrcuari4s41apbqstion.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
