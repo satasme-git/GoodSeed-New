@@ -209,8 +209,8 @@ const styles = StyleSheet.create({
     width:windowWidth
   },
   avatar: {
-    height:windowWidth/4,
-    width:windowWidth/4,
+    height:windowWidth/4.5,
+    width:windowWidth/4.5,
     marginHorizontal:10,
     marginVertical:10,
     borderRadius:100
@@ -245,29 +245,55 @@ const styles = StyleSheet.create({
   },
   
   heart: {
-    height:(windowWidth/2.2)-20,
-    width:windowWidth/2.2,
-    top:30,
+    height:(windowWidth/3)-7,
+    width:windowWidth/3,
     // alignSelf:'flex-end',
     position:'absolute',
+    top:0,
     // marginLeft:-windowWidth/2,
     zIndex:2,
     // backgroundColor:'red',
     // marginTop:-10
-    left:5
   },
-  heartBg: {
-    height:(windowWidth/2.2)-20,
-    width:windowWidth/2.2,
-    top:30,
+  heart2: {
+    height:(windowWidth/3)-7,
+    width:windowWidth/3,
     // alignSelf:'flex-end',
     position:'absolute',
+    top:0,
+    // marginLeft:-windowWidth/2,
+    zIndex:2,
+    // backgroundColor:'red',
+    // marginTop:-10
+  },
+  heartBg: {
+    marginTop:50,
+    // height:(windowWidth/2.2)-20,
+    width:windowWidth-20,
+    marginLeft:-5,
+    alignItems:'center',
+    // padding:15,
+    backgroundColor:'#6bb333',
+    // top:30,
+    // alignSelf:'flex-end',
+    // position:'absolute',
     // marginLeft:-windowWidth/2,
     zIndex:1,
-    left:5
+    paddingVertical:10,
+    borderRadius:15
+    // left:5
+  },
+  heartempty: {
+    height:windowWidth/3,
+    width:windowWidth/3,
+    backgroundColor:'#366011',
+    alignItems:'center',
+    justifyContent:'flex-end'
+    // position:'absolute',
+    // top:0
   },
   stepCounterView: {
-    height:(windowWidth/2.2)-20,
+    height:(windowWidth/2.2),
     width:windowWidth/2.2,
     top:50,
     // alignSelf:'flex-end',
@@ -313,10 +339,11 @@ const styles = StyleSheet.create({
   bg: {
     height:windowHeight,
     width:windowWidth,
-    alignSelf:'center',
-    bottom:0,
+    alignSelf:'baseline',
+    top:0,
     position:'absolute',
-    zIndex:1
+    zIndex:1,
+    resizeMode:'cover'
     // marginLeft:-windowWidth/2
   },
   road: {
@@ -492,7 +519,7 @@ const styles = StyleSheet.create({
     borderRadius:10,
     borderTopLeftRadius:50,
     borderTopRightRadius:50,
-    height:windowHeight/3,
+    height:windowHeight/3.2,
     backgroundColor: 'white',
   },
   imageBg: {
@@ -600,6 +627,18 @@ const buttons = StyleSheet.create({
     width:(windowWidth-40)/2,
     margin:-10,
     alignItems:'center'
+  },
+  homebuttons:{
+    paddingHorizontal:15,
+    paddingVertical:5,
+    backgroundColor:'rgba(255,255,255,0.4)',
+    borderRadius:10,
+  },
+  profileBitton:{
+    height:30,
+    width:30,
+    borderRadius:25,
+    alignSelf:'flex-end',
   }
 });
 

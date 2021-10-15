@@ -1,3 +1,8 @@
+import {StyleSheet, Dimensions, Platform} from 'react-native';
+
+const windowWidth = Dimensions.get('window').width;
+const windowHeight = Dimensions.get('window').height;
+
 export const Habbits = [
     {
       id:'1',
@@ -5,7 +10,8 @@ export const Habbits = [
     color:'#3b1568',
     fontColor:'white',
     screen:'Step',
-    height:80,
+    height:windowWidth/4,
+    width:windowWidth/4,
     png:require('../assets/walkman.png')
     },
     {
@@ -14,7 +20,8 @@ export const Habbits = [
     color:'#f5ac4e',
     fontColor:'black',
     screen:'Eat',
-    height:80,
+    height:windowWidth/4,
+    width:windowWidth/4,
     png:require('../assets/food.png')
     },
     {
@@ -23,7 +30,8 @@ export const Habbits = [
     color:'#dd4224',
     fontColor:'white',
     screen:'Illumination',
-    height:80,
+    height:windowWidth/4,
+    width:windowWidth/4,
     png:require('../assets/glass.png')
     },
     {
@@ -32,7 +40,8 @@ export const Habbits = [
     color:'#bb280f',
     fontColor:'white',
     screen:'Sleeping',
-    height:80,
+    height:windowWidth/4,
+    width:windowWidth/4,
     png:require('../assets/sleep.png')
     },
     {
@@ -41,7 +50,8 @@ export const Habbits = [
     color:'#940700',
     fontColor:'white',
     screen:'Meditation',
-    height:80,
+    height:windowWidth/4,
+    width:windowWidth/4,
     png:require('../assets/medi.png')
     },
     

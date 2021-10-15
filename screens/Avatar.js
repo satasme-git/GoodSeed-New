@@ -15,10 +15,23 @@ import { AvatarImages } from '../styles/AvatarImages';
 
 import { Vector } from 'react-native-particles/';
 import { BurstAndMoveEmitter } from 'react-native-particles';
+import { ScrollView } from 'react-native-gesture-handler';
+import { HealthProvider, HealthContext } from '../context/Context';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 export default function Avatar() {
+  const storeUserData = async (value) => {
+    try {
+        const jsonValue = JSON.stringify(value)
+        await AsyncStorage.setItem('user', jsonValue)
+    } catch (e) {
+        // saving error
+    }
+    }
+  const health = useContext(HealthContext);
+
     useEffect(() => {
         // if (Platform.OS === 'android') {
         //     StatusBar.setBackgroundColor('rgba(0,0,0,0)');
@@ -33,6 +46,34 @@ export default function Avatar() {
     const route = useRoute();
     const {item} = route.params;
     const {img} = route.params;
+
+    
+    const BaseUrl = require('../styles/BaseUrl');
+
+      const avatarUpdate = (img) => {
+        // var image = img.toString()
+        const formData = new FormData()
+    
+        formData.append('id', health.user.id);
+        formData.append('avatar', img);
+        console.log(img)
+    
+        fetch(BaseUrl.BASE_URL+'/api/avatar/', {
+          method: 'POST',
+          body: formData,
+        })
+          .then(response => response.json())
+          .then(data => {
+            health.setUser(data)
+            storeUserData(data)
+            // navigation.navigate('')
+            // console.log('Success:', data);
+          })
+          .catch(error => {
+            console.log('Error:', error);
+          });
+      };
+
     // const [savedImagePath, setSavedImagePath] = useState('');
     // const takeScreenShot = () => {
     //   // To capture Screenshot
@@ -52,15 +93,18 @@ export default function Avatar() {
     //   );
     // };
 
-    const [image, setImg] = useState();   
+    const [image, setImg] = useState(null);
+    const [imageID, setImgID] = useState(null);   
 
     const renderItem = ({ item }) => (
       <TouchableOpacity onPress={()=>{
-        navigation.navigate('Home');
-        // setImg(item.png);toggleModal()
+        // navigation.navigate('Home');
+        setImg(item.png)
+        // ;toggleModal()
         }}>
-        <Animatable.Image style={styles.avatar} source={item.png}
-         delay={item.delay} animation={'bounceIn'}
+        <Image style={[styles.avatar,{borderWidth:image==item.png?5:0,borderColor:'#6bb333'}]} source={item.png}
+        //  delay={item.delay} 
+        //  animation={'bounceIn'}
          />
       </TouchableOpacity>
     );
@@ -73,128 +117,8 @@ export default function Avatar() {
     const inputEl = useRef(null);
     return (
       <View style={styles.container}>
-            <StatusBar barStyle={'dark-content'} />
-            <Image style={styles.absolute} blurRadius={20} source={img}/>
-
-            <Modal 
-            isVisible={isModalVisible}
-            onBackButtonPress={toggleModal}
-            animationIn={'zoomIn'}
-            animationOut={'zoomOut'}
-            >
-              <View style={{flex: 1,justifyContent:'center'}}>
-              <Animatable.Image style={styles.avatar2} source={image}
-                 animation={'bounceIn'}
-                />
-
-                <Emitter
-                  autoStart={true}
-                  numberOfParticles={20}
-                  interval={100}
-                  emissionRate={5}
-                  particleLife={3000}
-                  direction={-90}
-                  spread={360}
-                  speed={8}
-                  segments={20}
-                  width={windowWidth/2}
-                  height={windowHeight/2}
-                  fromPosition={{ x: windowWidth / 2, y: windowHeight / 2 }}
-                  infiniteLoop ={true}
-                  gravity={0.2}
-                >
-                  <View style={{backgroundColor:'white',height:7,width:7,borderRadius:10}} />
-                
-              </Emitter>
-
-              <Emitter
-                  autoStart={true}
-                  numberOfParticles={10}
-                  interval={160}
-                  emissionRate={5}
-                  particleLife={3000}
-                  direction={-90}
-                  spread={360}
-                  speed={9}
-                  segments={10}
-                  width={windowWidth/2}
-                  height={windowHeight/2}
-                  fromPosition={{ x: windowWidth / 2, y: windowHeight / 2 }}
-                  infiniteLoop ={true}
-                  gravity={0.2}
-                >
-                  <View style={{backgroundColor:'white',height:7,width:7,borderRadius:10}} />
-                
-              </Emitter>
-
-              <Emitter
-                  autoStart={true}
-                  numberOfParticles={20}
-                  interval={200}
-                  emissionRate={5}
-                  particleLife={3000}
-                  direction={-90}
-                  spread={360}
-                  speed={8}
-                  segments={20}
-                  width={windowWidth/2}
-                  height={windowHeight/2}
-                  fromPosition={{ x: (windowWidth / 2)-40, y: (windowHeight / 2 )-40}}
-                  infiniteLoop ={true}
-                  gravity={0.2}
-                >
-                  <View style={{backgroundColor:'red',height:7,width:7,borderRadius:10}} />
-                
-              </Emitter>
-
-              <Emitter
-                  autoStart={true}
-                  numberOfParticles={20}
-                  interval={120}
-                  emissionRate={5}
-                  particleLife={3000}
-                  direction={-90}
-                  spread={360}
-                  speed={5}
-                  segments={20}
-                  width={windowWidth/2}
-                  height={windowHeight/2}
-                  fromPosition={{ x: (windowWidth / 2)-40, y: (windowHeight / 2 )-40}}
-                  infiniteLoop ={true}
-                  gravity={0.2}
-                >
-                  <View style={{backgroundColor:'yellow',height:7,width:7,borderRadius:10}} />
-                
-              </Emitter>
-              <Emitter
-                  autoStart={true}
-                  numberOfParticles={20}
-                  interval={150}
-                  emissionRate={5}
-                  particleLife={3000}
-                  direction={-90}
-                  spread={360}
-                  speed={5}
-                  segments={20}
-                  width={windowWidth/2}
-                  height={windowHeight/2}
-                  fromPosition={{ x: (windowWidth / 2)-40, y: (windowHeight / 2 )-40}}
-                  infiniteLoop ={true}
-                  gravity={0.2}
-                >
-                  <View style={{backgroundColor:'blue',height:7,width:7,borderRadius:10}} />
-                
-              </Emitter>
-
-              {/* <ImageBackground source={require('../assets/start.png')} imageStyle={{resizeMode:'contain'}} style={{width:200,height:80,marginTop:10,paddingTop:-10,alignSelf:'center',alignItems:'center',justifyContent:'center'}} >
-                <Text>Start</Text>
-              </ImageBackground> */}
-
-              <TouchableHighlight onPress={()=>navigation.navigate('HomeDrawer')} style={{backgroundColor:'#4b937c',paddingHorizontal:20,alignSelf:'center',marginTop:20,borderRadius:50,paddingVertical:5}}>
-                <Text style={{color:'white',fontSize:20}}>Start</Text>
-              </TouchableHighlight>
-              </View>
-            </Modal>
+            <StatusBar barStyle={'light-content'} />
+            {/* <Image style={styles.absolute} blurRadius={20} source={img}/> */}
 
             <View  style={[styles.absolute,{backgroundColor:'rgba(255,255,255,0.6)'}]} />
 
@@ -202,18 +126,67 @@ export default function Avatar() {
                {item}
             </Animatable.Text>
             <Animatable.Text style={{color:'black',fontSize:25,paddingTop:0,textAlign:'center',fontWeight:'bold'}} duration={1000} delay={300} animation={'bounceInLeft'}>
-               Create Your Avatar
+               Select Your Avatar
             </Animatable.Text>
                
-               <View style={{alignSelf:'center',marginTop:20}}>
-               <FlatList
+               <View style={{alignSelf:'center',marginTop:20,height: '70%'}}>
+               <ScrollView horizontal style={{flexGrow: 1 }}>
+                 {/* <View style={{height:10,flexDirection:'row'}}> */}
+               {
+                 AvatarImages.map((item)=>
+                 <TouchableOpacity key={item.id} onPress={()=>{
+                  // navigation.navigate('Home');
+                  setImg(item.png);setImgID(item.id)
+                  // ;toggleModal()
+                  }}>
+                  <Image style={[styles.avatar,{borderWidth:image==item.png?5:0,borderColor:'#6bb333'}]} source={item.png}
+                  //  delay={item.delay} 
+                  //  animation={'bounceIn'}
+                   />
+                </TouchableOpacity>
+                 )
+               }
+               {/* </View> */}
+               </ScrollView >
+               <View style={{padding:15,paddingHorizontal:50}}>
+                 <Text style={{textAlign:'center',fontSize:16}}>Select an Avatar for continue to the app. Your selected avatar will save as your profile picture.</Text>
+               </View>
+               
+               <View style={{padding:20,alignItems:'center'}}>
+                 {image==null?
+                 <View style={{width:120,height:120,borderRadius:60,backgroundColor:'rgba(107, 179, 51,0.5)'}}></View> 
+                 :
+                 <Image style={{width:120,height:120,borderRadius:60}} source={image}></Image> 
+                }
+
+                {
+                  image==null?
+                  <TouchableHighlight underlayColor={'rgba(0, 0, 0,0.7)'} style={{backgroundColor:"rgba(0, 0, 0,0.2)",paddingHorizontal:15,paddingVertical:5,marginTop:25,borderRadius:25}}>
+                  <View>
+                    <Text style={{fontSize:17}}>Continue</Text>
+                  </View>
+                </TouchableHighlight>
+                :
+                <TouchableHighlight onPress={()=>{avatarUpdate(imageID)}} underlayColor={'rgba(107, 179, 51,0.7)'} style={{backgroundColor:"rgba(107, 179, 51,0.2)",paddingHorizontal:15,paddingVertical:5,marginTop:25,borderRadius:25}}>
+                  <View>
+                    <Text style={{fontSize:17}}>Continue</Text>
+                  </View>
+                </TouchableHighlight>
+                }
+                
+               </View>
+               
+               
+               {/* <FlatList
                 data={AvatarImages}
                 renderItem={renderItem}
-                horizontal={false}
-                initialNumToRender={12}
-                numColumns={3}
+                horizontal={true}
+                // initialNumToRender={12}
+                // numColumns={3}
                 keyExtractor={item => item.id}
-              />
+              /> */}
+
+              {/* <Text>Select Yo</Text> */}
               </View>
 
                {/* <TouchableOpacity

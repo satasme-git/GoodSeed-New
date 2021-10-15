@@ -16,6 +16,8 @@ import { HealthContext } from '../context/Context';
 
 import RNFetchBlob from 'rn-fetch-blob'
 
+import LinearGradient from 'react-native-linear-gradient';
+
 // import * as ImagePicker from "react-native-image-picker"
 // import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 
@@ -49,7 +51,8 @@ export default function MainProfile() {
       .then((response) => response.json())
       .then((json) => {
          setData(json)
-         console.log(json)
+         health.setProPic(BaseUrl.BASE_URL+'/assets/profile_pics/'+json[1].image)
+         // console.log(BaseUrl.BASE_URL+'/assets/profile_pics/'+json[1].image)
       })
       .catch((error) => console.error(error))
       .finally(() => setLoading(false));
@@ -126,7 +129,9 @@ export default function MainProfile() {
       ]).then((resp) => {
          // getImages()
          setData(resp.json())
-          console.log(resp.json());
+          console.log(BaseUrl.BASE_URL+'/assets/profile_pics/'+resp.json()[1].image);
+          
+         health.setProPic(BaseUrl.BASE_URL+'/assets/profile_pics/'+resp.json()[1].image)
 
       }).catch((err) => {
           console.log(err);
@@ -165,21 +170,44 @@ export default function MainProfile() {
                >
                   <View>
                      <TouchableHighlight underlayColor={'#DDDDDD'} onPress={()=>refRBSheet.current.open()} style={styles.profilPicBack}>
-                        <Image 
+                     <View>
+                     {data.map((item,index)=>
+               index==1?  
+                        
+                     isLoading==true?
+                     <View style={[styles.profilePicBig2,{justifyContent:'center'}]}>
+                     <ActivityIndicator size="large" color="#4b937c" />
+                     </View>
+                     :
+                     item.image==null?
+                     <Image key={item.id}
                            source={require('../assets/propic.jpg')} 
                            style={styles.profilePic}
                         />
+               :
+                     <Image key={item.id}
+                        // source={{uri:filePath}}
+                        source={{uri:BaseUrl.BASE_URL+'/assets/profile_pics/'+item.image}} 
+                        style={styles.profilePic}
+                     />
+                  :
+                  null)}
+                  </View>
                      </TouchableHighlight>
 
                      <View style={styles.profilHeader}>
                         <Text style={{fontSize:17}}>{health.user.email}</Text>
+                        <Text style={{fontSize:15,color:'gray'}}>{health.user.email}</Text>
                      </View>
                   </View>
                </ImageBackground>
             </View>
 
-            <View style={{backgroundColor: 'white',marginTop:10,padding:10,borderTopRightRadius:10,borderTopLeftRadius:10}}>
-            <View style={{marginVertical:0,padding:0,flexDirection:'row',alignItems:'center',justifyContent:'space-between',backgroundColor: '#6bb333',borderRadius:20}}>
+            <View style={{backgroundColor: 'white',marginTop:0,padding:10,borderTopRightRadius:10,borderTopLeftRadius:10}}>
+            <LinearGradient 
+              colors={['#6bb333', '#366011']} 
+              style={{borderRadius:20}}>
+            <View style={{marginVertical:0,padding:0,flexDirection:'row',alignItems:'center',justifyContent:'space-between',borderRadius:20}}>
                   <Text style={{fontSize:19,textAlign:'center',color:'white',marginLeft:25}}>Your Risk {'\n'}Level</Text>
                   <View style={{alignItems:'center',backgroundColor: 'rgba(255,255,255,0.4)',margin:10,padding:10,borderRadius:20,alignSelf:'flex-end'}}>
                   <View style={{backgroundColor: 'white',padding:5,paddingHorizontal:30,borderRadius:15}}>
@@ -202,14 +230,16 @@ export default function MainProfile() {
                   </View>
 
                </View>
-
+            </LinearGradient>
                {/* <View style={styles.divider}/> */}
                {RiskData.map((item)=>
-                  <View key={item.id} style={{backgroundColor:item.color,marginTop:5,padding:7,borderRadius:10,flexDirection:'row',justifyContent:'space-between'}}>
-                     <Text style={{fontSize:16,color:item.fontColor}}>
+                  <View key={item.id} style={{backgroundColor:item.fontColor,marginTop:6,padding:10,borderRadius:10,flexDirection:'row',justifyContent:'space-between'}}>
+                     <Text style={{fontSize:16,color:'white'}}>
                         {item.title}
                      </Text>
-                     <Text style={{color:'black'}}>{item.points}</Text>
+                     <View style={{backgroundColor:'white',paddingVertical:5,paddingHorizontal:15,borderRadius:10}}>
+                     <Text style={{color:item.fontColor}}>{item.points}</Text>
+                     </View>
                   </View>
                )}
                </View>

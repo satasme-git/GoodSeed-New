@@ -21,6 +21,11 @@ import BMIStack from '../stacks/BMIStack'
 import MainProfile from '../screens/MainProfile'
 import Summary from '../screens/Summary'
 import Achivements from '../screens/Achivements'
+import Avatar from '../screens/Avatar'
+import Select from '../screens/Select'
+
+import { AvatarImages } from '../styles/AvatarImages';
+import { buttons, styles } from '../styles/Styles';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { HealthProvider, HealthContext } from '../context/Context';
@@ -38,17 +43,53 @@ import {
   WaveIndicator,
 } from 'react-native-indicators';
 
+import SplashScreen from 'react-native-splash-screen'
 
 const Drawer = createDrawerNavigator();
 
 function CustomDrawerContent(props) {
+
   const health = useContext(HealthContext);
+  const BaseUrl = require('../styles/BaseUrl');
+  // const getImages =()=>{
+      
+  //   fetch(BaseUrl.BASE_URL+'/api/imageUpload/'+health.user.id)
+  //   .then((response) => response.json())
+  //   .then((json) => {
+  //      health.setProPic(BaseUrl.BASE_URL+'/assets/profile_pics/'+json[1].image)
+  //      // console.log(BaseUrl.BASE_URL+'/assets/profile_pics/'+json[1].image)
+  //   })
+  //   .catch((error) => console.error(error))
+  //   .finally(() => {});
+
+  // }
+
+  // useEffect(() => {
+  //   getImages()
+  // }, []);
+
   return (
     <DrawerContentScrollView {...props}>
       <View style={{height:150,justifyContent:'space-evenly',padding:10,alignItems:'center'}}>
-        <View style={{backgroundColor:'white',height:60,width:60,borderRadius:50,elevation:5}} />
+        {
+          health.propic==null?
+              <Image
+                           source={require('../assets/propic.jpg')} 
+                           style={styles.profilePic}
+                        />
+               :
+                <Image
+                  // source={{uri:filePath}}
+                  source={{uri:health.propic}} 
+                  style={styles.profilePic}
+                />
+          
+        }
+        
+
         {/* <Text style={{color:'gray'}}>{health.user.email}</Text> */}
         <Text style={{color:'black',fontSize:17}}>{health.user.email}</Text>
+        {/* <Text  style={{color:'black',fontSize:17}}>{health.user.avatar}</Text> */}
       </View>
       <DrawerItemList {...props} itemStyle={{marginLeft:25}} labelStyle={{fontSize:16}}
       onPress = {()=>console.log('pressed')}
@@ -88,14 +129,18 @@ export default function MyDrawer() {
       
         :
         setScreen(<UnLoggedDrawer/>)
+        
         ;
 
     } catch(e) {
       console.log(e)
       // error reading value
     }
-
+    finally{
+      SplashScreen.hide();
+    }
   }
+  
   useEffect(() =>   {
     getData()
   }, [])
@@ -112,7 +157,8 @@ function Loading(){
   return (
     <View style={{justifyContent:'center',alignItems:'center',flex:1}}>
       <StatusBar backgroundColor={'#6bb333'} />
-      <MaterialIndicator color={'#6bb333'} />
+      <Image source={require('../assets/launch_screen.png')} style={{width:'100%',height:'100%'}} />
+      <MaterialIndicator color={'#fff'} style={{position:'absolute',top:900,zIndex:7,elevation:7}} />
     </View>
   )
 }
@@ -129,6 +175,7 @@ function LoggedDrawer() {
       activeBackgroundColor:'white',
       
     }}
+    drawerType='slide'
     initialRouteName={'Tabs'}
     
     >
@@ -141,6 +188,21 @@ function LoggedDrawer() {
       }}
       />
 
+      <Drawer.Screen 
+        name="Avatar" 
+        component={Avatar}  
+        options={{ drawerLabel: 'Avatar' ,
+        drawerIcon: ({ focused, color, size }) => <AntDesign color={color} size={20} name={'home'} />
+      }}
+      />
+
+      <Drawer.Screen 
+        name="Select" 
+        component={Select}  
+        options={{ drawerLabel: 'Select' ,
+        drawerIcon: ({ focused, color, size }) => <AntDesign color={color} size={20} name={'home'} />
+      }}
+      />
       <Drawer.Screen 
         name="Profile" 
         component={MainProfile}   
@@ -212,6 +274,8 @@ function UnLoggedDrawer() {
       activeBackgroundColor:'white',
       
     }}
+    
+    drawerType='slide'
     initialRouteName={'Login'}
     
     >

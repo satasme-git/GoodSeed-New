@@ -22,6 +22,7 @@ import PushNotification from "react-native-push-notification";
 import { HealthProvider, HealthContext } from '../context/Context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+import LinearGradient from 'react-native-linear-gradient';
 export default function Step() {
 
     const navigation = useNavigation();
@@ -75,12 +76,6 @@ export default function Step() {
     }, [])
 
 
-    // if (speed==steps){
-    //   setTimeout(() => {
-    //     setPause(false);
-    //     console.log(speed +'   '+ speed + '  ' + pause)       
-    // }, 200);
-    // }
 
     setTimeout(() => {
         setPause(false);
@@ -89,7 +84,7 @@ export default function Step() {
 
     return (
       <View style={styles.container}>
-          <View style={[styles.header,{elevation:0,justifyContent:'space-between'}]}>
+          <View style={[styles.header,{elevation:0,justifyContent:'space-between',backgroundColor:'transparent'}]}>
              <Ionicons 
                 name="arrow-back" 
                 size={30} 
@@ -97,31 +92,20 @@ export default function Step() {
                 onPress={() => navigation.goBack()}
              />
 
-              {/* <TouchableHighlight underlayColor={'#7cb26e'} onPress={() => refRBSheet.current.open()} style={{flexDirection:'row',borderColor: '#000',borderWidth:2.5,borderRadius:50}}>
-              <View style={{flexDirection:'row',justifyContent:'space-around',alignItems:'center',width:120,paddingVertical:5}}>
-                <Text style={{color:'black'}}>Challenge</Text>
-
-              <AntDesign 
-                            name="addusergroup" 
-                            size={25} 
-                            color="black"
-                             style={{marginRight:5}}
-                            // onPress={() => navigation.goBack()}
-                        />
-              </View>
-               
-              </TouchableHighlight>  */}
              
           </View>
           
-          {/* <View style={styles.innerContainer}> */}
-          <Background>
+          <View style={{alignItems:'center',justifyContent:'center',marginTop:50}}>
+          
+          <LinearGradient 
+              colors={['#6bb333', '#366011']} 
+              style={{borderRadius:20,alignItems:'center',justifyContent:'center',padding:15,width:'90%'}}>
           <AnimatedCircularProgress
             size={200}
             width={10}
-            fill={((steps*100)/filled)}
+            fill={((health.steps*100)/filled)}
             rotation={-0}
-            tintColor="#00e0ff"
+            tintColor="#fff"
             backgroundColor="#3d5875"
             
             lineCap={'round'}
@@ -130,31 +114,34 @@ export default function Step() {
             {
                 (fill) => (
                     <View style={{justifyContent:'center',alignItems:'center'}}>
-                        <Text style={{fontSize:40,color:'#00e0ff',justifyContent:'center'}} onLayout={()=>setSpeed(steps)}>
-                            {steps}
+                        <Text style={{fontSize:40,color:'#fff',justifyContent:'center'}} onLayout={()=>setSpeed(health.steps)}>
+                            {health.steps}
                         </Text> 
-                        <Text style={{fontSize:25,color:'#00e0ff'}}>Steps</Text>
+                        <Text style={{fontSize:30,color:'#fff'}}>Steps</Text>
                         
-                        <Text style={{fontSize:17,color:'#3d5875',marginTop:10}}>{filled-steps} Left</Text>
+                        <Text style={{fontSize:20,color:'rgba(255,255,255,0.7)',marginTop:10}}>{filled-health.steps} Left</Text>
                     </View>
                 
                 )
             }
             </AnimatedCircularProgress>
 
-            <View style={{marginTop:20,flexDirection:'row',alignItems:'center'}}>
-              <View style={{paddingHorizontal:20,alignItems:'center'}}>
-                <Text style={{fontSize:16,color:'#3d5875'}}>Distance{}</Text>
-                <View style={{backgroundColor: '#00e0ff',width:30,height:3,borderRadius:5}} />
-                <Text style={{fontSize:20,color:'#3d5875'}}>{(steps*0.000762).toFixed(2)}{<Text style={{fontSize:13,color:'#3d5875'}}>Km</Text>}</Text>
+            <View style={{marginTop:20,flexDirection:'row',alignItems:'center',justifyContent:'space-around',width: '100%',}}>
+              <View style={{paddingHorizontal:20,paddingVertical:5,alignItems:'center',backgroundColor:'rgba(255,255,255,0.6)',borderRadius:10}}>
+                <Text style={{fontSize:16,color:'#366011'}}>Distance{}</Text>
+                {/* <View style={{backgroundColor: '#00e0ff',width:30,height:3,borderRadius:5}} /> */}
+                <Text style={{fontSize:20,color:'#366011'}}>{(health.steps*0.000762).toFixed(2)}{<Text style={{fontSize:13,color:'#366011'}}>Km</Text>}</Text>
               </View>
-              <View style={{paddingHorizontal:20,alignItems:'center'}}>
-                <Text style={{fontSize:16,color:'#3d5875'}}>Complete</Text>
-                <View style={{backgroundColor: '#00e0ff',width:30,height:3,borderRadius:5}} />
-                <Text style={{fontSize:20,color:'#3d5875'}}>{steps+'/'+filled}({Math.round((steps*100)/filled,2).toFixed(2)}%)</Text>
+              <View style={{paddingHorizontal:20,paddingVertical:5,alignItems:'center',backgroundColor:'rgba(255,255,255,0.6)',borderRadius:10}}>
+                <Text style={{fontSize:16,color:'#366011'}}>Complete</Text>
+                {/* <View style={{backgroundColor: '#00e0ff',width:30,height:3,borderRadius:5}} /> */}
+                <Text style={{fontSize:20,color:'#366011'}}>{health.steps+'/'+filled}({Math.round((health.steps*100)/filled,2).toFixed(2)}%)</Text>
                 {/* <Text style={{fontSize:20,color:'#3d5875'}}>{(steps)/filled}</Text> */}
               </View>
             </View>
+            </LinearGradient>
+
+            <View>
             {
               pause==false?
               <Image  
@@ -167,65 +154,27 @@ export default function Step() {
               :
               <GifImage
                 source={require('../assets/walk.gif')}
-                // source={{
-                //   uri:
-                //     'https://media.tenor.com/images/1c39f2d94b02d8c9366de265d0fba8a0/tenor.gif',
-                // }} 
                 style={{
                   width: 100,
                   height: 100,
                 }}
                 resizeMode={'cover'}
-                // paused={true}
               />
             }
             
           <Progress.Bar 
-          // progress={0.6} 
-          progress={(steps)/filled} 
+          progress={(health.steps)/filled} 
           width={250} 
           borderRadius={2} 
           height={10} 
-          unfilledColor={'#3d5875'}
+          unfilledColor={'rgba(107, 179, 51,0.5)'}
           borderColor={'transparent'}
-          color={'#00e0ff'}
+          color={'rgb(107, 179, 51)'}
           />
-          
-            {/* <PercentageBar
-              height={20}
-              
-              backgroundColor={'grey'}
-              completedColor={'blue'}
-              percentage={20}
-            /> */}
-            
-
-            </Background>
-          {/* <RBSheet
-            ref={refRBSheet}
-            closeOnDragDown={true}
-            closeOnPressMask={true}
-            customStyles={{
-              wrapper: {
-                backgroundColor: "transparent"
-              },
-              draggableIcon: {
-                backgroundColor: "#fff"
-              },
-              container: {
-                backgroundColor: '#7cb26e',
-                borderTopLeftRadius:20,
-                borderTopRightRadius:20,
-                alignItems:'center',
-                elevation:5
-              },
-            }}
-            
-          >
-            <View>
-              <Text style={{fontSize:20,fontWeight:'bold'}}>Create Challenge</Text>
             </View>
-          </RBSheet> */}
+            
+          
+            </View>
       </View>
     );
   }

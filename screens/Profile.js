@@ -24,7 +24,6 @@ import * as Animatable from 'react-native-animatable';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import moment from 'moment';
 import {Picker} from '@react-native-picker/picker';
-import ModalDropdown from 'react-native-modal-dropdown';
 import {RadioButton} from 'react-native-paper';
 import StepIndicator from 'react-native-step-indicator';
 import DropDownPicker from 'react-native-dropdown-picker';

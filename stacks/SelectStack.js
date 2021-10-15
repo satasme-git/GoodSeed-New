@@ -9,7 +9,6 @@ import Select from '../screens/Select'
 import MainHome from '../screens/MainHome'
 import BMIChart from '../screens/BMIChart'
 import Step from '../screens/Step'
-import Map from '../screens/Map'
 import MainProfile from '../screens/MainProfile'
 
 const Stack = createStackNavigator();
@@ -20,13 +19,6 @@ export default function MyStack() {
       <Stack.Screen 
         name="Form" 
         component={Form}
-        options={{
-          headerShown: false,
-        }}
-      />
-      <Stack.Screen 
-        name="Map" 
-        component={Map}
         options={{
           headerShown: false,
         }}

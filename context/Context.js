@@ -21,13 +21,28 @@ export const HealthProvider = ({ children }) => {
       // error reading value
     }
   }
-
+  const getStepData = async () => {
+    try {
+      const value = await AsyncStorage.getItem('steps')
+      if(value !== null) {
+        setSteps(parseInt(value))
+        console.log(value)
+        // value previously stored
+      }
+    } catch(e) {
+      // error reading value
+    }
+  }
   const [user, setUser] = useState([]);
   const [state, setState] = useState("home");
   const [complete, setComplete] = useState(0);
   const [userFull, setUserFull] = useState([]);
   const [steps, setSteps] = useState(0);
+  const [sleep, setSleep] = useState('');
+  
+  const [propic, setProPic] = useState(null);
 
+  const BaseUrl = require('../styles/BaseUrl');
   // const getData = async () => {
   //   try {
   //     const jsonValue = await AsyncStorage.getItem('user')
@@ -40,9 +55,23 @@ export const HealthProvider = ({ children }) => {
   //   }
   // }
   
+  const getImages =()=>{
+      
+    fetch(BaseUrl.BASE_URL+'/api/imageUpload/'+user.id)
+    .then((response) => response.json())
+    .then((json) => {
+       setProPic(BaseUrl.BASE_URL+'/assets/profile_pics/'+json[1].image)
+       // console.log(BaseUrl.BASE_URL+'/assets/profile_pics/'+json[1].image)
+    })
+    .catch((error) => console.error(error))
+    .finally(() => {});
+
+  }
 
   useEffect(() => {
     getData()
+    getImages()
+    getStepData()
   }, []);
 
   return (
@@ -57,7 +86,11 @@ export const HealthProvider = ({ children }) => {
         userFull,
         setUserFull,
         steps,
-        setSteps
+        setSteps,
+        propic,
+        setProPic,
+        sleep,
+        setSleep
       }}
     >
       {children}

@@ -9,4 +9,11 @@
         <item name="android:windowDisablePreview">true</item>
     </style>
 
+    <style parent="Theme.AppCompat.NoActionBar" name="SplashTheme">
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:windowLightNavigationBar">false</item>
+        <item name="android:statusBarColor">#6bb333</item>
+        <item name="android:navigationBarColor">#386312</item>
+    </style>
+    
 </resources>
