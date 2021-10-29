@@ -18,12 +18,14 @@ const windowHeight = Dimensions.get('window').height;
 
 export default function SignUp() {
 
-    const [name, setName] = useState( "");  
+    const [name, setName] = useState( "");
+    const [contact, setContact] = useState( "");  
     const [pw, setPw] = useState( "");
     const [repw, setRePW] = useState( "");
 
     
     const [eVal, setEVal] = useState(false); 
+    const [cVal, setCVal] = useState(false); 
     const [pVal, setPVal] = useState(false); 
     const [rpVal, setRPVal] = useState(false); 
 
@@ -45,11 +47,12 @@ export default function SignUp() {
 
     const BaseUrl = require('../styles/BaseUrl');
     
-    const signUp = (em,key,rp) =>{
+    const signUp = (em,cn,key,rp) =>{
         const formData = new FormData()
         const data = { email: em,password: key,re_password:rp};
 
         formData.append('email', em);
+        formData.append('contact', cn);
         formData.append('password', key);
         formData.append('re_password', rp);
 
@@ -60,45 +63,102 @@ export default function SignUp() {
             .then(response => response.json())
             .then(data => {
             // getuserData(); 
-            // console.log(data);
+            console.log(data);
             
             // if(data='already'){
             //     Message('Error','red','User Already Registerd','Try Again')
             // } 
-            if(data.email=='' && data.password=='' && data.re_password==''){
+            if(data.email=='' && data.password=='' && data.re_password=='' && data.contact=='' ){
                 setEVal(true)
                 setPVal(true)
                 setRPVal(true)
+                setCVal(true)
             }
+            else if (data.password=='' && data.re_password=='' && data.contact==''){
+                setEVal(false)
+                setPVal(true)
+                setRPVal(true)
+                setCVal(true)
+            }
+            else if (data.email=='' && data.re_password=='' && data.contact==''){
+                setEVal(true)
+                setPVal(false)
+                setRPVal(true)
+                setCVal(true)
+            }
+            else if (data.email=='' && data.password=='' && data.contact==''){
+                setEVal(true)
+                setPVal(true)
+                setRPVal(false)
+                setCVal(true)
+            }
+            else if (data.email=='' && data.password=='' && data.re_password==''){
+                setEVal(true)
+                setPVal(true)
+                setRPVal(true)
+                setCVal(false)
+            }
+            
             else if (data.password=='' && data.re_password==''){
                 setEVal(false)
                 setPVal(true)
                 setRPVal(true)
+                setCVal(false)
+            }
+            else if (data.password=='' && data.contact==''){
+                setEVal(false)
+                setPVal(true)
+                setRPVal(false)
+                setCVal(true)
             }
             else if (data.email=='' && data.re_password==''){
                 setEVal(true)
                 setPVal(false)
                 setRPVal(true)
+                setCVal(false)
+            }
+            else if (data.contact=='' && data.re_password==''){
+                setEVal(false)
+                setPVal(false)
+                setRPVal(true)
+                setCVal(true)
             }
             else if (data.email=='' && data.password==''){
                 setEVal(true)
                 setPVal(true)
                 setRPVal(false)
+                setCVal(false)
             }
+            else if (data.email=='' && data.contact==''){
+                setEVal(true)
+                setPVal(false)
+                setRPVal(false)
+                setCVal(true)
+            }
+
             else if (data.email==''){
                 setEVal(true)
                 setPVal(false)
                 setRPVal(false)
+                setCVal(false)
             }
             else if (data.password==''){
                 setEVal(false)
                 setPVal(true)
                 setRPVal(false)
+                setCVal(false)
             }
             else if (data.re_password==''){
                 setEVal(false)
                 setPVal(false)
                 setRPVal(true)
+                setCVal(false)
+            }
+            else if (data.contact==''){
+                setEVal(false)
+                setPVal(false)
+                setRPVal(false)
+                setCVal(true)
             } 
 
             else if(data=='already'){
@@ -106,6 +166,7 @@ export default function SignUp() {
                 setEVal(false)
                 setPVal(false)
                 setRPVal(false)
+                setCVal(false)
             } 
             
             else{
@@ -113,6 +174,7 @@ export default function SignUp() {
                 setEVal(false)
                 setPVal(false)
                 setRPVal(false)
+                setCVal(false)
             }
             
             
@@ -239,6 +301,32 @@ export default function SignUp() {
 
                     <View style={{alignItems:'center',flexDirection:'row'}}>
                             <Ionicons 
+                                name="call-outline" 
+                                size={20} 
+                                color="black" 
+                                style={{marginRight:-45,marginLeft:25}}
+                            /> 
+                            <Text style={{position:'absolute',left:60}}>+94</Text>
+                    <TextInput
+                        style={[styles.inputText,{paddingLeft:80}]}
+                        placeholder={'contact Number'}
+                        value={contact}
+                        onChangeText={(text)=>setContact(text)}
+                        onFocus={()=>setCVal(false)} 
+                        keyboardType={'phone-pad'}  
+                    />
+                    
+                    {
+                        cVal==true?
+                            <Validation text={'Contact is Required'} />
+                        :
+                        null
+                    }
+                            
+                    </View>
+
+                    <View style={{alignItems:'center',flexDirection:'row'}}>
+                            <Ionicons 
                                 name="lock-closed-outline" 
                                 size={20} 
                                 color="black" 
@@ -336,7 +424,7 @@ export default function SignUp() {
                     <TouchableHighlight underlayColor={'#104c2e'} style={[buttons.login,{backgroundColor: '#6bb333',borderColor:'#6bb333',}]} onPress={()=>
                         
                         // navigation.navigate('Login')
-                        signUp(name,pw,repw)
+                        signUp(name,contact,pw,repw)
                         }>
                         <Text style={[buttons.text,{color: 'white',}]}>Sign Up</Text>
                     </TouchableHighlight>

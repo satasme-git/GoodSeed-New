@@ -28,6 +28,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import BackgroundTimer from 'react-native-background-timer';
 
 import { AvatarImages } from '../styles/AvatarImages';
+import moment from 'moment';
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 export default function Details() {
@@ -38,6 +39,8 @@ export default function Details() {
   
   const [steps, setStep] = useState(0);
   
+  const [data, setData] = useState([]);
+
   const storeData = async (value) => {
     try {
       await AsyncStorage.setItem('steps', value)
@@ -59,6 +62,45 @@ export default function Details() {
     }
   }
 
+  const storeSteps = async (value) => {
+    try {
+      const datas = []
+      const obj = {"id":health.user.id,"steps":value,"sleep":'07.00'}
+      
+      datas.push(obj)
+
+      // console.log(datas)
+      
+      data = datas
+
+      const jsonValue = JSON.stringify(datas)
+
+      await AsyncStorage.setItem('stepStorage', jsonValue)
+    } catch (e) {
+      // saving error
+    }
+  }
+
+
+  const getStepsData = async () => {
+    try {
+      const jsonValue = await AsyncStorage.getItem('stepStorage')
+      
+      return jsonValue != null ? 
+
+      // setData(JSON.parse(jsonValue)) 
+      console.log('array is '+JSON.parse(jsonValue))
+
+      :
+      null
+      ;
+
+    } catch(e) {
+      // error reading value
+    }
+  }
+  
+  
     const BaseUrl = require('../styles/BaseUrl');
 
     const getImages =()=>{
@@ -73,9 +115,61 @@ export default function Details() {
       .finally(() => {});
 
     }
+    const getSleptData =()=>{
+      
+      fetch(BaseUrl.BASE_URL+'/api/sleepData/'+health.user.id)
+      .then((response) => response.json())
+      .then((json) => {
+        
+
+        const current = moment().format('YYYY-MM-DD')
+
+        if (json!='no Item Found'){
+          const added2 = moment(json.date).format('YYYY-MM-DD')
+          if(added2==current){
+            health.setSleep(json.duration + ' Hours')
+          }
+          else{
+            health.setSleep('Add Sleep Time')
+          }
+          
+
+        }
+       })
+      .catch((error) => console.error(error))
+      .finally(() => {});
+
+    }
+    const setSteps = (steps) => {
+      const formData = new FormData()
+  
+      formData.append('member_id', health.user.id);
+      formData.append('steps', steps);
+  
+      
+      fetch(BaseUrl.BASE_URL+'/api/steps/', {
+        method: 'POST',
+        body: formData,
+      })
+        .then(response => response.json())
+        .then(data => {
+          // navigation.navigate('profile')
+          console.log('Success:', data);
+          setStep(parseInt(data.steps))
+          // Message('Nice','#6bb333','You Created Challenge Successfully','Start Walking','');
+        })
+        .catch(error => {
+          console.log('Error:', formData);
+        });
+  
+    };
+
+    
     useEffect(() => {
       getData()
       getImages()
+      getSleptData()
+      getStepsData()
       // toggleBackground()
       const config = {
         default_threshold: 15.0,
@@ -88,12 +182,14 @@ export default function Details() {
     // }
       
     const backgroundtimer = (step) =>{
-      console.log(steps)
+      // console.log(steps)
       health.setSteps(step)
       storeData(step.toString())
+      setSteps(step)
+      // storeSteps(step.toString())
       
     }
-    });
+    },[]);
 
     const navigation = useNavigation();
     const renderItem = ({ item }) => (
@@ -103,23 +199,17 @@ export default function Details() {
     );
 
     return (
-      <View style={styles.container}>
-        <Background>
-          <View style={[styles.header,{backgroundColor: 'transparent',}]}>
+      <View style={[styles.container,{backgroundColor:'white'}]}>
+        <StatusBar backgroundColor={'#6bb333'} barStyle={'light-content'} />
+          <View style={[styles.header,{backgroundColor: 'transparent',justifyContent:'space-between',}]}>
              <Ionicons 
                 name="menu-outline" 
                 size={30} 
                 color="black" 
                 onPress={() => navigation.dispatch(DrawerActions.toggleDrawer())}
              /> 
-          </View>
-
-          <ScrollView contentContainerStyle={{alignItems:'center'}}>
-            <LinearGradient 
-              colors={['#6bb333', '#366011']} 
-              style={[styles.heartBg]}>
-
-        {
+             
+             {
           health.propic!=null?
           <TouchableOpacity 
                 style={[buttons.profileBitton,{marginRight:10,backgroundColor:'rgba(255,255,255,0.5)'}]} 
@@ -136,6 +226,14 @@ export default function Details() {
           
           
         }
+          </View>
+          {/* <Background> */}
+          <View style={{alignItems:'center'}}>
+            <LinearGradient 
+              colors={['#6bb333','#6bb333', '#438e05']} 
+              style={[styles.heartBg]}>
+
+        
               
           
               <MaskedView
@@ -143,8 +241,8 @@ export default function Details() {
                   <View
                     style={{
                       backgroundColor: 'transparent',
-                      justifyContent: 'center',
-                      alignItems: 'center',
+                      justifyContent: 'flex-start',
+                      alignItems: 'flex-start',
                     }}
                   >
                     <Image source={require('../assets/heartBg.png')} style={styles.heart2} />
@@ -152,43 +250,43 @@ export default function Details() {
                 }>
                 <View style={[styles.heartempty]} >
                 <Image source={require('../assets/heart2.png')} style={[styles.heart,{tintColor:'white'}]} />
-                  <Image source={require('../assets/watering2.gif')} style={{height:20,width:'100%',tintColor:'#6bb333'}}/>
-                  <View style={{backgroundColor:'#6bb333',height:30,width:'100%'}} />
+                  <Image source={require('../assets/watering2.gif')} style={{height:20,width:'100%',tintColor:'#8639e5'}}/>
+                  <View style={{backgroundColor:'#8639e5',height:30,width:'100%'}} />
                 </View>
               </MaskedView>
 
-              <View style={{flexDirection:'row',width:'90%',justifyContent:'space-evenly'}}>
+              <View style={{height:'70%',justifyContent:'space-evenly',alignItems:'flex-start',paddingLeft:25}}>
                 <TouchableOpacity style={buttons.homebuttons}>
                   <View style={{flexDirection:'row',alignItems:'center'}}>
                     <FontAwesome5 name={'walking'} size={16} />
-                  <Text>  {health.steps}</Text>
+                  <Text style={{fontSize:17}}>  {health.steps}</Text>
                   </View>
                 </TouchableOpacity>
 
                 <TouchableOpacity style={buttons.homebuttons}>
                 <View style={{flexDirection:'row',alignItems:'center'}}>
                     <MaterialCommunityIcons name={'power-sleep'} size={16} />
-                  <Text> </Text>
+                  <Text style={{fontSize:17}}> {health.sleep} </Text>
                   </View>
                 </TouchableOpacity>
               </View>
             </LinearGradient>
 
-            <View style={{marginTop:10,flexDirection:'row',width:windowWidth,flexWrap:'wrap',justifyContent:'flex-start',marginLeft:10}}>
+            <View style={{marginTop:10,flexDirection:'row',width:windowWidth,flexWrap:'wrap',justifyContent:'center'}}>
               {Habbits.map((item)=>
                   <TouchableOpacity key={item.id} 
-                  style={{backgroundColor:'white',marginHorizontal:10,marginVertical:10,paddingVertical:0,paddingHorizontal:0,borderRadius:20,height:item.height,width:item.width,justifyContent:'space-evenly',alignSelf:'flex-start',alignItems:'center'}} 
+                  style={{backgroundColor:item.color,marginHorizontal:10,marginVertical:10,paddingVertical:0,paddingHorizontal:0,borderRadius:20,height:item.height,width:item.width,justifyContent:'space-evenly',alignSelf:'flex-start',alignItems:'center'}} 
                   onPress={()=>{navigation.navigate(item.screen)}}>
-                  <Image source={item.png} style={{width:40,height:40,tintColor:item.color,margin:5,resizeMode:'contain'}} />
-                    <Text style={{color:item.color,paddingHorizontal:5,fontSize:15,margin:5}}>{item.title}</Text>
+                  <Image source={item.png} style={{width:25,height:25,tintColor:'white',margin:5,resizeMode:'contain'}} />
+                    <Text style={{color:'white',paddingHorizontal:5,fontSize:14,margin:5}}>{item.title}</Text>
                   </TouchableOpacity>
               )}
             </View>
 
      
-          </ScrollView>
+          </View>
 
-        </Background>
+        {/* </Background> */}
         
       </View>
     );

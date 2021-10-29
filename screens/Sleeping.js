@@ -133,15 +133,21 @@ import moment from 'moment';
       fetch(BaseUrl.BASE_URL+'/api/sleepData/'+this.context.user.id)
       .then((response) => response.json())
       .then((json) => {
-        console.log(json.duration)
-        this.context.setState({sleep:json.duration})
+        
 
         const current = moment().format('YYYY-MM-DD')
 
-        if (json!=null){
-          const added = moment(json.date).format('YYYY-MM-DD')
-          if(added==current){
+        if (json!='no Item Found'){
+          const added2 = moment(json.date).format('YYYY-MM-DD')
+          if(added2==current){
+            
+            this.context.setSleep(json.duration+ ' Hours')
+
             this.setState({added:true,duration:json.duration})
+            // this.bedtime=JSON.parse(json.bedtime)
+            // this.waketime=JSON.parse(json.wake)
+            
+            console.log('wake time ' +this.context.sleep)
           }
           else{
             this.setState({added:false})
@@ -150,7 +156,7 @@ import moment from 'moment';
 
         }
         
-
+        console.log('Success:', json);
         //  health.setProPic(BaseUrl.BASE_URL+'/assets/profile_pics/'+json[1].image)
          // console.log(BaseUrl.BASE_URL+'/assets/profile_pics/'+json[1].image)
       })
@@ -172,7 +178,7 @@ import moment from 'moment';
     // }
   
     render() {
-      const { startAngle, angleLength , time } = this.state;
+      const { startAngle, angleLength , time ,added} = this.state;
       const bedtime = calculateTimeFromAngle(startAngle);
       const waketime = calculateTimeFromAngle((startAngle + angleLength) % (2 * Math.PI));
   
@@ -190,20 +196,40 @@ import moment from 'moment';
         const formData = new FormData()
     
         formData.append('id',this.context.user.id);
-        formData.append('duration', hours+":"+minutes);
-        console.log(hours+":"+minutes)
+        formData.append('duration', hours+":"+minutes)
+        formData.append('bedtime', JSON.stringify(bedtime));
+        formData.append('waketime', JSON.stringify(waketime));
+
+        console.log(bedtime)
     
         fetch(BaseUrl.BASE_URL+'/api/sleepData/', {
           method: 'POST',
           body: formData,
         })
           .then(response => response.json())
-          .then(data => {
+          .then(json => {
             // health.setUser(data)
 
             // storeUserData(data)
             // navigation.navigate('')
-            console.log('Success:', data);
+            this.context.setSleep(json.duration)
+
+        const current = moment().format('YYYY-MM-DD')
+
+        if (json!=null){
+          const added = moment(json.date).format('YYYY-MM-DD')
+          
+            console.log(current)
+          if(added==current){
+            this.setState({added:true,duration:json.duration})
+          }
+          else{
+            this.setState({added:false})
+          }
+          
+
+        }
+            console.log('Success:', json);
           })
           .catch(error => {
             console.log('Error:', error);
@@ -278,11 +304,11 @@ import moment from 'moment';
           </View>
 
             {
-              this.state.added==true?
+              added==true?
               // null
               <TouchableHighlight style={{backgroundColor:'rgba(107,179,51,0.2)',paddingHorizontal:15,paddingVertical:5,marginTop:20,borderRadius:25}}>
               <View>
-                  <Text style={{fontSize:17}}>You Slept {this.state.duration} mins Today</Text>
+                  <Text style={{fontSize:17}}>You Slept {this.state.duration} Hours Today</Text>
               </View>
             </TouchableHighlight>
               :

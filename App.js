@@ -193,7 +193,7 @@ export default function App() {
   return (
     <HealthProvider>
       {/* <NavigationContainer> */}
-        <StatusBar backgroundColor={'#4b937c'} />
+      <StatusBar backgroundColor={'#6bb333'} barStyle={'light-content'} />
         <HomeDrawer/>
         {/* <SelectStack/> */}
         {/* <LoginStack/> */}

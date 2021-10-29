@@ -5583,6 +5583,11 @@ react-native-collapsible@^1.6.0:
   resolved "https://registry.yarnpkg.com/react-native-collapsible/-/react-native-collapsible-1.6.0.tgz"
   integrity sha512-beZjdgbT9Y/Pg591Xy5XkKG20HffJiVad4n9bfcUF/f783A+tvOVXnqvbS58Lkaym93mi4jcDPMuW9Vc1t6rqg==
 
+react-native-contacts@^7.0.2:
+  version "7.0.2"
+  resolved "https://registry.yarnpkg.com/react-native-contacts/-/react-native-contacts-7.0.2.tgz#de9a10f37fb3f7583dbcba7a9fa46d370725c47b"
+  integrity sha512-LCDznIOkVpdTPk18Wp94sLLpbQNKw0Y0tvqbEi5ik610UoQxzteq6Plqdo3mGyccgGLIKD6VMNRgac4mk0Fz2w==
+
 react-native-dropdown-picker@^5.1.21:
   version "5.1.21"
   resolved "https://registry.yarnpkg.com/react-native-dropdown-picker/-/react-native-dropdown-picker-5.1.21.tgz"
@@ -6153,6 +6158,13 @@ rn-fetch-blob@^0.12.0:
   dependencies:
     base-64 "0.1.0"
     glob "7.0.6"
+
+rn-swipeable-panel@^1.2.5, rn-swipeable-panel@^1.2.6:
+  version "1.2.6"
+  resolved "https://registry.yarnpkg.com/rn-swipeable-panel/-/rn-swipeable-panel-1.2.6.tgz#a7c2b090ecfd8c43ad91abd553100cb79f5a33ee"
+  integrity sha512-jZ5wsrtSUddf1GJR6Xc14ohum0R3RpEfD8UyX6nSAcpNAACErR+kwKlyp60yiF95bTy6fqB3+/udcQ4eOo+NXw==
+  dependencies:
+    rn-swipeable-panel "^1.2.5"
 
 rn-vertical-slider@^2.0.2:
   version "2.0.2"

@@ -146,7 +146,7 @@ export default function Login() {
                <Animatable.Text style={{color:'white',fontSize:30,textAlign:'center',paddingBottom:50}} delay={300} animation={'bounceIn'}>
                         Welcome
               </Animatable.Text>
-              <Animatable.Image delay={300} animation={'zoomIn'} source={require('../assets/logo.png')} style={{width:150,height:120,resizeMode:'cover'}} />
+              <Animatable.Image delay={300} animation={'zoomIn'} source={require('../assets/logoicon.png')} style={{width:150,height:120,resizeMode:'cover'}} />
               
               </View>
                  

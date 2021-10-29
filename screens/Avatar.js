@@ -66,7 +66,7 @@ export default function Avatar() {
           .then(data => {
             health.setUser(data)
             storeUserData(data)
-            // navigation.navigate('')
+            navigation.navigate('profile')
             // console.log('Success:', data);
           })
           .catch(error => {

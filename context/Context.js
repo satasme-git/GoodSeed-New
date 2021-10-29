@@ -34,6 +34,7 @@ export const HealthProvider = ({ children }) => {
     }
   }
   const [user, setUser] = useState([]);
+  const [userSteps, setUserSteps] = useState([]);
   const [state, setState] = useState("home");
   const [complete, setComplete] = useState(0);
   const [userFull, setUserFull] = useState([]);
@@ -41,6 +42,7 @@ export const HealthProvider = ({ children }) => {
   const [sleep, setSleep] = useState('');
   
   const [propic, setProPic] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   const BaseUrl = require('../styles/BaseUrl');
   // const getData = async () => {
@@ -90,7 +92,11 @@ export const HealthProvider = ({ children }) => {
         propic,
         setProPic,
         sleep,
-        setSleep
+        setSleep,
+        userSteps,
+        setUserSteps,
+        loading,
+        setLoading
       }}
     >
       {children}

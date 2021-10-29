@@ -626,7 +626,7 @@ export default function Eveluation() {
                 value={classNumber}
                 placeholder="Enter class number"
               />
-              <Text style={styles.labelText}>Height</Text>
+              <Text style={styles.labelText}>Height (cm)</Text>
               <TextInput
                 style={[
                   styles.labelTextContainer,
@@ -637,7 +637,7 @@ export default function Eveluation() {
                 value={height}
                 placeholder="Enter height here"
               />
-              <Text style={styles.labelText}>Weight</Text>
+              <Text style={styles.labelText}>Weight (kg)</Text>
               <TextInput
                 style={[
                   styles.labelTextContainer,
@@ -648,7 +648,7 @@ export default function Eveluation() {
                 value={weight}
                 placeholder="Enter weight here"
               />
-              <Text style={styles.labelText}>Waist size</Text>
+              <Text style={styles.labelText}>Waist size(cm)</Text>
               <TextInput
                 style={[
                   styles.labelTextContainer,
@@ -2580,7 +2580,7 @@ export default function Eveluation() {
                 </View>
             </View> 
             :
-            <TouchableOpacity onPress={()=>{position();navigation.navigate('profile')}} style={{alignSelf:'flex-end',margin:10,padding:7,paddingHorizontal:15,backgroundColor:'#6bb333',borderRadius:20}}>
+            <TouchableOpacity onPress={()=>{position();navigation.navigate('Select')}} style={{alignSelf:'flex-end',margin:10,padding:7,paddingHorizontal:15,backgroundColor:'#6bb333',borderRadius:20}}>
                 <View style={{flexDirection:'row'}}>
                     <Text style={{color:'white'}}>Next</Text>
                     <Ionicons

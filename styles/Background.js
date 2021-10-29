@@ -11,7 +11,7 @@ const Background =({ children })=>{
     return(
     <LinearGradient 
     // colors={['#4b937c', '#709c97', '#90b0b5']} 
-    colors={['#e5e5e5', '#e5e5e5', '#e5e5e5']} 
+    colors={['#f4f4f4', '#f4f4f4', '#f4f4f4']} 
     style={[styles.linearGradient,{alignItems:'center'}]}>
         <StatusBar backgroundColor={'#6bb333'} />
         {/* <Animatable.Image delay={300} animation={'fadeInLeft'} source={require('../assets/leaforrange.png')} style={{width:100,height:100,resizeMode:'center',position:'absolute',top:30,left:-50,tintColor:'#90b0b5'}} />

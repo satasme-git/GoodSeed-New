@@ -19,7 +19,8 @@ export default function HomeTabs() {
     activeColor="#6bb333"
     inactiveColor="#c4c4c4"
     barStyle={{ backgroundColor: '#fff' }}
-    shifting={true}
+    shifting={false}
+    labeled
     >
       <Tab.Screen name="Home" component={MainHomeStack} 
               options={{

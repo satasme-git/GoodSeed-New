@@ -188,7 +188,7 @@ function LoggedDrawer() {
       }}
       />
 
-      <Drawer.Screen 
+      {/* <Drawer.Screen 
         name="Avatar" 
         component={Avatar}  
         options={{ drawerLabel: 'Avatar' ,
@@ -202,7 +202,7 @@ function LoggedDrawer() {
         options={{ drawerLabel: 'Select' ,
         drawerIcon: ({ focused, color, size }) => <AntDesign color={color} size={20} name={'home'} />
       }}
-      />
+      /> */}
       <Drawer.Screen 
         name="Profile" 
         component={MainProfile}   

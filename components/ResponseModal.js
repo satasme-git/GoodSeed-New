@@ -36,9 +36,9 @@ const ResponseModal = ({
     >
         <View style={{backgroundColor:headerColor,height:50,width:windowWidth-40,borderTopRightRadius:10,borderTopLeftRadius:10,marginBottom:-10,zIndex:2,alignItems:'center',justifyContent: 'center',}} >
             {/* <Text style={{color:'white',fontSize:17}}>{title}</Text> */}
-            {title=='Success'?
+            {title=='Error'?
             <Ionicons 
-                name="checkmark-circle-outline" 
+                name="close-circle-outline" 
                 size={35} 
                 color="white" 
                 style={{zIndex:2}}
@@ -60,7 +60,7 @@ const ResponseModal = ({
              
              :
              <Ionicons 
-                name="close-circle-outline" 
+                name="checkmark-circle-outline" 
                 size={35} 
                 color="white" 
                 style={{zIndex:2}}

@@ -6,7 +6,7 @@ import { buttons, styles } from '../styles/Styles';
 import * as Animatable from 'react-native-animatable';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { TouchableHighlight } from 'react-native-gesture-handler';
-
+import { HealthProvider, HealthContext } from '../context/Context';
 import {
   BallIndicator,
   BarIndicator,
@@ -19,32 +19,110 @@ import {
   WaveIndicator,
 } from 'react-native-indicators';
 
+import {LevelData} from '../styles/LevelData'
+
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
+
+import { AvatarImages } from '../styles/AvatarImages';
+
+import { SwipeablePanel } from 'rn-swipeable-panel';
+
 export default function Home() {
-
+  const health = useContext(HealthContext);
   const [loading,setLoading]= useState(true);
+  const navigation = useNavigation();
 
-  useEffect(() => {
+  
+  const route = useRoute();
+  // useEffect(() => {
 
-    setTimeout(() => {setLoading(false)}, 2000)
+  //   setTimeout(() => {setLoading(false)}, 2000)
 
+  // }, []);
+
+  React.useEffect(() => {
+    setTimeout(() => {setLoading(false)}, 1500)
+
+    setTimeout(() => {openPanel()}, 9000)
+    // const unsubscribe = navigation.addListener('tabPress', (e) => {
+    //   // Prevent default behavior
+    //   e.preventDefault();
+
+    //   console.log('Default behavior prevented');
+    //   // Do something manually
+    //   // ...
+    // });
+
+    // return unsubscribe;
+    
   }, []);
-    const navigation = useNavigation();
 
+  const getData = () => {
+    var array =[]
+    setRefreshing(true)
+    fetch(BaseUrl.BASE_URL+'/api/challenge/'+health.user.id)
+    .then((response) => response.json())
+    .then((json) => {
+    //    contacts.map((item)=>
+    //       {item.phoneNumbers.map((ph)=>
+    //          {json.map((log)=>
+    //             ph.number==log.contactNo || ph.number.replace("0", "+94")==log.contactNo?array.push({rawContactId:item.rawContactId,displayName:item.displayName,avatar:log.avatar,id:log.id}):null
+    //          )}
+    //       )}
+    //    )
+    // setContacts(array)
+    setRequests(json)
+    // console.log(json)
+    })
+    .catch((error) => console.error(error))
+    .finally(() => {setRefreshing(false)});
+ 
+  }
+  const [panelProps, setPanelProps] = useState({
+    fullWidth: true,
+    showCloseButton: false,
+    noBackgroundOpacity:true,
+    // noBar:true,
+    // onClose: () => closePanel(),
+    onPressCloseButton: () => closePanel(),
+    // ...or any prop you want
+  });
+  const [isPanelActive, setIsPanelActive] = useState(false);
+
+  const openPanel = () => {
+    setIsPanelActive(true);
+  };
+
+  const closePanel = () => {
+    setIsPanelActive(false);
+  };
+  
     // const modifier = Math.min(1, Math.max(-1, pivotPoint));
 
     const zoomIn = {
       0: {
         opacity: 1,
-        scale: 1,
+        scale: 1.1,
         translateY:10
       },
-      1: {
+      0.75: {
         opacity: 1,
-        scale: 1.3,
+        scale: 1.4,
         
         translateY:0
+      },
+      0.85: {
+        opacity: 1,
+        scale: 1.4,
+        
+        translateY:0
+      },
+      1: {
+        opacity:0.6,
+        scale: 1,
+        
+        translateY:-150
       },
     };
 
@@ -63,7 +141,7 @@ export default function Home() {
     const arcZoomIn = {
       0: {
         opacity: 1,
-        scale: 1.2,
+        scale: 1,
         translateY:-10
       },
       // 0.5:{
@@ -71,9 +149,19 @@ export default function Home() {
       //   scale: 1.75,
       //   translateY:40
       // },
-      1: {
+      0.75: {
         opacity: 1,
-        scale: 2.5,
+        scale: 2.2,
+        translateY:0
+      },
+      0.85: {
+        opacity: 1,
+        scale: 2.2,
+        translateY:0
+      },
+      1: {
+        opacity: 0.7,
+        scale: 2.2,
         translateY:0
       },
     };
@@ -81,18 +169,28 @@ export default function Home() {
     const roadZoomIn = {
       0: {
         opacity: 1,
-        scale: 1,
-        translateY:-10
+        scale: 0.7,
+        translateY:20
       },
       // 0.5:{
       //   opacity: 1,
       //   scale: 1.2,
       //   translateY:40
       // },
-      1: {
+      0.75: {
         opacity: 1,
-        scale: 1.5,
-        translateY:0
+        scale: 1,
+        translateY:60
+      },
+      0.85: {
+        opacity: 1,
+        scale: 1,
+        translateY:60
+      },
+      1: {
+        opacity: 0.7,
+        scale: 0.6,
+        translateY:-280
       },
     };
     const manZoomOut = {
@@ -114,7 +212,8 @@ export default function Home() {
     };
     return (
       <View style={styles.container}>
-        <View style={[styles.header,{justifyContent:'space-between',backgroundColor:'transparent',position: 'absolute',zIndex:10,elevation:7}]}>
+        {/* <View style={[styles.header,{justifyContent:'space-between',backgroundColor:'red',position: 'absolute',zIndex:10,elevation:7,}]}> */}
+          <View style={{position: 'absolute',zIndex:10,top:10,left:10}}>
             <TouchableHighlight style={{borderRadius:50}} underlayColor={'rgba(107, 179, 51,0.7)'} onPress={() => navigation.goBack()}>  
              <Ionicons 
                 name="arrow-back" 
@@ -123,8 +222,11 @@ export default function Home() {
                 
              />
             </TouchableHighlight>
-             
+            <Text>{route.params.challengId}</Text>
           </View>
+            
+             
+          {/* </View> */}
         {loading==true ?(
         <View style={{position:'absolute',height:windowHeight,width:windowWidth,zIndex:1,top:0,backgroundColor: 'white',elevation:6,justifyContent:'center',alignItems:'center'}}>
           <View style={{alignSelf:'center',alignItems:'center',justifyContent: 'center',height:120,width:120}}>
@@ -132,29 +234,75 @@ export default function Home() {
             <DotIndicator color={'#000'} size={7}/>
             </View>
         </View>):
-        null
-        }
+        null}
 
-          <Animatable.Image delay={500} animation={zoomIn} duration={10000} source={require('../assets/bg3.jpg')} style={styles.bg} />  
+        
+<View style={{flex:1}}>
+
+          <Animatable.Image delay={500} animation={zoomIn} duration={14000} source={require('../assets/bg3.jpg')} style={styles.bg} />  
           
           <Animatable.Image delay={500} 
-          animation={roadZoomIn} duration={10000} 
-          source={require('../assets/road.png')} style={styles.road} />
+          animation={roadZoomIn} duration={14000} 
+          source={require('../assets/path.png')} style={styles.road} />
 
 
 
-         <Animatable.Image source={require('../assets/Arch2.png')}
+         <Animatable.Image source={require('../assets/Arch3.png')}
                 delay={1000} 
                 style={styles.arc} 
-                animation={arcZoomIn} duration={10000}
+                animation={arcZoomIn} duration={14000}
                 /> 
+          <Animatable.View delay={6000} animation={'fadeIn'} style={{position:'absolute',zIndex:1,alignSelf:'center',top:20}}>
+            <Animatable.Text delay={10000} animation={'fadeOut'} style={{fontSize:45,fontWeight:'bold',marginTop:60}}>Start Walking</Animatable.Text>  
+            {
+                     LevelData.map((lv)=>
+                     lv.id==health.user.level?
+                     <Animatable.View delay={11000} animation={'fadeIn'} key={lv.id} style={{marginTop:-115,alignItems:'center'}}>
+                        <Animatable.Image delay={11000} animation={'fadeIn'} source={lv.png} style={{width: 160,height:160,resizeMode:'contain',tintColor:'#6bb333',zIndex:2}} />
+                        {/* <Image source={lv.png} style={{width: 200,height:200,resizeMode:'contain',tintColor:'rgba(255,255,255,0.7)',position:'absolute',top:-20}} /> */}
+                     <View key={lv.id} style={{padding:5,marginLeft:10,backgroundColor:'rgba(255, 255, 255,0.7)',paddingHorizontal:10,marginVertical:5,borderRadius:15}}>
+                        <Animatable.Text delay={10000} animation={'fadeIn'} style={{fontSize:17,color:'#000'}}>Walk Around {lv.name}</Animatable.Text>
+                     </View>
+                     </Animatable.View>
+                     :
+                     null
+                     )
+                  }
+          </Animatable.View>
+
           {/* <Animatable.Image delay={7000} animation={manZoomOut} duration={50000} source={require('../assets/back.gif')} style={{width:300,height:300,position:'absolute',zIndex:7,bottom:10,alignSelf:'center',resizeMode:'contain'}} /> */}
-  {/* <Animatable.Image source={require('../assets/map3.png')}
-                delay={9000} 
-                style={styles.map} 
-                animation={'bounceIn'} duration={500}
-                />  */}
+  {/* <Animatable.View animation={'slideInUp'} delay={6000} style={[styles.map,{top:50,left:20,alignItems:'center',backgroundColor:'rgba(255, 255, 255,0.8)',borderWidth:2,borderColor:'white',height:400,justifyContent:'space-evenly',borderRadius:10}]}>
+        <View style={{alignItems:'center'}}>
+          <Image style={{position:'absolute',width:130,height:130,zIndex:9,top:0}} source={require('../assets/avatarbg.png')} />
+        {AvatarImages.map((item,index)=>
+        health.user.avatar==item.id?
+            <Image key ={index} style={{width:100,height:100,borderRadius:120,marginTop:15,}} source={item.png} />
+          : 
+          null        
+        )} 
+        <View style={{marginTop:-5,alignItems:'center',zIndex:10}}>
+        <Text style={{fontSize:16,color:'black',borderColor:'white',borderWidth:1 ,backgroundColor:'rgba(255, 255, 255,0.6)',paddingHorizontal:5,borderRadius:5}}> Level {health.user.level} </Text>
+        <Text style={{fontSize:17,color:'black',marginTop:40}}> {health.user.email} </Text> 
+
+        <TouchableHighlight  underlayColor={'rgba(107, 179, 51,0.7)'} onPress={()=>{navigation.navigate('LevelScreen')}} style={{padding:10,paddingHorizontal:15,borderRadius:25,backgroundColor:'rgba(107, 179, 51,0.5)',marginTop:50,borderWidth:2,borderColor:'rgb(107, 179, 51)'}}>
+                  <View style={{flexDirection:'row',alignItems:'center'}}>
+                    <Text style={{color:'black',fontSize:16}}>Challenge with Friends</Text>
+                  </View>
+               </TouchableHighlight>
+
+        </View> 
+        </View>  
         
+  </Animatable.View> */}
+
+  
+
+  </View> 
+        {/* } */}
+        <SwipeablePanel {...panelProps} isActive={isPanelActive} style={{zIndex:3,elevation:20,padding: 20,}}>
+                  <Text style={{fontSize:22,fontWeight:'bold',textAlign:'center'}}>Leaderboard</Text>
+
+               </SwipeablePanel>
       </View>
     );
   }

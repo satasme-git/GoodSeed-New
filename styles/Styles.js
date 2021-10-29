@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
     alignItems:'center',
     justifyContent:'flex-start',
     paddingLeft:10,
-    zIndex:1,
+    zIndex:2,
     padding:10
   },
   newHeader: {
@@ -230,23 +230,31 @@ const styles = StyleSheet.create({
     bottom:0,
     position:'absolute',
     // marginLeft:-windowWidth/2,
-    zIndex:2
+    zIndex:1
   },
   map: {
-    height:windowHeight/1.2,
-    width:windowWidth/1.2,
+    height:538,
+    width:327,
+    // height:windowHeight/1.1,
+    // width:windowWidth/1.1,
     // alignSelf:'flex-end',
     // resizeMode:'contain',
     alignSelf:'center',
-    bottom:20,
+    top:0,
     position:'absolute',
     // marginLeft:-windowWidth/2,
-    zIndex:2
+    zIndex:2,
+    // maxHeight:
   },
-  
+  levelIcon:{
+    width:14,
+    height:17,
+    alignItems:'center',
+    paddingTop:0
+  },
   heart: {
-    height:(windowWidth/3)-7,
-    width:windowWidth/3,
+    height:(windowWidth/2.5)-7,
+    width:windowWidth/2.5,
     // alignSelf:'flex-end',
     position:'absolute',
     top:0,
@@ -256,39 +264,47 @@ const styles = StyleSheet.create({
     // marginTop:-10
   },
   heart2: {
-    height:(windowWidth/3)-7,
-    width:windowWidth/3,
+    height:(windowWidth/2.5)-7,
+    width:windowWidth/2.5,
     // alignSelf:'flex-end',
     position:'absolute',
     top:0,
     // marginLeft:-windowWidth/2,
     zIndex:2,
+    left:0,
     // backgroundColor:'red',
     // marginTop:-10
   },
   heartBg: {
-    marginTop:50,
-    // height:(windowWidth/2.2)-20,
-    width:windowWidth-20,
-    marginLeft:-5,
-    alignItems:'center',
+    marginTop:-(windowHeight/2)+50,
+    height:(windowHeight/1.2),
+    width:windowWidth*2,
+    
+    alignSelf:'center',
+    // marginLeft:-windowWidth/2,
+    alignItems:'flex-start',
+    paddingLeft:windowHeight/3,
+    paddingTop:windowHeight/2,
+    flexDirection:'row',
     // padding:15,
-    backgroundColor:'#6bb333',
+    // backgroundColor:'#6bb333',
     // top:30,
     // alignSelf:'flex-end',
     // position:'absolute',
     // marginLeft:-windowWidth/2,
     zIndex:1,
     paddingVertical:10,
-    borderRadius:15
+    borderBottomLeftRadius:600,
+    borderBottomRightRadius:600
     // left:5
   },
   heartempty: {
-    height:windowWidth/3,
-    width:windowWidth/3,
-    backgroundColor:'#366011',
+    height:windowWidth/2.5,
+    width:windowWidth/2.5,
+    backgroundColor:'#3b1568',
     alignItems:'center',
-    justifyContent:'flex-end'
+    justifyContent:'flex-end',
+    alignSelf:'flex-start'
     // position:'absolute',
     // top:0
   },
@@ -354,7 +370,7 @@ const styles = StyleSheet.create({
     bottom:-200,
     position:'absolute',
     // marginLeft:-windowWidth/2,
-    zIndex:2
+    zIndex:1
   },
   grass: {
     height:windowHeight,
@@ -631,14 +647,18 @@ const buttons = StyleSheet.create({
   homebuttons:{
     paddingHorizontal:15,
     paddingVertical:5,
-    backgroundColor:'rgba(255,255,255,0.4)',
+    backgroundColor:'rgba(255,255,255,0.7)',
     borderRadius:10,
+    borderColor:'rgba(255,255,255,0.8)',
+    borderWidth:1
   },
   profileBitton:{
     height:30,
     width:30,
     borderRadius:25,
-    alignSelf:'flex-end',
+    // alignSelf:'flex-end',
+    // borderColor:'white',
+    // borderWidth:2
   }
 });
 

@@ -24,6 +24,8 @@ target 'GoodSeed' do
 
   pod 'RNSVG', :path => '../node_modules/react-native-svg'
 
+  pod 'RNTouchThroughView', :path => '../node_modules/react-native-touch-through-view'
+
   target 'GoodSeedTests' do
     inherit! :complete
     # Pods for testing

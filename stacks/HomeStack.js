@@ -7,13 +7,14 @@ import Avatar from '../screens/Avatar'
 import Select from '../screens/Select'
 import Challenge from '../screens/Challenge'
 import Step from '../screens/Step'
-
+import LevelScreen from '../screens/LevelScreen';
+import CreateChallenge from '../screens/CreateChallenge';
 
 const Stack = createStackNavigator();
 
 export default function MyStack() {
   return (
-    <Stack.Navigator initialRouteName={'Challenge'}>
+    <Stack.Navigator initialRouteName={'LevelScreen'}>
       <Stack.Screen 
         name="Home" component={Home}         
         options={{
@@ -21,7 +22,19 @@ export default function MyStack() {
         }} 
       />
       <Stack.Screen 
+        name="CreateChallenge" component={CreateChallenge}         
+        options={{
+          headerShown: false,
+        }} 
+      />
+      <Stack.Screen 
         name="Challenge" component={Challenge}         
+        options={{
+          headerShown: false,
+        }} 
+      />
+      <Stack.Screen 
+        name="LevelScreen" component={LevelScreen}         
         options={{
           headerShown: false,
         }} 
