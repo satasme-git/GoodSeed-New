@@ -9,12 +9,13 @@ import Challenge from '../screens/Challenge'
 import Step from '../screens/Step'
 import LevelScreen from '../screens/LevelScreen';
 import CreateChallenge from '../screens/CreateChallenge';
+import LoadingScreen from '../screens/LoadingScreen';
 
 const Stack = createStackNavigator();
 
 export default function MyStack() {
   return (
-    <Stack.Navigator initialRouteName={'LevelScreen'}>
+    <Stack.Navigator initialRouteName={'LoadingScreen'}>
       <Stack.Screen 
         name="Home" component={Home}         
         options={{
@@ -23,6 +24,12 @@ export default function MyStack() {
       />
       <Stack.Screen 
         name="CreateChallenge" component={CreateChallenge}         
+        options={{
+          headerShown: false,
+        }} 
+      />
+      <Stack.Screen 
+        name="LoadingScreen" component={LoadingScreen}         
         options={{
           headerShown: false,
         }} 

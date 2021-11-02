@@ -374,7 +374,7 @@ export default function CreateChallenge() {
                         :
                         <TouchableHighlight underlayColor={'#DDDDDD'} style={buttons.modalButton} 
                        
-                            onPress={()=>{setModelView(false);navigation.navigate('Home')}}>
+                            onPress={()=>{setModelView(false);navigation.navigate('Home',{challengId:challengId})}}>
                             <Text style={buttons.text}>{buttonText}</Text>
                         </TouchableHighlight>  
                         )}

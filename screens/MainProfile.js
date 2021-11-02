@@ -175,7 +175,7 @@ export default function MainProfile() {
                index==1?  
                         
                      isLoading==true?
-                     <View style={[styles.profilePicBig2,{justifyContent:'center'}]}>
+                     <View key={index} style={[styles.profilePicBig2,{justifyContent:'center'}]}>
                      <ActivityIndicator size="large" color="#4b937c" />
                      </View>
                      :
@@ -273,12 +273,14 @@ export default function MainProfile() {
                 {
                      item.image==null?
                      <Image 
+                     key={index}
                         source={require('../assets/profile.png')} 
                         style={styles.profilePicBig}
                      />
                :
                      <Image 
                         // source={{uri:filePath}}
+                        key={index}
                         source={{uri:BaseUrl.BASE_URL+'/assets/profile_pics/'+item.image}}
                         style={styles.profilePicBig2}
                      />

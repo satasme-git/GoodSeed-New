@@ -33,7 +33,9 @@ export default function Home() {
   const [loading,setLoading]= useState(true);
   const navigation = useNavigation();
 
+  const BaseUrl = require('../styles/BaseUrl');
   
+  const [users, setUsers] = useState([]);
   const route = useRoute();
   // useEffect(() => {
 
@@ -45,6 +47,7 @@ export default function Home() {
     setTimeout(() => {setLoading(false)}, 1500)
 
     setTimeout(() => {openPanel()}, 9000)
+    getData()
     // const unsubscribe = navigation.addListener('tabPress', (e) => {
     //   // Prevent default behavior
     //   e.preventDefault();
@@ -60,8 +63,7 @@ export default function Home() {
 
   const getData = () => {
     var array =[]
-    setRefreshing(true)
-    fetch(BaseUrl.BASE_URL+'/api/challenge/'+health.user.id)
+    fetch(BaseUrl.BASE_URL+'/api/LeaderBoard/'+route.params.challengId)
     .then((response) => response.json())
     .then((json) => {
     //    contacts.map((item)=>
@@ -72,11 +74,11 @@ export default function Home() {
     //       )}
     //    )
     // setContacts(array)
-    setRequests(json)
-    // console.log(json)
+    setUsers(json)
+    console.log(json)
     })
     .catch((error) => console.error(error))
-    .finally(() => {setRefreshing(false)});
+    .finally(() => {});
  
   }
   const [panelProps, setPanelProps] = useState({
@@ -222,7 +224,7 @@ export default function Home() {
                 
              />
             </TouchableHighlight>
-            <Text>{route.params.challengId}</Text>
+            {/* <Text>{route.params.challengId}</Text> */}
           </View>
             
              
@@ -301,7 +303,15 @@ export default function Home() {
         {/* } */}
         <SwipeablePanel {...panelProps} isActive={isPanelActive} style={{zIndex:3,elevation:20,padding: 20,}}>
                   <Text style={{fontSize:22,fontWeight:'bold',textAlign:'center'}}>Leaderboard</Text>
-
+                  <View>
+                    {
+                      users.map((user)=>
+                        <View key={user.id}>
+                          <Text>{user.member_id} : {user.steps}</Text>
+                        </View>
+                      )
+                    }
+                  </View>
                </SwipeablePanel>
       </View>
     );

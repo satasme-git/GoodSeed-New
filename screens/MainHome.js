@@ -205,7 +205,7 @@ export default function Details() {
              <Ionicons 
                 name="menu-outline" 
                 size={30} 
-                color="black" 
+                color="white" 
                 onPress={() => navigation.dispatch(DrawerActions.toggleDrawer())}
              /> 
              
@@ -228,6 +228,7 @@ export default function Details() {
         }
           </View>
           {/* <Background> */}
+          <ScrollView>
           <View style={{alignItems:'center'}}>
             <LinearGradient 
               colors={['#6bb333','#6bb333', '#438e05']} 
@@ -245,47 +246,57 @@ export default function Details() {
                       alignItems: 'flex-start',
                     }}
                   >
-                    <Image source={require('../assets/heartBg.png')} style={styles.heart2} />
+                    <Image source={require('../assets/heartNewFill.png')} style={styles.heart2} />
                   </View>
                 }>
                 <View style={[styles.heartempty]} >
-                <Image source={require('../assets/heart2.png')} style={[styles.heart,{tintColor:'white'}]} />
-                  <Image source={require('../assets/watering2.gif')} style={{height:20,width:'100%',tintColor:'#8639e5'}}/>
-                  <View style={{backgroundColor:'#8639e5',height:30,width:'100%'}} />
+                <Image source={require('../assets/heartNew.png')} style={[styles.heart,{tintColor:'white'}]} />
+                  <Image source={require('../assets/watering2.gif')} style={{height:20,width:'100%',tintColor:'#6bb333'}}/>
+                  <View style={{backgroundColor:'#6bb333',height:30,width:'100%'}} />
                 </View>
               </MaskedView>
 
-              <View style={{height:'70%',justifyContent:'space-evenly',alignItems:'flex-start',paddingLeft:25}}>
+              <View style={{width:'60%',justifyContent:'space-around',alignItems:'center',paddingLeft:0,flexDirection:'row',backgroundColor:'white',paddingVertical:2,borderRadius:10}}>
                 <TouchableOpacity style={buttons.homebuttons}>
                   <View style={{flexDirection:'row',alignItems:'center'}}>
-                    <FontAwesome5 name={'walking'} size={16} />
-                  <Text style={{fontSize:17}}>  {health.steps}</Text>
+                    <FontAwesome5 name={'walking'} size={20} color={'#6bb333'}/>
+                  <Text style={{fontSize:17,color:'#6bb333'}}>  {health.steps}</Text>
                   </View>
                 </TouchableOpacity>
 
                 <TouchableOpacity style={buttons.homebuttons}>
                 <View style={{flexDirection:'row',alignItems:'center'}}>
-                    <MaterialCommunityIcons name={'power-sleep'} size={16} />
-                  <Text style={{fontSize:17}}> {health.sleep} </Text>
+                    <MaterialCommunityIcons name={'power-sleep'} size={20}  color={'#6bb333'}/>
+                  <Text style={{fontSize:17,color:'#6bb333'}}> {health.sleep} </Text>
                   </View>
                 </TouchableOpacity>
               </View>
             </LinearGradient>
 
-            <View style={{marginTop:10,flexDirection:'row',width:windowWidth,flexWrap:'wrap',justifyContent:'center'}}>
+            <View style={{marginTop:-40,zIndex:5,width:windowWidth,justifyContent:'center',borderTopLeftRadius:40,borderTopRightRadius:40,backgroundColor:'white',padding:10,paddingTop:15}}>
               {Habbits.map((item)=>
                   <TouchableOpacity key={item.id} 
-                  style={{backgroundColor:item.color,marginHorizontal:10,marginVertical:10,paddingVertical:0,paddingHorizontal:0,borderRadius:20,height:item.height,width:item.width,justifyContent:'space-evenly',alignSelf:'flex-start',alignItems:'center'}} 
+                  style={{backgroundColor:'#6bb333',marginHorizontal:5,marginVertical:5,borderRadius:15,width:windowWidth-30,justifyContent:'space-between',alignSelf:'flex-start',alignItems:'center',flexDirection:'row',padding:12}} 
                   onPress={()=>{navigation.navigate(item.screen)}}>
-                  <Image source={item.png} style={{width:25,height:25,tintColor:'white',margin:5,resizeMode:'contain'}} />
-                    <Text style={{color:'white',paddingHorizontal:5,fontSize:14,margin:5}}>{item.title}</Text>
+                    <View style={{flexDirection:'row',alignItems:'center'}}>
+                  <Image source={item.png} style={{width:40,height:40,tintColor:'white',margin:5,resizeMode:'contain'}} />
+                    <View style={{width:'70%'}}>
+                    <Text style={{color:'white',paddingHorizontal:5,fontSize:17}}>{item.title}</Text>
+                    <Text style={{color:'white',paddingHorizontal:5,fontSize:10}}>{item.desc}</Text>
+                    </View>
+                    </View>
+                    <Ionicons 
+                name="chevron-forward-circle" 
+                size={30} 
+                color="white" 
+             /> 
                   </TouchableOpacity>
               )}
             </View>
 
      
           </View>
-
+</ScrollView>
         {/* </Background> */}
         
       </View>
