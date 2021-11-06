@@ -98,7 +98,7 @@ export default function Step() {
           <View style={{alignItems:'center',justifyContent:'center',marginTop:50}}>
           
           <LinearGradient 
-              colors={['#6bb333', '#366011']} 
+              colors={['#6bb333', '#6bb333']} 
               style={{borderRadius:20,alignItems:'center',justifyContent:'center',padding:15,width:'90%'}}>
           <AnimatedCircularProgress
             size={200}
@@ -106,7 +106,7 @@ export default function Step() {
             fill={((health.steps*100)/filled)}
             rotation={-0}
             tintColor="#fff"
-            backgroundColor="#3d5875"
+            backgroundColor="rgba(255,255,255,0.3)"
             
             lineCap={'round'}
             backgroundWidth={10}
@@ -167,7 +167,7 @@ export default function Step() {
           width={250} 
           borderRadius={2} 
           height={10} 
-          unfilledColor={'rgba(107, 179, 51,0.5)'}
+          unfilledColor={'rgba(107, 179, 51,0.3)'}
           borderColor={'transparent'}
           color={'rgb(107, 179, 51)'}
           />

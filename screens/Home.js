@@ -1,5 +1,5 @@
 import React, { useState , useEffect , useContext, useRef  } from 'react';
-import { StatusBar, View , BackHandler , Dimensions,Text,Image} from 'react-native';
+import { StatusBar, View , BackHandler , Dimensions,Text,Image,TouchableOpacity} from 'react-native';
 import { useNavigation , DrawerActions ,useRoute } from '@react-navigation/native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { buttons, styles } from '../styles/Styles';
@@ -7,6 +7,7 @@ import * as Animatable from 'react-native-animatable';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { TouchableHighlight } from 'react-native-gesture-handler';
 import { HealthProvider, HealthContext } from '../context/Context';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import {
   BallIndicator,
   BarIndicator,
@@ -28,6 +29,8 @@ import { AvatarImages } from '../styles/AvatarImages';
 
 import { SwipeablePanel } from 'rn-swipeable-panel';
 
+import Modal from "react-native-modal";
+
 export default function Home() {
   const health = useContext(HealthContext);
   const [loading,setLoading]= useState(true);
@@ -36,44 +39,25 @@ export default function Home() {
   const BaseUrl = require('../styles/BaseUrl');
   
   const [users, setUsers] = useState([]);
+  const [win, setWins] = useState([]);
   const route = useRoute();
-  // useEffect(() => {
-
-  //   setTimeout(() => {setLoading(false)}, 2000)
-
-  // }, []);
+  const next = parseInt(health.user.level) + 1
+  const [isModalVisible, setModalVisible] = useState(false);
 
   React.useEffect(() => {
     setTimeout(() => {setLoading(false)}, 1500)
 
     setTimeout(() => {openPanel()}, 9000)
     getData()
-    // const unsubscribe = navigation.addListener('tabPress', (e) => {
-    //   // Prevent default behavior
-    //   e.preventDefault();
-
-    //   console.log('Default behavior prevented');
-    //   // Do something manually
-    //   // ...
-    // });
-
-    // return unsubscribe;
-    
-  }, []);
+    getWinData()
+    getUser()
+  },[]);
 
   const getData = () => {
     var array =[]
     fetch(BaseUrl.BASE_URL+'/api/LeaderBoard/'+route.params.challengId)
     .then((response) => response.json())
     .then((json) => {
-    //    contacts.map((item)=>
-    //       {item.phoneNumbers.map((ph)=>
-    //          {json.map((log)=>
-    //             ph.number==log.contactNo || ph.number.replace("0", "+94")==log.contactNo?array.push({rawContactId:item.rawContactId,displayName:item.displayName,avatar:log.avatar,id:log.id}):null
-    //          )}
-    //       )}
-    //    )
-    // setContacts(array)
     setUsers(json)
     console.log(json)
     })
@@ -81,6 +65,42 @@ export default function Home() {
     .finally(() => {});
  
   }
+  const getWinData = () => {
+    var array =[]
+    fetch(BaseUrl.BASE_URL+'/api/Win/'+route.params.challengId+"/"+next)
+    .then((response) => response.json())
+    .then((json) => {
+
+    setWins(json)
+    console.log(json)
+      if(json.win !=0){
+        setModalVisible(true)
+      }
+    })
+    .catch((error) => console.error(error))
+    .finally(() => {});
+ 
+  }
+
+  
+  const getUser = () => {
+    var array =[]
+    fetch(BaseUrl.BASE_URL+'/api/Login/'+health.user.id)
+    .then((response) => response.json())
+    .then((json) => {
+
+      health.setUser(json)
+    // setWins(json)
+    console.log(json)
+      // if(json.win !=0){
+      //   setModalVisible(true)
+      // }
+    })
+    .catch((error) => console.error(error))
+    .finally(() => {});
+ 
+  }
+
   const [panelProps, setPanelProps] = useState({
     fullWidth: true,
     showCloseButton: false,
@@ -225,6 +245,19 @@ export default function Home() {
              />
             </TouchableHighlight>
             {/* <Text>{route.params.challengId}</Text> */}
+            
+          </View>
+          <View style={{position: 'absolute',zIndex:10,top:10,right:10}}>
+            <TouchableHighlight style={{borderRadius:50}} underlayColor={'rgba(107, 179, 51,0.7)'} onPress={() => navigation.goBack()}>  
+             {/* <Ionicons 
+                name="arrow-back" 
+                size={30} 
+                color="black" 
+                
+             /> */}
+            </TouchableHighlight>
+            <Text style={{backgroundColor:'rgba(255,255,255,0.6)',paddingVertical:2,paddingHorizontal:7,borderRadius:20,fontSize:15}}>Target - {win.target} steps</Text>
+            
           </View>
             
              
@@ -302,17 +335,60 @@ export default function Home() {
   </View> 
         {/* } */}
         <SwipeablePanel {...panelProps} isActive={isPanelActive} style={{zIndex:3,elevation:20,padding: 20,}}>
-                  <Text style={{fontSize:22,fontWeight:'bold',textAlign:'center'}}>Leaderboard</Text>
+                  <Text style={{fontSize:22,fontWeight:'bold',textAlign:'center',marginBottom:15}}>Leaderboard</Text>
                   <View>
                     {
                       users.map((user)=>
-                        <View key={user.id}>
-                          <Text>{user.member_id} : {user.steps}</Text>
+                        <View key={user.id} style={{flexDirection:'row',alignItems:'center',justifyContent:'space-between',margin:2,padding:10,backgroundColor: 'rgba(107, 179, 51,0.2)',borderRadius:10}}>
+                          <View style={{flexDirection:'row',alignItems:'center'}}>
+                          {AvatarImages.map((av)=>
+                              av.id==user.avatar?
+                                  // setImage(av.png)
+                                  <Image key={av.id} source={av.png} style={{width:30,height:30,borderRadius:50,marginRight:10}}  />
+                                  :
+                                  null
+                                  // <Image key={av.id} source={av.png} style={{width:25,height:25}}  />
+                              
+                                                  
+                          )}
+                          <Text style={{fontSize:17}}>{user.player}</Text>
+                          </View>
+                          <View style={{backgroundColor: 'white',padding:5,paddingHorizontal:15,borderRadius:15,width:90,flexDirection:'row',alignItems:'center',justifyContent:'space-around'}}>
+                            <FontAwesome5 name={'walking'} size={17} color={'#6bb333'}/>
+                            <Text style={{fontSize:17,color:'#6bb333',textAlign:'center'}}>{user.steps}</Text>
+                          </View>
                         </View>
                       )
                     }
                   </View>
                </SwipeablePanel>
+               <Modal isVisible={isModalVisible} style={{zIndex:25,elevation:6,alignItems:'center',justifyContent:'center'}}>
+        <View style={{backgroundColor:'white',alignSelf:'center',width:windowWidth-40,alignItems:'center',padding:15,borderRadius:15}}>
+          <Text style={{fontSize:25}}>Congradulations</Text>
+            {users.map((user,index)=>
+            user.member_id==win.win?
+            <View key={index} style={{alignItems:'center'}}>
+              <Text style={{fontSize:25,fontWeight:'bold'}}>{user.player}</Text>{AvatarImages.map((av)=>
+                              av.id==user.avatar?
+                                  // setImage(av.png)
+                                  <Image key={av.id} source={av.png} style={{width:60,height:60,borderRadius:50,margin:20}}  />
+                                  :
+                                  null
+                                  // <Image key={av.id} source={av.png} style={{width:25,height:25}}  />
+                              
+                                                  
+                          )}
+              <Text style={{color:'gray',marginTop:10}}>{user.player} won the Challenge</Text>
+            </View>
+            :
+            null
+            )}
+          {/* <Button title="Hide modal" onPress={toggleModal} /> */}
+          <TouchableOpacity onPress={()=>setModalVisible(false)} style={{backgroundColor:'rgba(107, 179, 51,0.4)',paddingVertical:5,paddingHorizontal:10,borderRadius:10,marginTop:20}}>
+            <Text>Close</Text>
+          </TouchableOpacity>
+        </View>
+      </Modal>
       </View>
     );
   }

@@ -7,6 +7,7 @@ import SelectStack from '../stacks/SelectStack'
 import Welcome from '../screens/Welcome'
 import Profile from '../screens/Profile'
 import HomeDrawer from '../drawer/HomeDrawer'
+import ContactNumber from '../screens/ContactNumber';
 
 const Stack = createStackNavigator();
 
@@ -21,6 +22,12 @@ export default function MyStack() {
       />
       <Stack.Screen 
         name="Login" component={Login}         
+        options={{
+          headerShown: false,
+        }} 
+      />
+      <Stack.Screen 
+        name="ContactNumber" component={ContactNumber}         
         options={{
           headerShown: false,
         }} 

@@ -29,17 +29,22 @@ import BackgroundTimer from 'react-native-background-timer';
 
 import { AvatarImages } from '../styles/AvatarImages';
 import moment from 'moment';
+
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
+
 export default function Details() {
   
   const health = useContext(HealthContext);
 
-  const sleep = (time) => new Promise((resolve) => setTimeout(() => resolve(), time));
+  // const sleep = (time) => new Promise((resolve) => setTimeout(() => resolve(), time));
   
   const [steps, setStep] = useState(0);
   
+  const [key, setKey] = useState(0);
   const [data, setData] = useState([]);
+  const [percentage, setPercentage] = useState(0);
+  const [height, setHeight] = useState(0);
 
   const storeData = async (value) => {
     try {
@@ -49,18 +54,15 @@ export default function Details() {
     }
   }
   
-  const getData = async () => {
-    try {
-      const value = await AsyncStorage.getItem('steps')
-      if(value !== null) {
-        setStep(parseInt(value))
-        console.log(value)
-        // value previously stored
-      }
-    } catch(e) {
-      // error reading value
-    }
+  const getPersentage = () =>{
+    var heartHeight = (windowWidth/2.5)-7
+    var now =((health.steps*100)/6000).toFixed(1)
+    setPercentage(((health.steps*100)/6000).toFixed(1))
+    setKey(key+1)
+
+    setHeight((now/100)*heartHeight)
   }
+
 
   const storeSteps = async (value) => {
     try {
@@ -82,23 +84,7 @@ export default function Details() {
   }
 
 
-  const getStepsData = async () => {
-    try {
-      const jsonValue = await AsyncStorage.getItem('stepStorage')
-      
-      return jsonValue != null ? 
-
-      // setData(JSON.parse(jsonValue)) 
-      console.log('array is '+JSON.parse(jsonValue))
-
-      :
-      null
-      ;
-
-    } catch(e) {
-      // error reading value
-    }
-  }
+  
   
   
     const BaseUrl = require('../styles/BaseUrl');
@@ -115,6 +101,7 @@ export default function Details() {
       .finally(() => {});
 
     }
+
     const getSleptData =()=>{
       
       fetch(BaseUrl.BASE_URL+'/api/sleepData/'+health.user.id)
@@ -130,7 +117,7 @@ export default function Details() {
             health.setSleep(json.duration + ' Hours')
           }
           else{
-            health.setSleep('Add Sleep Time')
+            health.setSleep('0 Hours')
           }
           
 
@@ -163,14 +150,50 @@ export default function Details() {
         });
   
     };
+    const getData =()=>{
 
+      fetch(BaseUrl.BASE_URL+'/api/Elimination/'+health.user.id)
+      .then((response) => response.json())
+      .then((json) => {
+         // health.setProPic(BaseUrl.BASE_URL+'/assets/profile_pics/'+json[1].image)
+        //  console.log(json)
+         health.setGlasses(parseInt(json.glasses))
+         // console.log(BaseUrl.BASE_URL+'/assets/profile_pics/'+json[1].image)
+      })
+      .catch((error) => console.error(error))
+      .finally(() => {});
+
+    }
     
     useEffect(() => {
       getData()
       getImages()
       getSleptData()
-      getStepsData()
+      getPersentage()
+      // countSteps()
       // toggleBackground()
+      
+    // }
+      
+    
+    },[]);
+    
+    const countSteps = async () => {
+      try {
+        const jsonValue = await AsyncStorage.getItem('user')
+        return jsonValue != null ?[ 
+        setUser(JSON.parse(jsonValue)), 
+        console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>'+jsonValue)]
+        
+        : 
+        console.log(jsonValue);
+      } catch(e) {
+        console.log(e)
+        // error reading value
+      }
+    }
+
+    const counter = () => {
       const config = {
         default_threshold: 15.0,
         default_delay: 150000000,
@@ -179,18 +202,18 @@ export default function Details() {
         onCheat: () => { }
       }
       startCounter(config);
-    // }
-      
+      return () => { stopCounter() }
+    }
+
     const backgroundtimer = (step) =>{
       // console.log(steps)
+      setSteps(step)
       health.setSteps(step)
       storeData(step.toString())
-      setSteps(step)
+      
       // storeSteps(step.toString())
       
     }
-    },[]);
-
     const navigation = useNavigation();
     const renderItem = ({ item }) => (
       <TouchableOpacity style={{backgroundColor:item.color,margin:10,paddingVertical:10,paddingHorizontal:20,borderRadius:10}} onPress={()=>{navigation.navigate(item.screen)}}>
@@ -251,25 +274,54 @@ export default function Details() {
                 }>
                 <View style={[styles.heartempty]} >
                 <Image source={require('../assets/heartNew.png')} style={[styles.heart,{tintColor:'white'}]} />
-                  <Image source={require('../assets/watering2.gif')} style={{height:20,width:'100%',tintColor:'#6bb333'}}/>
-                  <View style={{backgroundColor:'#6bb333',height:30,width:'100%'}} />
+                {
+                  percentage==0?
+                  <View key={key} onLayout={()=>getPersentage()}></View>
+                  :
+              <Text style={{position:'absolute',top:30,fontSize:35,color:'white'}}>{percentage}%</Text>
+                }
+                
+                  
+                  <Image source={require('../assets/watering2.gif')} style={{height:20,width:'100%',tintColor:'#72ff00',opacity:0.6}}/>
+                  <View style={{backgroundColor:'#72ff00',height:height,width:'100%',opacity:0.6}} />
                 </View>
               </MaskedView>
 
-              <View style={{width:'60%',justifyContent:'space-around',alignItems:'center',paddingLeft:0,flexDirection:'row',backgroundColor:'white',paddingVertical:2,borderRadius:10}}>
+              <View style={{width:'70%',justifyContent:'space-around',alignItems:'center',paddingLeft:0,flexDirection:'row',backgroundColor:'rgba(255,255,255,1)',paddingVertical:2,borderRadius:10}}>
                 <TouchableOpacity style={buttons.homebuttons}>
                   <View style={{flexDirection:'row',alignItems:'center'}}>
-                    <FontAwesome5 name={'walking'} size={20} color={'#6bb333'}/>
-                  <Text style={{fontSize:17,color:'#6bb333'}}>  {health.steps}</Text>
+                    <FontAwesome5 name={'walking'} size={17} color={'#6bb333'}/>
+                  <Text style={{fontSize:16,color:'#6bb333'}}>  {health.steps}</Text>
                   </View>
                 </TouchableOpacity>
 
                 <TouchableOpacity style={buttons.homebuttons}>
                 <View style={{flexDirection:'row',alignItems:'center'}}>
-                    <MaterialCommunityIcons name={'power-sleep'} size={20}  color={'#6bb333'}/>
-                  <Text style={{fontSize:17,color:'#6bb333'}}> {health.sleep} </Text>
+                    <MaterialCommunityIcons name={'power-sleep'} size={17}  color={'#6bb333'}/>
+                  {
+                    health.sleep==''?
+                    <View onLayout={()=>getSleptData()}></View>
+                    :
+                    <Text style={{fontSize:16,color:'#6bb333'}}> {health.sleep} </Text>
+                  }
+                  
                   </View>
                 </TouchableOpacity>
+
+                <TouchableOpacity style={buttons.homebuttons}>
+                  <View style={{flexDirection:'row',alignItems:'center'}}>
+                    <MaterialCommunityIcons name={'glass-pint-outline'} size={17} color={'#6bb333'}/>
+                  {
+                    health.glasses==0?
+                    <View onLayout={()=>getData()}></View>
+                    :
+                    <Text style={{fontSize:16,color:'#6bb333'}}>  {health.glasses}</Text>
+                  }
+                  
+                  </View>
+                </TouchableOpacity>
+
+
               </View>
             </LinearGradient>
 

@@ -41,7 +41,7 @@ export default function HomeTabs() {
     />
       <Tab.Screen name="Habbits" component={Habbits} 
             options={{
-            tabBarLabel: 'Habbits',
+            tabBarLabel: 'Habits',
             tabBarIcon: ({ color, size }) => (
               <Ionicons name="water-outline" color={color} size={25} />
             ),

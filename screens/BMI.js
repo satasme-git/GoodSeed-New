@@ -206,12 +206,12 @@ const calculateBmiStandard = async () => {
             <Text style={{color:'black',fontSize:16}}>Close</Text>
           </TouchableHighlight>
 
-          <TouchableHighlight 
+          {/* <TouchableHighlight 
           underlayColor={color2} 
           onPress={()=>{navigation.navigate('BMIChart');toggleModal()}} 
           style={{backgroundColor:'white',borderWidth:2,alignSelf:'flex-end',position:'absolute',bottom:20,right:20,paddingHorizontal:20,paddingVertical:5,borderRadius:20,borderColor:color}}>
             <Text style={{color:'black',fontSize:16}}>View the Chart</Text>
-          </TouchableHighlight>
+          </TouchableHighlight> */}
           
 
 

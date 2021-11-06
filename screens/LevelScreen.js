@@ -28,6 +28,7 @@ import LinearGradient from 'react-native-linear-gradient';
 export default function LevelScreen (){
 
     const navigation = useNavigation();
+    const health = useContext(HealthContext);
     
     const arcZoomIn = {
       0: {
@@ -77,41 +78,78 @@ export default function LevelScreen (){
                 >
                 <ImageBackground source={require('../assets/map4.png')} style={[styles.map,{top:0}]}>
                   
-                  <TouchableOpacity style={{marginTop:147,marginLeft:65,alignSelf:'flex-start'}} onPress={()=>navigation.navigate('Challenge')}>
+                  <TouchableOpacity style={{marginTop:147,marginLeft:65,alignSelf:'flex-start'}} onPress={health.user.level == 1?()=>navigation.navigate('Challenge'):null}>
                     <View style={{flexDirection:'row',alignItems:'flex-start'}}>
                       
-                    <ImageBackground source={require('../assets/level.png')} style={styles.levelIcon} imageStyle={{resizeMode:'contain'}}>
-                    {/* <Image source={require('../assets/complete.png')} style={{width:14,height:14,position:'absolute',top:3}} /> */}
-                      <Text style={{fontSize:11,fontWeight:'bold'}}>1</Text>
+                    <ImageBackground source={require('../assets/level.png')} style={styles.levelIcon} imageStyle={{resizeMode:'contain',tintColor:health.user.level >= 1?'#cc6608':'gray'}}>
+                    {
+                      health.user.level > 1?
+                      <Image source={require('../assets/complete.png')} style={{width:14,height:14,position:'absolute',top:3}} />
+                      : 
+                      null
+                    }
+                    
+                      <Text style={{fontSize:11,fontWeight:'bold',color:'#6b0e0e'}}>1</Text>
                     </ImageBackground>  
                     
-
+                    {
+                      health.user.level >= 1?
                       <View style={{marginLeft:1,backgroundColor: 'rgba(255,255,255,0.6)',paddingHorizontal:5,borderRadius:5,borderWidth:0.7,borderColor:'#693910',paddingVertical:1}}>
                         <Text style={{fontSize:5}}>Kingdom of Tambapanni</Text>
-                      </View>  
+                      </View>
+                      : null
+                    }
+                        
                     </View>            
                   </TouchableOpacity>
 
-                  <TouchableOpacity style={{marginTop:27,marginLeft:113,alignSelf:'flex-start'}}>
+                  <TouchableOpacity style={{marginTop:27,marginLeft:113,alignSelf:'flex-start'}} onPress={health.user.level == 2?()=>navigation.navigate('Challenge'):()=>{}}>
                   <View style={{flexDirection:'row',alignItems:'flex-start'}}>
-                    <ImageBackground source={require('../assets/level.png')} style={styles.levelIcon}  imageStyle={{resizeMode:'contain'}}>
-                      <Text style={{fontSize:11,fontWeight:'bold'}}>2</Text>
+                    <ImageBackground source={require('../assets/level.png')} style={styles.levelIcon}  imageStyle={{resizeMode:'contain',tintColor:health.user.level >= 2?'#cc6608':'gray'}}>
+                    {
+                      health.user.level > 2?
+                      <Image source={require('../assets/complete.png')} style={{width:14,height:14,position:'absolute',top:3}} />
+                      : 
+                      null
+                    }
+                    <Text style={{fontSize:11,fontWeight:'bold',color:'#6b0e0e'}}>2</Text>
                     </ImageBackground> 
 
-                    <View style={{marginLeft:1,backgroundColor: 'rgba(255,255,255,0.6)',paddingHorizontal:5,borderRadius:5,borderWidth:0.7,borderColor:'#693910',paddingVertical:1}}>
+                    {
+                      health.user.level >= 2?
+                      <View style={{marginLeft:1,backgroundColor: 'rgba(255,255,255,0.6)',paddingHorizontal:5,borderRadius:5,borderWidth:0.7,borderColor:'#693910',paddingVertical:1}}>
                         <Text style={{fontSize:5}}>Anuradhapura Kingdom</Text>
                       </View>
+                      :
+                      null
+                    }
 
                     </View>               
                   </TouchableOpacity>
 
-                  <TouchableOpacity style={{marginTop:30,marginLeft:121}}>
-                  <View style={{flexDirection:'row',alignItems:'flex-start'}}>
-                  <View style={{marginLeft:2,backgroundColor: 'rgba(255,255,255,0.6)',paddingHorizontal:3,borderRadius:5,borderWidth:0.7,borderColor:'#693910',paddingVertical:1}}>
+                  <TouchableOpacity style={{marginTop:30,marginLeft:121}} onPress={health.user.level == 3?()=>navigation.navigate('Challenge'):()=>{}}>
+                  <View style={{flexDirection:'row',alignItems:'flex-start'}} >
+                  
+                  {
+                    health.user.level >= 3?
+                      <View style={{marginLeft:2,backgroundColor: 'rgba(255,255,255,0.6)',paddingHorizontal:3,borderRadius:5,borderWidth:0.7,borderColor:'#693910',paddingVertical:1}}>
                         <Text style={{fontSize:5}}>Kingdom of Polonnaruwa</Text>
                       </View>
-                    <ImageBackground source={require('../assets/level.png')} style={styles.levelIcon}  imageStyle={{resizeMode:'contain'}}>
-                      <Text style={{fontSize:11,fontWeight:'bold'}}>3</Text>
+                    :
+                    <View style={{marginLeft:2,backgroundColor: 'rgba(255,255,255,0.0)',paddingHorizontal:6,borderRadius:5}}>
+                        <Text style={{fontSize:5,color:'transparent'}}>Kingdom of Polonnaruwa</Text>
+                      </View>
+                  }
+                  
+
+                    <ImageBackground source={require('../assets/level.png')} style={styles.levelIcon}  imageStyle={{resizeMode:'contain',tintColor:health.user.level >= 3?'#cc6608':'gray'}}>
+                    {
+                      health.user.level > 3?
+                      <Image source={require('../assets/complete.png')} style={{width:14,height:14,position:'absolute',top:3}} />
+                      : 
+                      null
+                    }
+                    <Text style={{fontSize:11,fontWeight:'bold',color:'#6b0e0e'}}>3</Text>
                     </ImageBackground>   
 
                                  
@@ -119,83 +157,176 @@ export default function LevelScreen (){
                   </TouchableOpacity>
 
                   
-                  <TouchableOpacity style={{marginTop:0,marginLeft:100,alignSelf:'flex-start'}}>
+                  <TouchableOpacity style={{marginTop:0,marginLeft:100,alignSelf:'flex-start'}} onPress={health.user.level == 5?()=>navigation.navigate('Challenge'):()=>{}}>
                   <View style={{flexDirection:'row',alignItems:'flex-start'}}>
-                    <ImageBackground source={require('../assets/level.png')} style={styles.levelIcon}  imageStyle={{resizeMode:'contain'}}>
-                      <Text style={{fontSize:11,fontWeight:'bold'}}>5</Text>
+                    <ImageBackground source={require('../assets/level.png')} style={styles.levelIcon}  imageStyle={{resizeMode:'contain',tintColor:health.user.level >= 5?'#cc6608':'gray'}}>
+                      {
+                      health.user.level > 5?
+                      <Image source={require('../assets/complete.png')} style={{width:14,height:14,position:'absolute',top:3}} />
+                      : 
+                      null
+                    }
+                    <Text style={{fontSize:11,fontWeight:'bold',color:'#6b0e0e'}}>5</Text>
                     </ImageBackground>    
+                    
+                    {health.user.level >= 5?
                     <View style={{marginLeft:1,backgroundColor: 'rgba(255,255,255,0.6)',paddingHorizontal:5,borderRadius:5,borderWidth:0.7,borderColor:'#693910',paddingVertical:1}}>
-                        <Text style={{fontSize:5}}>Kingdom of Yapahuwa</Text>
+                    
+                    <Text style={{fontSize:5}}>Kingdom of Yapahuwa</Text>
                       </View> 
+                      :
+                      null
+                  }
+                    
+
+
                       </View>            
                   </TouchableOpacity>
 
                   
-                  <TouchableOpacity style={{marginTop:20,marginLeft:108,alignSelf:'flex-start'}}>
+                  <TouchableOpacity style={{marginTop:20,marginLeft:108,alignSelf:'flex-start'}} onPress={health.user.level == 6?()=>navigation.navigate('Challenge'):()=>{}}>
                   <View style={{flexDirection:'row',alignItems:'flex-start'}}>
-                    <ImageBackground source={require('../assets/level.png')} style={styles.levelIcon}  imageStyle={{resizeMode:'contain'}}>
-                      <Text style={{fontSize:11,fontWeight:'bold'}}>6</Text>
-                    </ImageBackground> 
-                    <View style={{marginLeft:1,backgroundColor: 'rgba(255,255,255,0.6)',paddingHorizontal:5,borderRadius:5,borderWidth:0.7,borderColor:'#693910',paddingVertical:1}}>
+                    <ImageBackground source={require('../assets/level.png')} style={styles.levelIcon}  imageStyle={{resizeMode:'contain',tintColor:health.user.level >= 6?'#cc6608':'gray'}}>
+                    {
+                      health.user.level > 6?
+                      <Image source={require('../assets/complete.png')} style={{width:14,height:14,position:'absolute',top:3}} />
+                      : 
+                      null
+                    }
+                    <Text style={{fontSize:11,fontWeight:'bold',color:'#6b0e0e'}}>6</Text>
+                    </ImageBackground>
+                    {
+                      health.user.level >= 6?
+                      <View style={{marginLeft:1,backgroundColor: 'rgba(255,255,255,0.6)',paddingHorizontal:5,borderRadius:5,borderWidth:0.7,borderColor:'#693910',paddingVertical:1}}>
                         <Text style={{fontSize:5}}>Kingdom of Kurunegala</Text>
-                      </View> 
+                      </View>
+                      :
+                      null
+                    } 
+                     
                     </View>               
                   </TouchableOpacity>
 
                   
-                  <TouchableOpacity style={{marginTop:-2,marginLeft:88,alignSelf:'flex-start'}}>
+                  <TouchableOpacity style={{marginTop:-2,marginLeft:88,alignSelf:'flex-start'}} onPress={health.user.level == 4?()=>navigation.navigate('Challenge'):()=>{}}>
                   <View style={{flexDirection:'row',alignItems:'flex-start'}}>
-                    <ImageBackground source={require('../assets/level.png')} style={styles.levelIcon}  imageStyle={{resizeMode:'contain'}}>
-                      <Text style={{fontSize:11,fontWeight:'bold'}}>4</Text>
+                    <ImageBackground source={require('../assets/level.png')} style={styles.levelIcon}  imageStyle={{resizeMode:'contain',tintColor:health.user.level >= 4?'#cc6608':'gray'}}>
+                    {
+                      health.user.level > 4?
+                      <Image source={require('../assets/complete.png')} style={{width:14,height:14,position:'absolute',top:3}} />
+                      : 
+                      null
+                    }
+                    <Text style={{fontSize:11,fontWeight:'bold',color:'#6b0e0e'}}>4</Text>
                     </ImageBackground> 
+                    
+                    {
+                      health.user.level >= 4?
                     <View style={{marginLeft:1,backgroundColor: 'rgba(255,255,255,0.6)',paddingHorizontal:5,borderRadius:5,borderWidth:0.7,borderColor:'#693910',paddingVertical:1}}>
                         <Text style={{fontSize:5}}>Kingdom of Dambadeniya</Text>
                       </View> 
+                      :
+                      null
+                    }
+
                     </View>               
                   </TouchableOpacity>
 
-                  <TouchableOpacity style={{marginTop:-2,marginLeft:142,alignSelf:'flex-start'}}>
+                  <TouchableOpacity style={{marginTop:-2,marginLeft:142,alignSelf:'flex-start'}} onPress={health.user.level == 10?()=>navigation.navigate('Challenge'):()=>{}}>
                   <View style={{flexDirection:'row',alignItems:'flex-start'}}>
-                    <ImageBackground source={require('../assets/level.png')} style={styles.levelIcon}  imageStyle={{resizeMode:'contain'}}>
-                      <Text style={{fontSize:11,fontWeight:'bold'}}>10</Text>
+                    <ImageBackground source={require('../assets/level.png')} style={styles.levelIcon}  imageStyle={{resizeMode:'contain',tintColor:health.user.level >= 10?'#cc6608':'gray'}}>
+                    {
+                      health.user.level > 10?
+                      <Image source={require('../assets/complete.png')} style={{width:14,height:14,position:'absolute',top:3}} />
+                      : 
+                      null
+                    }
+                    <Text style={{fontSize:11,fontWeight:'bold',color:'#6b0e0e'}}>10</Text>
                     </ImageBackground> 
+
+                    {
+                      health.user.level >= 10?
                     <View style={{marginLeft:1,backgroundColor: 'rgba(255,255,255,0.6)',paddingHorizontal:5,borderRadius:5,borderWidth:0.7,borderColor:'#693910',paddingVertical:1}}>
                         <Text style={{fontSize:5}}>Kingdom of Kandy</Text>
-                      </View> 
+                      </View>
+                      :
+                      null
+                    }
+ 
                     </View>               
                   </TouchableOpacity>
 
                   
-                  <TouchableOpacity style={{marginTop:-2,marginLeft:130,alignSelf:'flex-start'}}>
+                  <TouchableOpacity style={{marginTop:-2,marginLeft:130,alignSelf:'flex-start'}} onPress={health.user.level == 7?()=>navigation.navigate('Challenge'):()=>{}}>
                   <View style={{flexDirection:'row',alignItems:'flex-start'}}>
-                    <ImageBackground source={require('../assets/level.png')} style={styles.levelIcon}  imageStyle={{resizeMode:'contain'}}>
-                      <Text style={{fontSize:11,fontWeight:'bold'}}>7</Text>
-                    </ImageBackground>  
+                    <ImageBackground source={require('../assets/level.png')} style={styles.levelIcon}  imageStyle={{resizeMode:'contain',tintColor:health.user.level >= 7?'#cc6608':'gray'}}>
+                    {
+                      health.user.level > 7?
+                      <Image source={require('../assets/complete.png')} style={{width:14,height:14,position:'absolute',top:3}} />
+                      : 
+                      null
+                    }
+                    <Text style={{fontSize:11,fontWeight:'bold',color:'#6b0e0e'}}>7</Text>
+                    </ImageBackground> 
+
+                    {
+                      health.user.level >= 7?
                     <View style={{marginLeft:1,backgroundColor: 'rgba(255,255,255,0.6)',paddingHorizontal:5,borderRadius:5,borderWidth:0.7,borderColor:'#693910',paddingVertical:1}}>
                         <Text style={{fontSize:5}}>Kingdom of Gampola</Text>
                       </View> 
+                      :
+                      null
+                    } 
+
                     </View>              
                   </TouchableOpacity>
 
-                  <TouchableOpacity style={{marginTop:0,marginLeft:92,alignSelf:'flex-start'}}>
+                  <TouchableOpacity style={{marginTop:0,marginLeft:92,alignSelf:'flex-start'}} onPress={health.user.level == 9?()=>navigation.navigate('Challenge'):()=>{}}>
                   <View style={{flexDirection:'row',alignItems:'flex-start'}}>
-                    <ImageBackground source={require('../assets/level.png')} style={styles.levelIcon}  imageStyle={{resizeMode:'contain'}}>
-                      <Text style={{fontSize:11,fontWeight:'bold'}}>9</Text>
+                    <ImageBackground source={require('../assets/level.png')} style={styles.levelIcon}  imageStyle={{resizeMode:'contain',tintColor:health.user.level >= 9?'#cc6608':'gray'}}>
+                    {
+                      health.user.level > 9?
+                      <Image source={require('../assets/complete.png')} style={{width:14,height:14,position:'absolute',top:3}} />
+                      : 
+                      null
+                    }
+                    <Text style={{fontSize:11,fontWeight:'bold',color:'#6b0e0e'}}>9</Text>
                     </ImageBackground>
+
+                    {
+                      health.user.level >= 9?
                     <View style={{marginLeft:1,backgroundColor: 'rgba(255,255,255,0.6)',paddingHorizontal:5,borderRadius:5,borderWidth:0.7,borderColor:'#693910',paddingVertical:1}}>
                         <Text style={{fontSize:5}}>Kingdom of Sitawaka</Text>
-                      </View> 
+                      </View>
+                      :
+                      null
+                    }
+ 
                     </View>                
                   </TouchableOpacity>
 
-                  <TouchableOpacity style={{marginTop:-2,marginLeft:63,alignSelf:'flex-start'}} onPress={()=>{console.log('pppp')}}>
+                  <TouchableOpacity style={{marginTop:-2,marginLeft:63,alignSelf:'flex-start'}}  onPress={health.user.level == 8?()=>navigation.navigate('Challenge'):()=>{}}>
                   <View style={{flexDirection:'row',alignItems:'flex-start'}}>
-                    <ImageBackground source={require('../assets/level.png')} style={styles.levelIcon}  imageStyle={{resizeMode:'contain'}}>
-                      <Text style={{fontSize:11,fontWeight:'bold'}}>8</Text>
+                    <ImageBackground source={require('../assets/level.png')} style={styles.levelIcon}  imageStyle={{resizeMode:'contain',tintColor:health.user.level >= 8?'#cc6608':'gray'}}>
+                    {
+                      health.user.level > 8?
+                      <Image source={require('../assets/complete.png')} style={{width:14,height:14,position:'absolute',top:3}} />
+                      : 
+                      null
+                    }
+                    <Text style={{fontSize:11,fontWeight:'bold',color:'#6b0e0e'}}>8</Text>
                     </ImageBackground> 
-                    <View style={{marginLeft:1,backgroundColor: 'rgba(255,255,255,0.6)',paddingHorizontal:5,borderRadius:5,borderWidth:0.7,borderColor:'#693910',paddingVertical:1}}>
+
+                    {
+                      health.user.level >= 8?
+                      <View style={{marginLeft:1,backgroundColor: 'rgba(255,255,255,0.6)',paddingHorizontal:5,borderRadius:5,borderWidth:0.7,borderColor:'#693910',paddingVertical:1}}>
                         <Text style={{fontSize:5}}>Kingdom of Kotte</Text>
                       </View> 
+                      :
+                      null
+
+                    }
+                    
                     </View>               
                   </TouchableOpacity>
 

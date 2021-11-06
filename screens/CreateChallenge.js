@@ -138,13 +138,13 @@ export default function CreateChallenge() {
       var array =[]
       
       Contacts.getAll().then(contacts => {
-         fetch(BaseUrl.BASE_URL+'/api/LoginController/')
+         fetch(BaseUrl.BASE_URL+'/api/LoginController/'+health.user.level)
       .then((response) => response.json())
       .then((json) => {
          contacts.map((item)=>
             {item.phoneNumbers.map((ph)=>
                {json.map((log)=>
-                  ph.number==log.contactNo || ph.number.replace("0", "+94")==log.contactNo?array.push({rawContactId:item.rawContactId,displayName:item.displayName,avatar:log.avatar,id:log.id}):null
+                  ph.number==log.contactNo || ph.number.replace("0", "+94")==log.contactNo ?array.push({rawContactId:item.rawContactId,displayName:item.displayName,avatar:log.avatar,id:log.id}):null
                )}
             )}
          )
@@ -292,8 +292,11 @@ export default function CreateChallenge() {
                      <View key={con.rawContactId} style={{backgroundColor:'rgba(107, 179, 51,0.1)',width:'100%',padding:5,paddingVertical:10,margin:2,borderRadius:5,flexDirection:'row',alignItems:'center',justifyContent:'space-between'}}>
                         {/* <Text>{con.avatar}</Text> */}
                         <View style={{flexDirection:'row',alignItems:'center'}}>
-                        {
+                        {con.avatar==null?
+                           <View key={1} style={{backgroundColor:'rgba(0,0,0,0.2)',width: 27,height:27,borderRadius:25,marginHorizontal:7}} />
+                           :
                            AvatarImages.map((av)=>
+                           
                               av.id==con.avatar?
                               <Image key={av.id} source={av.png} style={{width: 27,height:27,borderRadius:25,marginHorizontal:7}} />
                               :null

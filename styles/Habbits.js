@@ -28,6 +28,17 @@ export const Habbits = [
     },
     {
       id:'3',
+    title: 'Elimination',
+    color:'#dd4224',
+    fontColor:'white',
+    screen:'Illumination',
+    height:windowWidth/4,
+    width:windowWidth/4,
+    png:require('../assets/glass.png'),
+    desc:'Drinking sufficient water is essential to stay hydrated. It improves digestion, keeps skin healthy and boosts brain activity.'
+    },
+    {
+      id:'4',
     title: 'Eating',
     color:'#f5ac4e',
     fontColor:'black',
@@ -36,17 +47,6 @@ export const Habbits = [
     width:windowWidth/4,
     png:require('../assets/food.png'),
     desc:'The food you eat can affect your health and your risk for certain diseases. You may need to change some of your daily habits.'
-    },
-    {
-      id:'4',
-    title: 'Elimination',
-    color:'#dd4224',
-    fontColor:'white',
-    screen:'Illumination',
-    height:windowWidth/4,
-    width:windowWidth/4,
-    png:require('../assets/glass.png'),
-    desc:'The more foods you remove during the elimination phase, the more likely it is that you will discover .'
     },
     {
       id:'5',

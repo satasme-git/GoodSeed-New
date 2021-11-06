@@ -21,18 +21,20 @@ const styles = StyleSheet.create({
   },
   contactView: {
     backgroundColor:'white',
-    margin:10,
-    paddingVertical:10,
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 1,
-    },
-    shadowOpacity: 0.22,
-    shadowRadius: 2.22,
+    marginLeft:0,
+    paddingVertical:15,
+    borderTopLeftRadius:30,
+    borderTopRightRadius:30
+    // shadowColor: "#000",
+    // shadowOffset: {
+    //   width: 0,
+    //   height: 1,
+    // },
+    // shadowOpacity: 0.22,
+    // shadowRadius: 2.22,
 
-    elevation: 3,
-    alignSelf:'flex-end'
+    // elevation: 3,
+    // alignSelf:'flex-end'
   },
   header: {
     height: windowHeight/10,
@@ -62,7 +64,7 @@ const styles = StyleSheet.create({
   },
   innerContainer: {
     flex: 1,
-    backgroundColor: '#e5e5e5',
+    backgroundColor: '#fff',
     paddingTop:windowHeight/9,
     // alignItems:""
   },
@@ -250,7 +252,7 @@ const styles = StyleSheet.create({
     width:14,
     height:17,
     alignItems:'center',
-    paddingTop:0
+    paddingTop:0,
   },
   heart: {
     height:(windowWidth/2.5)-7,
@@ -619,10 +621,10 @@ const buttons = StyleSheet.create({
   login: {
     zIndex: 1,
     paddingHorizontal:10,
-    paddingVertical:5,
+    paddingVertical:7,
     width:windowWidth-100,
     margin:5,
-    height:40,
+    // height:40,
     borderWidth:1,
     borderColor:'#255c43',
     alignItems:'center',

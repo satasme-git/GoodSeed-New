@@ -150,6 +150,7 @@ import moment from 'moment';
             console.log('wake time ' +this.context.sleep)
           }
           else{
+            this.context.setSleep('0 Hours')
             this.setState({added:false})
           }
           
@@ -212,7 +213,7 @@ import moment from 'moment';
 
             // storeUserData(data)
             // navigation.navigate('')
-            this.context.setSleep(json.duration)
+            this.context.setSleep(json.duration+' Hours')
 
         const current = moment().format('YYYY-MM-DD')
 
@@ -306,13 +307,13 @@ import moment from 'moment';
             {
               added==true?
               // null
-              <TouchableHighlight style={{backgroundColor:'rgba(107,179,51,0.2)',paddingHorizontal:15,paddingVertical:5,marginTop:20,borderRadius:25}}>
+              <TouchableHighlight style={{backgroundColor:'rgba(107,179,51,0.2)',paddingHorizontal:15,paddingVertical:7,marginTop:20,borderRadius:25}}>
               <View>
-                  <Text style={{fontSize:17}}>You Slept {this.state.duration} Hours Today</Text>
+                  <Text style={{fontSize:16}}>You Slept {this.state.duration} Hours Today</Text>
               </View>
             </TouchableHighlight>
               :
-              <TouchableHighlight onPress={()=>sleepData(calculateMinutesFromAngle(angleLength))} style={{backgroundColor:'rgba(107,179,51,0.2)',paddingHorizontal:15,paddingVertical:5,marginTop:20,borderRadius:25}}>
+              <TouchableHighlight onPress={()=>sleepData(calculateMinutesFromAngle(angleLength))} style={{backgroundColor:'rgba(107,179,51,0.2)',paddingHorizontal:15,paddingVertical:7,marginTop:20,borderRadius:25}}>
                 <View>
                     <Text style={{fontSize:17}}>Save Slept time</Text>
                 </View>

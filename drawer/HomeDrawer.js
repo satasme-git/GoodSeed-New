@@ -147,7 +147,7 @@ export default function MyDrawer() {
 
   
   return (
-    <NavigationContainer>
+    <NavigationContainer independent={true}>
       {screen}
     </NavigationContainer>
   );
@@ -219,7 +219,7 @@ function LoggedDrawer() {
       }}
       />
 
-      <Drawer.Screen 
+      {/* <Drawer.Screen 
         name="Achivements" 
         component={Achivements}    
         options={{ drawerLabel: 'Achivements' ,
@@ -233,7 +233,7 @@ function LoggedDrawer() {
         options={{ drawerLabel: 'Summary' ,
         drawerIcon: ({ focused, color, size }) => <AntDesign color={color} size={20} name={'bars'} />
       }} 
-      />
+      /> */}
 
       <Drawer.Screen 
         name="Contact us" 
@@ -304,7 +304,7 @@ function UnLoggedDrawer() {
       }}
       />
 
-      <Drawer.Screen 
+      {/* <Drawer.Screen 
         name="Achivements" 
         component={Achivements}    
         options={{ drawerLabel: 'Achivements' ,
@@ -318,7 +318,7 @@ function UnLoggedDrawer() {
         options={{ drawerLabel: 'Summary' ,
         drawerIcon: ({ focused, color, size }) => <AntDesign color={color} size={20} name={'bars'} />
       }} 
-      />
+      /> */}
 
       <Drawer.Screen 
         name="Contact us" 
