@@ -62,13 +62,26 @@ export const HealthProvider = ({ children }) => {
   const setStepCount = async (steps) => {
 
     const jsonValue = await AsyncStorage.getItem('user')
-    const id = JSON.parse(jsonValue).id
+
+    // const jsonValue = await AsyncStorage.getItem('user')
+    var id;
+
+    if(jsonValue == null) {
+      id = user.id
+    }
+    else{
+      id = JSON.parse(jsonValue).id
+    }
+
+    // const id = JSON.parse(jsonValue).id
 
     const formData = new FormData()
 
     formData.append('member_id', id);
     formData.append('steps', steps);
 
+    
+    console.log(id)
     
     fetch(BaseUrl.BASE_URL+'/api/steps/', {
       method: 'POST',
@@ -77,7 +90,7 @@ export const HealthProvider = ({ children }) => {
       .then(response => response.json())
       .then(data => {
         // navigation.navigate('profile')
-        console.log('Success:', data);
+        // console.log('Success:', data);
         setSteps(parseInt(data.steps))
         // Message('Nice','#6bb333','You Created Challenge Successfully','Start Walking','');
       })
@@ -85,12 +98,21 @@ export const HealthProvider = ({ children }) => {
         // getAsyncSteps()
         // console.log('Error:', formData);
       });
+    
 
   };
 
   const getSteps = async () => {
     const jsonValue = await AsyncStorage.getItem('user')
-    const id = JSON.parse(jsonValue).id
+    var id;
+
+    if(jsonValue == null) {
+      id = user.id
+    }
+    else{
+      id = JSON.parse(jsonValue).id
+    }
+    console.log(id)
 
     fetch(BaseUrl.BASE_URL+'/api/steps/'+id)
         .then((response) => response.json())
@@ -99,14 +121,14 @@ export const HealthProvider = ({ children }) => {
         setSteps(json.steps)
 
         const config = {
-          default_threshold: 15.0,
+          default_threshold: 20.0,
           default_delay: 150000000,
           cheatInterval: 3000,
           onStepCountChange: (stepCount) => {backgroundtimer(parseInt(json.steps)+stepCount) },
           onCheat: () => { }
         }
         startCounter(config);
-        return () => { stopCounter() }
+        // return () => { stopCounter() }
 
         // console.log(json.steps)
         })
@@ -114,9 +136,18 @@ export const HealthProvider = ({ children }) => {
         .finally(() => {});
   }
   
-  const getImages =()=>{
-      
-    fetch(BaseUrl.BASE_URL+'/api/imageUpload/'+user.id)
+  const getImages = async () => {
+    const jsonValue = await AsyncStorage.getItem('user')
+    var id;
+
+    if(jsonValue == null) {
+      id = user.id
+    }
+    else{
+      id = JSON.parse(jsonValue).id
+    }
+
+    fetch(BaseUrl.BASE_URL+'/api/imageUpload/'+id)
     .then((response) => response.json())
     .then((json) => {
        setProPic(BaseUrl.BASE_URL+'/assets/profile_pics/'+json[1].image)
@@ -141,11 +172,11 @@ export const HealthProvider = ({ children }) => {
  
   const backgroundtimer = (step) =>{
     // console.log(steps)
-    setSteps(step)
+    
     // await BackgroundJob.updateNotification({ taskDesc: step });
     setStepCount(step)
     storeData(step.toString())
-    
+    setSteps(step)
     // storeSteps(step.toString())
     
   }

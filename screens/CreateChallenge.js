@@ -1,5 +1,5 @@
 import React, {useRef, useState,useEffect,useContext} from 'react';
-import { Dimensions , View , StatusBar , Text , Image , TouchableOpacity ,TouchableHighlight  , SafeAreaView  } from 'react-native';
+import { Dimensions , View , StatusBar , Text , Image , TouchableOpacity ,TouchableHighlight  , SafeAreaView , PermissionsAndroid , LogBox } from 'react-native';
 import { useNavigation , DrawerActions } from '@react-navigation/native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { buttons, styles } from '../styles/Styles';
@@ -28,6 +28,9 @@ const windowHeight = Dimensions.get('window').height;
 import { ScrollView } from 'react-native-gesture-handler';
 
 import {LevelData} from '../styles/LevelData'
+
+LogBox.ignoreLogs(['Warning: Each child in a list should have a unique "key" prop.']);
+
 export default function CreateChallenge() {
 
     const navigation = useNavigation();
@@ -110,6 +113,29 @@ export default function CreateChallenge() {
 
   };
 
+  const requestContactsPermission = async () => { 
+   try {
+     const granted = await PermissionsAndroid.request(
+       PermissionsAndroid.PERMISSIONS.READ_CONTACTS,
+      //  {
+      //    title: "GoodSeed App Permission",
+      //    message:
+      //      "GoodSeed App needs access to your Contacts " ,
+      //    buttonNeutral: "Ask Me Later",
+      //    buttonNegative: "Cancel",
+      //    buttonPositive: "OK"
+      //  }
+     );
+     if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+       console.log("You can use the camera");
+       addContact()
+     } else {
+       console.log("Camera permission denied");
+     }
+   } catch (err) {
+     console.warn(err);
+   }
+ };
    const getLogins =()=>{
       
       fetch(BaseUrl.BASE_URL+'/api/LoginController/')
@@ -167,27 +193,58 @@ export default function CreateChallenge() {
         }
     }
     return (
-      <SafeAreaView  style={[styles.container,{backgroundColor:'#f4f4f4 '}]} onLayout={()=>{addContact()}}>
-         <StatusBar backgroundColor={'#6bb333'} barStyle={'dark-content'} />
-         <View style={[styles.header,{backgroundColor:'transparent',padding:0}]}>
+      <SafeAreaView  style={[styles.container,{backgroundColor:'#f4f4f4 '}]} onLayout={()=>{requestContactsPermission()}}>
+         <StatusBar backgroundColor={'#6bb333'} barStyle={'light-content'} />
+         <View style={[styles.header,{backgroundColor:'#6bb333',padding:0,flexDirection:'column',height:185,borderBottomLeftRadius:25,borderBottomRightRadius:25}]}>
+             <View style={{flexDirection:'row',justifyContent:'space-between',alignItems:'center',alignSelf:'flex-start',width:windowWidth}}>
              <Ionicons 
                 name="arrow-back" 
                 size={30} 
-                color="black" 
+                color="#FFF" 
                 onPress={() => navigation.goBack()}
              /> 
-             {
+             
+                   <Text style={{fontSize:13,position:'absolute',right:25,backgroundColor:'white',paddingVertical:3,paddingHorizontal:7,borderRadius:10,color:'#6bb333'}}>Challenge Id  {challengId}</Text>
+               
+                  </View>
+             {/* <Text style={{color:'black',fontSize:22,marginLeft:10}}>Challenge to Friends</Text> */}
+             <View style={{alignItems:'center'}}>
+                  {
+                  AvatarImages.map((av)=>
+                              av.id==health.user.avatar?
+                              <View key={av.id} style={{alignItems:'center'}}>
+                                 <Image source={av.png} style={{width:60,height: 60,borderRadius:50,marginTop:2.5,zIndex:5}} />
+                                    <View style={{borderRadius:50,backgroundColor:'rgba(255,255,255,0.9)',width:65,height:65,position: 'absolute',top:0}} />
+                              </View>
+                              // <Image key={av.id} source={av.png} style={{width: 60,height:60,borderRadius:60}} />
+                              :null
+                           )
+                  }
+                  <View>
+                     <Text style={{fontSize:17,color:'white'}}>{health.user.email}</Text>
+                     {/* <Text>Level {health.user.level}</Text> */}
+                     
+                  </View>
+                  <View style={{flexDirection:'row',backgroundColor:'white',marginVertical:12,width:windowWidth-30,borderRadius:15,padding:7,alignItems:'center',marginLeft:-10}}>
+                
+                <View style={{backgroundColor:'#5CA3FC',height:30,width:30,borderRadius:30,alignItems:'center',justifyContent:'center',marginRight:10}}>
+              <Image source={require('../assets/crown.png')} style={{width:20,height:20,borderRadius:25}} />
+              </View>
+
+              <Text style={{fontSize:15,color:'rgb(107, 179, 51)'}}>Level {health.user.level}</Text>
+              {
                      LevelData.map((lv)=>
                      lv.id==health.user.level?
-                     <View key={lv.id} style={{padding:5,marginLeft:10,backgroundColor:'rgba(255, 255, 255,0.7)',paddingHorizontal:10,marginVertical:10,borderRadius:15}}>
-                        <Text style={{fontSize:17,color:'#000'}}>Walk Around {lv.name}</Text>
+                     <View key={lv.id} style={{padding:5,marginLeft:10}}>
+                        <Text style={{fontSize:14,color:'rgb(107, 179, 51)',fontWeight:'bold'}}>Walk Around {lv.name}</Text>
                         
                      </View>
                      :
                      null
                      )
                   }
-             {/* <Text style={{color:'black',fontSize:22,marginLeft:10}}>Challenge to Friends</Text> */}
+              </View>
+               </View>
           </View>
           
           {/* <Background> */}
@@ -200,48 +257,49 @@ export default function CreateChallenge() {
                <View style={{flex:1,alignItems:'center',justifyContent:'flex-start'}}>
                <View style={{backgroundColor: 'rgba(255, 255, 255,0.7)',marginTop:70,paddingHorizontal:15,paddingVertical:10,width:'90%',borderRadius:10,flexDirection:'row',alignItems:'center',justifyContent:'space-between'}}>
                
-               <View style={{flexDirection:'row'}}>
-                  {
-                  AvatarImages.map((av)=>
-                              av.id==health.user.avatar?
-                              <Image key={av.id} source={av.png} style={{width: 35,height:35,borderRadius:25,marginRight:10}} />
-                              :null
-                           )
-                  }
-                  <View>
-                     <Text style={{fontSize:17}}>{health.user.email}</Text>
-                     <Text>Level {health.user.level}</Text>
-                  </View>
-               </View>
+               
                  
                </View>
-               <View style={{paddingVertical:50}}>
+               {/* <View style={{paddingVertical:50}}>
                    <Text style={{fontSize:17}}>Challenge Id  {challengId}</Text>
-               </View>
+               </View> */}
 
-               <View style={{backgroundColor: 'rgba(255, 255, 255,0.7)',marginVertical:10,paddingHorizontal:15,paddingVertical:10,width:'90%',borderRadius:10,flexDirection:'row',alignItems:'center',justifyContent:'space-between'}}>
-               
-                  <Text style={{fontSize:16,alignSelf:'center'}}>Add Friends</Text>
+               <View style={{backgroundColor: '#6bb333',marginVertical:10,paddingHorizontal:15,paddingVertical:10,width:'90%',borderRadius:10,flexDirection:'row',alignItems:'center',justifyContent:'space-between',marginTop:110}}>
+               <View>
+                  <Text style={{fontSize:16,alignSelf:'center',color:'white'}}>Add Friends</Text>
+                  <View style={{flexDirection:'row',alignSelf:'flex-start',paddingVertical:5}}>              
                   
-               <TouchableOpacity onPress={()=>refRBSheet.current.open()} style={{backgroundColor:'#6bb333',paddingHorizontal:10,paddingVertical:5,borderRadius:30,alignItems:'center',justifyContent:'center'}}>
-                           <Text style={{fontSize:16,alignSelf:'center'}}>Add</Text>
+                  {AvatarImages.map((av)=>
+                      av.id<4?
+                      <View key={av.id} style={{backgroundColor:'white',height:30,width:30,borderRadius:30,alignItems:'center',justifyContent:'center',marginRight:-7}}>
+                      <Image source={av.png} style={{width:27,height:27,borderRadius:27}} />
+                      </View>
+                     :
+                     null
+                                          
+                  )
+                  }
+                  </View> 
+               </View>   
+               <TouchableOpacity onPress={()=>refRBSheet.current.open()} style={{backgroundColor:'#fff',paddingHorizontal:20,paddingVertical:5,borderRadius:30,alignItems:'center',justifyContent:'center'}}>
+                           <Text style={{fontSize:16,alignSelf:'center',color:'#6bb333'}}>Add</Text>
                 </TouchableOpacity>
                  
                </View>
 
-               <View style={{backgroundColor: 'rgba(255, 255, 255,0.7)',marginVertical:10,paddingHorizontal:15,paddingVertical:10,width:'90%',borderRadius:10,flexDirection:'row',alignItems:'center',justifyContent:'space-between'}}>
+               <View style={{backgroundColor: '#6bb333',marginVertical:10,paddingHorizontal:15,paddingVertical:10,width:'90%',borderRadius:10,flexDirection:'row',alignItems:'center',justifyContent:'space-between'}}>
                
-                  <Text style={{fontSize:16,alignSelf:'center'}}>Target</Text>
+                  <Text style={{fontSize:16,alignSelf:'center',color:'#fff'}}>Target</Text>
                 
                 <View style={{flexDirection:'row',alignItems:'center'}}>  
-               <TouchableOpacity onPress={()=>minusTarget()}  style={{backgroundColor:'#6bb333',paddingHorizontal:12,paddingVertical:1,borderRadius:30,alignItems:'center',justifyContent:'center',marginRight:5}}>
-                           <Text style={{fontSize:25,alignSelf:'center'}}>-</Text>
+               <TouchableOpacity onPress={()=>minusTarget()}  style={{backgroundColor:'#fff',paddingHorizontal:12,paddingVertical:1,borderRadius:30,alignItems:'center',justifyContent:'center',marginRight:5}}>
+                           <Text style={{fontSize:25,alignSelf:'center',color:'#6bb333'}}>-</Text>
                 </TouchableOpacity>
 
-                <Text style={{fontSize:18,paddingVertical:5,paddingHorizontal:15,backgroundColor:'#e0e0e0',borderRadius:50,width:100,textAlign:'center'}}>{target}</Text>
+                <Text style={{fontSize:18,paddingVertical:5,paddingHorizontal:15,backgroundColor:'#fff',borderRadius:50,width:100,textAlign:'center',color:'#6bb333'}}>{target}</Text>
 
-                <TouchableOpacity  onPress={()=>addTarget()} style={{backgroundColor:'#6bb333',paddingHorizontal:10,paddingVertical:5,borderRadius:30,alignItems:'center',justifyContent:'center',marginLeft:5}}>
-                           <Text style={{fontSize:17,alignSelf:'center'}}>+</Text>
+                <TouchableOpacity  onPress={()=>addTarget()} style={{backgroundColor:'#fff',paddingHorizontal:10,paddingVertical:5,borderRadius:30,alignItems:'center',justifyContent:'center',marginLeft:5}}>
+                           <Text style={{fontSize:17,alignSelf:'center',color:'#6bb333'}}>+</Text>
                 </TouchableOpacity>
                 </View>
 
@@ -250,7 +308,7 @@ export default function CreateChallenge() {
 
                   <View style={{marginBottom:15,alignItems:'center'}}>
                <TouchableOpacity  onPress={()=>createChallenge()} style={{backgroundColor:'#6bb333',paddingHorizontal:10,paddingVertical:5,borderRadius:30,alignItems:'center',justifyContent:'center',marginLeft:5}}>
-                           <Text style={{fontSize:17,alignSelf:'center'}}>Create Challenge</Text>
+                           <Text style={{fontSize:17,alignSelf:'center',color:'#fff'}}>Create Challenge</Text>
                 </TouchableOpacity>
                 </View>
 
@@ -275,7 +333,7 @@ export default function CreateChallenge() {
             >
 
                <Text style={{color:'black',fontSize:20,textAlign:'center'}}>Friends You Know</Text>
-               
+               <ScrollView style={{marginBottom:35}}>
                <View style={{backgroundColor:'white',width:'100%',paddingHorizontal:20,paddingVertical:20,borderTopLeftRadius:50,borderTopRightRadius:50,minHeight:200}}>
                   {/* <Text style={{width: '90%',paddingVertical:10,fontSize:20}}></Text> */}
                   
@@ -343,8 +401,9 @@ export default function CreateChallenge() {
                      </View>
                      )
                   }
+                  
                   </View>
-
+               </ScrollView>
             </RBSheet>
 
             <ResponseModal 

@@ -62,7 +62,7 @@ export default function Habbits() {
           <View style={styles.innerContainer}>
                <WebView 
                source={{ uri: 'https://seed.rn-innovations.com/category/good-habits/' }} 
-               style={{marginTop:-200}}
+               style={{marginTop:-200,marginBottom:-1400}}
                ref={WEBVIEW_REF}
                onLoadStart={() => (showSpinner())}
                onLoadEnd={() => hideSpinner()}

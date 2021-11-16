@@ -26,6 +26,8 @@ target 'GoodSeed' do
 
   pod 'RNTouchThroughView', :path => '../node_modules/react-native-touch-through-view'
 
+  pod 'RNSound', :path => '../node_modules/react-native-sound'
+
   target 'GoodSeedTests' do
     inherit! :complete
     # Pods for testing

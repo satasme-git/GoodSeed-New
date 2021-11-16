@@ -10,6 +10,7 @@ import Step from '../screens/Step'
 import LevelScreen from '../screens/LevelScreen';
 import CreateChallenge from '../screens/CreateChallenge';
 import LoadingScreen from '../screens/LoadingScreen';
+import LeaderBoard from '../screens/LeaderBoard'
 
 const Stack = createStackNavigator();
 
@@ -56,6 +57,13 @@ export default function MyStack() {
       <Stack.Screen 
         name="Form" 
         component={Form}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen 
+        name="LeaderBoard" 
+        component={LeaderBoard}
         options={{
           headerShown: false,
         }}

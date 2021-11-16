@@ -76,9 +76,21 @@ export default function LevelScreen (){
                 <Animatable.View delay={1500} duration={2900} 
                 animation={arcZoomIn}
                 >
-                <ImageBackground source={require('../assets/map4.png')} style={[styles.map,{top:0}]}>
-                  
-                  <TouchableOpacity style={{marginTop:147,marginLeft:65,alignSelf:'flex-start'}} onPress={health.user.level == 1?()=>navigation.navigate('Challenge'):null}>
+                <ImageBackground source={require('../assets/map5.png')} style={[styles.map,{top:0}]}>
+                  <View style={{zIndex:2,position:'absolute',top:155,left:67}}>
+                  <Image  source={health.user.level >= 1?require('../assets/now.png'):require('../assets/lock.png')} style={{width:22,height:22}}/>
+                  <Image  source={health.user.level >= 2?require('../assets/now.png'):require('../assets/lock.png')} style={{width:22,height:22,marginTop:22,marginLeft:50}}/>
+                  <Image  source={health.user.level >= 5?require('../assets/now.png'):require('../assets/lock.png')} style={{width:22,height:22,marginTop:27,marginLeft:30}}/>
+                  <Image  source={health.user.level >= 3?require('../assets/now.png'):require('../assets/lock.png')} style={{width:22,height:22,marginTop:-7,marginLeft:102}}/>
+                  <Image  source={health.user.level >= 6?require('../assets/now.png'):require('../assets/lock.png')} style={{width:22,height:22,marginTop:13,marginLeft:57}}/>
+                  <Image  source={health.user.level >= 4?require('../assets/now.png'):require('../assets/lock.png')} style={{width:22,height:22,marginTop:-10,marginLeft:10}}/>
+                  <Image  source={health.user.level >= 10?require('../assets/now.png'):require('../assets/lock.png')} style={{width:22,height:22,marginTop:-5,marginLeft:85}}/>
+                  <Image  source={health.user.level >= 7?require('../assets/now.png'):require('../assets/lock.png')} style={{width:22,height:22,marginTop:-10,marginLeft:50}}/>
+                  <Image  source={health.user.level >= 9?require('../assets/now.png'):require('../assets/lock.png')} style={{width:22,height:22,marginTop:0,marginLeft:40}}/>
+                  <Image  source={health.user.level >= 8?require('../assets/now.png'):require('../assets/lock.png')} style={{width:22,height:22,marginTop:-12,marginLeft:5}}/>
+                  </View>
+
+                  <TouchableOpacity style={{marginTop:147,marginLeft:65,alignSelf:'flex-start',zIndex:3}} onPress={health.user.level == 1?()=>navigation.navigate('CreateChallenge'):null}>
                     <View style={{flexDirection:'row',alignItems:'flex-start'}}>
                       
                     <ImageBackground source={require('../assets/level.png')} style={styles.levelIcon} imageStyle={{resizeMode:'contain',tintColor:health.user.level >= 1?'#cc6608':'gray'}}>
@@ -94,8 +106,8 @@ export default function LevelScreen (){
                     
                     {
                       health.user.level >= 1?
-                      <View style={{marginLeft:1,backgroundColor: 'rgba(255,255,255,0.6)',paddingHorizontal:5,borderRadius:5,borderWidth:0.7,borderColor:'#693910',paddingVertical:1}}>
-                        <Text style={{fontSize:5}}>Kingdom of Tambapanni</Text>
+                      <View style={{marginLeft:1,backgroundColor: '#6bb333',paddingHorizontal:5,borderRadius:5,borderWidth:0.7,borderColor:'#000',paddingVertical:1}}>
+                        <Text style={{fontSize:6}}>Kingdom of Tambapanni</Text>
                       </View>
                       : null
                     }
@@ -103,7 +115,7 @@ export default function LevelScreen (){
                     </View>            
                   </TouchableOpacity>
 
-                  <TouchableOpacity style={{marginTop:27,marginLeft:113,alignSelf:'flex-start'}} onPress={health.user.level == 2?()=>navigation.navigate('Challenge'):()=>{}}>
+                  <TouchableOpacity style={{marginTop:27,marginLeft:113,alignSelf:'flex-start'}} onPress={health.user.level == 2?()=>navigation.navigate('CreateChallenge'):()=>{}}>
                   <View style={{flexDirection:'row',alignItems:'flex-start'}}>
                     <ImageBackground source={require('../assets/level.png')} style={styles.levelIcon}  imageStyle={{resizeMode:'contain',tintColor:health.user.level >= 2?'#cc6608':'gray'}}>
                     {
@@ -117,8 +129,8 @@ export default function LevelScreen (){
 
                     {
                       health.user.level >= 2?
-                      <View style={{marginLeft:1,backgroundColor: 'rgba(255,255,255,0.6)',paddingHorizontal:5,borderRadius:5,borderWidth:0.7,borderColor:'#693910',paddingVertical:1}}>
-                        <Text style={{fontSize:5}}>Anuradhapura Kingdom</Text>
+                      <View style={{marginLeft:1,backgroundColor: '#6bb333',paddingHorizontal:5,borderRadius:5,borderWidth:0.7,borderColor:'#000',paddingVertical:1}}>
+                        <Text style={{fontSize:6}}>Anuradhapura Kingdom</Text>
                       </View>
                       :
                       null
@@ -127,13 +139,41 @@ export default function LevelScreen (){
                     </View>               
                   </TouchableOpacity>
 
-                  <TouchableOpacity style={{marginTop:30,marginLeft:121}} onPress={health.user.level == 3?()=>navigation.navigate('Challenge'):()=>{}}>
+
+                  <TouchableOpacity style={{marginTop:30,marginLeft:100,alignSelf:'flex-start'}} onPress={health.user.level == 5?()=>navigation.navigate('CreateChallenge'):()=>{}}>
+                  <View style={{flexDirection:'row',alignItems:'flex-start'}}>
+                    <ImageBackground source={require('../assets/level.png')} style={styles.levelIcon}  imageStyle={{resizeMode:'contain',tintColor:health.user.level >= 5?'#cc6608':'gray'}}>
+                      {
+                      health.user.level > 5?
+                      <Image source={require('../assets/complete.png')} style={{width:14,height:14,position:'absolute',top:3}} />
+                      : 
+                      null
+                    }
+                    <Text style={{fontSize:11,fontWeight:'bold',color:'#6b0e0e'}}>5</Text>
+                    </ImageBackground>    
+                    
+                    {health.user.level >= 5?
+                    <View style={{marginLeft:1,backgroundColor: '#6bb333',paddingHorizontal:5,borderRadius:5,borderWidth:0.7,borderColor:'#000',paddingVertical:1}}>
+                    
+                    <Text style={{fontSize:6}}>Kingdom of Yapahuwa</Text>
+                      </View> 
+                      :
+                      null
+                  }
+                    
+
+
+                      </View>            
+                  </TouchableOpacity>
+
+
+                  <TouchableOpacity style={{marginTop:0,marginLeft:121}} onPress={health.user.level == 3?()=>navigation.navigate('CreateChallenge'):()=>{}}>
                   <View style={{flexDirection:'row',alignItems:'flex-start'}} >
                   
                   {
                     health.user.level >= 3?
-                      <View style={{marginLeft:2,backgroundColor: 'rgba(255,255,255,0.6)',paddingHorizontal:3,borderRadius:5,borderWidth:0.7,borderColor:'#693910',paddingVertical:1}}>
-                        <Text style={{fontSize:5}}>Kingdom of Polonnaruwa</Text>
+                    <View style={{marginLeft:2,backgroundColor: '#6bb333',paddingHorizontal:5,borderRadius:5,borderWidth:0.7,borderColor:'#000',paddingVertical:1}}>
+                        <Text style={{fontSize:6}}>Kingdom of Polonnaruwa</Text>
                       </View>
                     :
                     <View style={{marginLeft:2,backgroundColor: 'rgba(255,255,255,0.0)',paddingHorizontal:6,borderRadius:5}}>
@@ -157,34 +197,10 @@ export default function LevelScreen (){
                   </TouchableOpacity>
 
                   
-                  <TouchableOpacity style={{marginTop:0,marginLeft:100,alignSelf:'flex-start'}} onPress={health.user.level == 5?()=>navigation.navigate('Challenge'):()=>{}}>
-                  <View style={{flexDirection:'row',alignItems:'flex-start'}}>
-                    <ImageBackground source={require('../assets/level.png')} style={styles.levelIcon}  imageStyle={{resizeMode:'contain',tintColor:health.user.level >= 5?'#cc6608':'gray'}}>
-                      {
-                      health.user.level > 5?
-                      <Image source={require('../assets/complete.png')} style={{width:14,height:14,position:'absolute',top:3}} />
-                      : 
-                      null
-                    }
-                    <Text style={{fontSize:11,fontWeight:'bold',color:'#6b0e0e'}}>5</Text>
-                    </ImageBackground>    
-                    
-                    {health.user.level >= 5?
-                    <View style={{marginLeft:1,backgroundColor: 'rgba(255,255,255,0.6)',paddingHorizontal:5,borderRadius:5,borderWidth:0.7,borderColor:'#693910',paddingVertical:1}}>
-                    
-                    <Text style={{fontSize:5}}>Kingdom of Yapahuwa</Text>
-                      </View> 
-                      :
-                      null
-                  }
-                    
-
-
-                      </View>            
-                  </TouchableOpacity>
+                  
 
                   
-                  <TouchableOpacity style={{marginTop:20,marginLeft:108,alignSelf:'flex-start'}} onPress={health.user.level == 6?()=>navigation.navigate('Challenge'):()=>{}}>
+                  <TouchableOpacity style={{marginTop:15,marginLeft:128,alignSelf:'flex-start'}} onPress={health.user.level == 6?()=>navigation.navigate('CreateChallenge'):()=>{}}>
                   <View style={{flexDirection:'row',alignItems:'flex-start'}}>
                     <ImageBackground source={require('../assets/level.png')} style={styles.levelIcon}  imageStyle={{resizeMode:'contain',tintColor:health.user.level >= 6?'#cc6608':'gray'}}>
                     {
@@ -197,8 +213,8 @@ export default function LevelScreen (){
                     </ImageBackground>
                     {
                       health.user.level >= 6?
-                      <View style={{marginLeft:1,backgroundColor: 'rgba(255,255,255,0.6)',paddingHorizontal:5,borderRadius:5,borderWidth:0.7,borderColor:'#693910',paddingVertical:1}}>
-                        <Text style={{fontSize:5}}>Kingdom of Kurunegala</Text>
+                      <View style={{marginLeft:1,backgroundColor: '#6bb333',paddingHorizontal:5,borderRadius:5,borderWidth:0.7,borderColor:'#000',paddingVertical:1}}>
+                        <Text style={{fontSize:6}}>Kingdom of Kurunegala</Text>
                       </View>
                       :
                       null
@@ -208,7 +224,7 @@ export default function LevelScreen (){
                   </TouchableOpacity>
 
                   
-                  <TouchableOpacity style={{marginTop:-2,marginLeft:88,alignSelf:'flex-start'}} onPress={health.user.level == 4?()=>navigation.navigate('Challenge'):()=>{}}>
+                  <TouchableOpacity style={{marginTop:-2,marginLeft:88,alignSelf:'flex-start'}} onPress={health.user.level == 4?()=>navigation.navigate('CreateChallenge'):()=>{}}>
                   <View style={{flexDirection:'row',alignItems:'flex-start'}}>
                     <ImageBackground source={require('../assets/level.png')} style={styles.levelIcon}  imageStyle={{resizeMode:'contain',tintColor:health.user.level >= 4?'#cc6608':'gray'}}>
                     {
@@ -222,8 +238,8 @@ export default function LevelScreen (){
                     
                     {
                       health.user.level >= 4?
-                    <View style={{marginLeft:1,backgroundColor: 'rgba(255,255,255,0.6)',paddingHorizontal:5,borderRadius:5,borderWidth:0.7,borderColor:'#693910',paddingVertical:1}}>
-                        <Text style={{fontSize:5}}>Kingdom of Dambadeniya</Text>
+                      <View style={{marginLeft:1,backgroundColor: '#6bb333',paddingHorizontal:5,borderRadius:5,borderWidth:0.7,borderColor:'#000',paddingVertical:1}}>
+                        <Text style={{fontSize:6}}>Kingdom of Dambadeniya</Text>
                       </View> 
                       :
                       null
@@ -232,7 +248,7 @@ export default function LevelScreen (){
                     </View>               
                   </TouchableOpacity>
 
-                  <TouchableOpacity style={{marginTop:-2,marginLeft:142,alignSelf:'flex-start'}} onPress={health.user.level == 10?()=>navigation.navigate('Challenge'):()=>{}}>
+                  <TouchableOpacity style={{marginTop:-2,marginLeft:155,alignSelf:'flex-start'}} onPress={health.user.level == 10?()=>navigation.navigate('CreateChallenge'):()=>{}}>
                   <View style={{flexDirection:'row',alignItems:'flex-start'}}>
                     <ImageBackground source={require('../assets/level.png')} style={styles.levelIcon}  imageStyle={{resizeMode:'contain',tintColor:health.user.level >= 10?'#cc6608':'gray'}}>
                     {
@@ -246,8 +262,8 @@ export default function LevelScreen (){
 
                     {
                       health.user.level >= 10?
-                    <View style={{marginLeft:1,backgroundColor: 'rgba(255,255,255,0.6)',paddingHorizontal:5,borderRadius:5,borderWidth:0.7,borderColor:'#693910',paddingVertical:1}}>
-                        <Text style={{fontSize:5}}>Kingdom of Kandy</Text>
+                      <View style={{marginLeft:1,backgroundColor: '#6bb333',paddingHorizontal:5,borderRadius:5,borderWidth:0.7,borderColor:'#000',paddingVertical:1}}>
+                        <Text style={{fontSize:6}}>Kingdom of Kandy</Text>
                       </View>
                       :
                       null
@@ -257,7 +273,7 @@ export default function LevelScreen (){
                   </TouchableOpacity>
 
                   
-                  <TouchableOpacity style={{marginTop:-2,marginLeft:130,alignSelf:'flex-start'}} onPress={health.user.level == 7?()=>navigation.navigate('Challenge'):()=>{}}>
+                  <TouchableOpacity style={{marginTop:-2,marginLeft:130,alignSelf:'flex-start'}} onPress={health.user.level == 7?()=>navigation.navigate('CreateChallenge'):()=>{}}>
                   <View style={{flexDirection:'row',alignItems:'flex-start'}}>
                     <ImageBackground source={require('../assets/level.png')} style={styles.levelIcon}  imageStyle={{resizeMode:'contain',tintColor:health.user.level >= 7?'#cc6608':'gray'}}>
                     {
@@ -271,8 +287,8 @@ export default function LevelScreen (){
 
                     {
                       health.user.level >= 7?
-                    <View style={{marginLeft:1,backgroundColor: 'rgba(255,255,255,0.6)',paddingHorizontal:5,borderRadius:5,borderWidth:0.7,borderColor:'#693910',paddingVertical:1}}>
-                        <Text style={{fontSize:5}}>Kingdom of Gampola</Text>
+                      <View style={{marginLeft:1,backgroundColor: '#6bb333',paddingHorizontal:5,borderRadius:5,borderWidth:0.7,borderColor:'#000',paddingVertical:1}}>
+                        <Text style={{fontSize:6}}>Kingdom of Gampola</Text>
                       </View> 
                       :
                       null
@@ -281,7 +297,7 @@ export default function LevelScreen (){
                     </View>              
                   </TouchableOpacity>
 
-                  <TouchableOpacity style={{marginTop:0,marginLeft:92,alignSelf:'flex-start'}} onPress={health.user.level == 9?()=>navigation.navigate('Challenge'):()=>{}}>
+                  <TouchableOpacity style={{marginTop:2,marginLeft:112,alignSelf:'flex-start'}} onPress={health.user.level == 9?()=>navigation.navigate('CreateChallenge'):()=>{}}>
                   <View style={{flexDirection:'row',alignItems:'flex-start'}}>
                     <ImageBackground source={require('../assets/level.png')} style={styles.levelIcon}  imageStyle={{resizeMode:'contain',tintColor:health.user.level >= 9?'#cc6608':'gray'}}>
                     {
@@ -295,8 +311,8 @@ export default function LevelScreen (){
 
                     {
                       health.user.level >= 9?
-                    <View style={{marginLeft:1,backgroundColor: 'rgba(255,255,255,0.6)',paddingHorizontal:5,borderRadius:5,borderWidth:0.7,borderColor:'#693910',paddingVertical:1}}>
-                        <Text style={{fontSize:5}}>Kingdom of Sitawaka</Text>
+                      <View style={{marginLeft:1,backgroundColor: '#6bb333',paddingHorizontal:5,borderRadius:5,borderWidth:0.7,borderColor:'#000',paddingVertical:1}}>
+                        <Text style={{fontSize:6}}>Kingdom of Sitawaka</Text>
                       </View>
                       :
                       null
@@ -305,7 +321,7 @@ export default function LevelScreen (){
                     </View>                
                   </TouchableOpacity>
 
-                  <TouchableOpacity style={{marginTop:-2,marginLeft:63,alignSelf:'flex-start'}}  onPress={health.user.level == 8?()=>navigation.navigate('Challenge'):()=>{}}>
+                  <TouchableOpacity style={{marginTop:0,marginLeft:70,alignSelf:'flex-start'}}  onPress={health.user.level == 8?()=>navigation.navigate('CreateChallenge'):()=>{}}>
                   <View style={{flexDirection:'row',alignItems:'flex-start'}}>
                     <ImageBackground source={require('../assets/level.png')} style={styles.levelIcon}  imageStyle={{resizeMode:'contain',tintColor:health.user.level >= 8?'#cc6608':'gray'}}>
                     {
@@ -319,8 +335,8 @@ export default function LevelScreen (){
 
                     {
                       health.user.level >= 8?
-                      <View style={{marginLeft:1,backgroundColor: 'rgba(255,255,255,0.6)',paddingHorizontal:5,borderRadius:5,borderWidth:0.7,borderColor:'#693910',paddingVertical:1}}>
-                        <Text style={{fontSize:5}}>Kingdom of Kotte</Text>
+                      <View style={{marginLeft:1,backgroundColor: '#6bb333',paddingHorizontal:5,borderRadius:5,borderWidth:0.7,borderColor:'#000',paddingVertical:1}}>
+                        <Text style={{fontSize:6}}>Kingdom of Kotte</Text>
                       </View> 
                       :
                       null

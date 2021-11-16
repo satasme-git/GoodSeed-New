@@ -145,7 +145,7 @@ export default function Step() {
             {
               pause==false?
               <Image  
-              source={require('../assets/walk.png')} 
+              source={require('../assets/walk2.png')} 
               style={{
                 width: 100,
                 height: 100,

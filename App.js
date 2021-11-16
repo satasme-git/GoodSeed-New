@@ -1,8 +1,8 @@
 import 'react-native-gesture-handler';
-import React, { useEffect, useState ,useContext} from "react";
+import React, { useEffect, useState ,useContext } from "react";
 import { NavigationContainer } from '@react-navigation/native';
 import HomeDrawer from './drawer/HomeDrawer'
-import { StatusBar } from 'react-native';
+import { StatusBar ,LogBox} from 'react-native';
 
 import { HealthProvider, HealthContext } from './context/Context';
 
@@ -24,6 +24,8 @@ import BackgroundFetch from 'react-native-background-fetch';
 import BackgroundTimer from 'react-native-background-timer';
 
 import { startCounter, stopCounter } from 'react-native-accurate-step-counter';
+
+LogBox.ignoreAllLogs();
 export default function App() {
 
   const health = useContext(HealthContext);

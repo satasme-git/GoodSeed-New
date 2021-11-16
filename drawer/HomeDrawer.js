@@ -23,6 +23,7 @@ import Summary from '../screens/Summary'
 import Achivements from '../screens/Achivements'
 import Avatar from '../screens/Avatar'
 import Select from '../screens/Select'
+// import Pedometer from '../screens/Pedometer'
 
 import { AvatarImages } from '../styles/AvatarImages';
 import { buttons, styles } from '../styles/Styles';
@@ -155,9 +156,9 @@ export default function MyDrawer() {
 
 function Loading(){
   return (
-    <View style={{justifyContent:'center',alignItems:'center',flex:1}}>
+    <View style={{justifyContent:'center',alignItems:'center',flex:1,backgroundColor:'white'}}>
       <StatusBar backgroundColor={'#6bb333'} />
-      <Image source={require('../assets/launch_screen.png')} style={{width:'100%',height:'100%'}} />
+      {/* <Image source={require('../assets/launch_screen.png')} style={{width:'100%',height:'100%'}} /> */}
       <MaterialIndicator color={'#fff'} style={{position:'absolute',top:900,zIndex:7,elevation:7}} />
     </View>
   )
@@ -234,6 +235,15 @@ function LoggedDrawer() {
         drawerIcon: ({ focused, color, size }) => <AntDesign color={color} size={20} name={'bars'} />
       }} 
       /> */}
+
+
+      {/* <Drawer.Screen 
+        name="Pedometer" 
+        component={Pedometer}   
+        options={{ drawerLabel: 'Pedometer' ,
+        drawerIcon: ({ focused, color, size }) => <AntDesign color={color} size={20} name={'bars'} />
+      }} 
+      />  */}
 
       <Drawer.Screen 
         name="Contact us" 
@@ -316,6 +326,14 @@ function UnLoggedDrawer() {
         name="Summary" 
         component={Summary}   
         options={{ drawerLabel: 'Summary' ,
+        drawerIcon: ({ focused, color, size }) => <AntDesign color={color} size={20} name={'bars'} />
+      }} 
+      /> */}
+
+      {/* <Drawer.Screen 
+        name="Pedometer" 
+        component={Pedometer}   
+        options={{ drawerLabel: 'Pedometer' ,
         drawerIcon: ({ focused, color, size }) => <AntDesign color={color} size={20} name={'bars'} />
       }} 
       /> */}

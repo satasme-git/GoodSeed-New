@@ -10,7 +10,7 @@ import Speedometer from 'react-native-speedometer-chart';
 
 import * as Animatable from 'react-native-animatable';
 
-import RNSpeedometer from 'react-native-speedometer';
+// import RNSpeedometer from 'react-native-speedometer';
 
 import { HealthContext } from '../context/Context';
 

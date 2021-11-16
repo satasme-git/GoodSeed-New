@@ -246,6 +246,7 @@ const styles = StyleSheet.create({
     position:'absolute',
     // marginLeft:-windowWidth/2,
     zIndex:2,
+    // paddingLeft:15
     // maxHeight:
   },
   levelIcon:{
