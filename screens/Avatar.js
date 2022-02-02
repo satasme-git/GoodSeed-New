@@ -167,7 +167,7 @@ export default function Avatar() {
                   </View>
                 </TouchableHighlight>
                 :
-                <TouchableHighlight onPress={()=>{avatarUpdate(imageID)}} underlayColor={'rgba(107, 179, 51,0.7)'} style={{backgroundColor:"rgba(107, 179, 51,0.2)",paddingHorizontal:15,paddingVertical:5,marginTop:25,borderRadius:25}}>
+                <TouchableHighlight onPress={()=>{avatarUpdate(imageID)}} underlayColor={'rgba(107, 179, 51,0.7)'} style={buttons.continuebtn}>
                   <View>
                     <Text style={{fontSize:17}}>Continue</Text>
                   </View>
@@ -176,54 +176,7 @@ export default function Avatar() {
                 
                </View>
                
-               
-               {/* <FlatList
-                data={AvatarImages}
-                renderItem={renderItem}
-                horizontal={true}
-                // initialNumToRender={12}
-                // numColumns={3}
-                keyExtractor={item => item.id}
-              /> */}
-
-              {/* <Text>Select Yo</Text> */}
               </View>
-
-               {/* <TouchableOpacity
-                style={{backgroundColor:'black',padding:5}}
-                onPress={takeScreenShot}>
-                <Text style={{backgroundColor:'white',padding:5}}>
-                  Take Screenshot
-                </Text>
-              </TouchableOpacity> */}
-
-            {/* </Animatable.View> */}
-
-            
-
-            {/* <Image
-              source={{uri: imageURI}}
-              style={{
-                width: 200,
-                height: 300,
-                resizeMode: 'contain',
-                marginTop: 5
-              }}
-            /> */}
-        
-            {/* <TouchableOpacity
-              style={{backgroundColor:'black',padding:5}}
-              onPress={takeScreenShot}>
-              <Text style={{backgroundColor:'white',padding:5}}>
-                Take Screenshot
-              </Text>
-            </TouchableOpacity> */}
-
-            {/* <View style={styles.pallet}>
-                <View style={styles.pallet2}>
-
-                </View>
-            </View> */}
             
       </View>
     );

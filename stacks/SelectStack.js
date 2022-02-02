@@ -3,13 +3,15 @@ import { createStackNavigator } from '@react-navigation/stack';
 
 import HomeDrawer from '../drawer/HomeDrawer'
 import BMI from '../screens/BMI'
-import Form from '../screens/Eveluation'
+// import Form from '../screens/Eveluation'
 import Avatar from '../screens/Avatar'
 import Select from '../screens/Select'
 import MainHome from '../screens/MainHome'
 import BMIChart from '../screens/BMIChart'
 import Step from '../screens/Step'
 import MainProfile from '../screens/MainProfile'
+import Form from '../screens/Evaluate';
+import Form2 from '../screens/Evaluate2';
 
 const Stack = createStackNavigator();
 
@@ -19,6 +21,13 @@ export default function MyStack() {
       <Stack.Screen 
         name="Form" 
         component={Form}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen 
+        name="Form2" 
+        component={Form2}
         options={{
           headerShown: false,
         }}

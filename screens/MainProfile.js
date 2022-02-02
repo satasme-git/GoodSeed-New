@@ -37,6 +37,9 @@ export default function MainProfile() {
 
     const [level, setLevel] = useState(210);
 
+    const [bmi, setBmi] = useState('');
+    const [bmilevel, setBmilevel] = useState('');
+
     const [show, setShow] = useState(null);
 
     const [filePath, setFilePath] = useState({});
@@ -139,9 +142,36 @@ export default function MainProfile() {
   }
 
 
+  const getBMI =()=>{
+      
+   fetch(BaseUrl.BASE_URL+'/api/BasicDetails/'+health.user.member_id)
+   .then((response) => response.json())
+   .then((json) => {
+      setBmi(json.toFixed(1)+'0')
+      // health.setProPic(BaseUrl.BASE_URL+'/assets/profile_pics/'+json[1].image)
+      // console.log(BaseUrl.BASE_URL+'/assets/profile_pics/'+json[1].image)
+
+      json < 18.5?
+      setBmilevel('UNDERWEIGHT'):
+      json < 24.9?
+      setBmilevel('NORMAL'):
+      json < 29.9?
+      setBmilevel('OVERWEIGHT'):
+      json < 34.9?
+      setBmilevel('OBESE')
+      :
+      setBmilevel('EXTREMELY OBESE')
+
+      console.log(json.toFixed(1)+'0')
+   })
+   .catch((error) => console.error(error))
+   .finally(() => setLoading(false));
+
+ }
  
     useEffect(() => {
       getImages()
+      getBMI()
     }, []);
 
     return (
@@ -156,11 +186,11 @@ export default function MainProfile() {
              /> 
              <Text style={{color:'white',fontSize:22,marginLeft:10}}>Profile</Text>
           </View>
-          
-          <View style={[styles.innerContainer,{backgroundColor: '#6bb333',}]}>
+         <ScrollView contentContainerStyle={{ flexGrow: 1 }}> 
+          <View style={[styles.innerContainer,{backgroundColor: '#6bb333',flex:1}]}>
 
             
-
+            
             <Animatable.View style={styles.bottomSheet} animation={'slideInUp'}>
             <View style={styles.profileHeader}>
                <ImageBackground 
@@ -197,13 +227,24 @@ export default function MainProfile() {
 
                      <View style={styles.profilHeader}>
                         <Text style={{fontSize:17}}>{health.user.email}</Text>
-                        <Text style={{fontSize:15,color:'gray'}}>{health.user.email}</Text>
+                        {/* <Text style={{fontSize:15,color:'gray'}}>{health.user.email}</Text> */}
                      </View>
                   </View>
                </ImageBackground>
             </View>
-
+               <LinearGradient 
+              colors={['#6bb333', '#366011']} 
+              style={{borderRadius:20,marginTop:10,padding:10,marginHorizontal:10}}>
+            <View style={{flexDirection:'row',justifyContent:'space-between'}}>
+               <Text style={{color:'#dfd',fontSize:17}}>Your BMI  Index {<Text style={{color:'#fff',fontSize:19,fontWeight:'bold'}}>{bmi}</Text>}</Text>
+               
+               <Text style={{color:'#6bb333',backgroundColor:'#fff',fontSize:17,paddingHorizontal:10,borderRadius:50}}>{bmilevel}</Text>
+            </View>
+            </LinearGradient>
             <View style={{backgroundColor: 'white',marginTop:0,padding:10,borderTopRightRadius:10,borderTopLeftRadius:10}}>
+            
+            
+            
             <LinearGradient 
               colors={['#6bb333', '#366011']} 
               style={{borderRadius:20}}>
@@ -231,6 +272,7 @@ export default function MainProfile() {
 
                </View>
             </LinearGradient>
+
                {/* <View style={styles.divider}/> */}
                {RiskData.map((item)=>
                   <View key={item.id} style={{backgroundColor:item.fontColor,marginTop:6,padding:10,borderRadius:10,flexDirection:'row',justifyContent:'space-between'}}>
@@ -244,7 +286,7 @@ export default function MainProfile() {
                )}
                </View>
             </Animatable.View>
-
+            
             <RBSheet
                ref={refRBSheet}
                closeOnDragDown={true}
@@ -370,7 +412,7 @@ export default function MainProfile() {
 
 
           </View>
-        
+          </ScrollView>
       </View>
     );
   }

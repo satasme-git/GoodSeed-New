@@ -62,6 +62,19 @@ const styles = StyleSheet.create({
     paddingLeft:10,
     padding:10,
   },
+  normalheader: {
+    height: windowHeight/10,
+    width:windowWidth,
+    backgroundColor: '#6bb333',
+    position:'absolute',
+    top:0,
+    zIndex:9999,
+    flexDirection:'row',
+    alignItems:'flex-start',
+    justifyContent:'flex-start',
+    paddingLeft:10,
+    padding:10,
+  },
   innerContainer: {
     flex: 1,
     backgroundColor: '#fff',
@@ -483,14 +496,15 @@ const styles = StyleSheet.create({
     },
     shadowRadius: 40,
     shadowOpacity: 0.08,
-    borderWidth: 2,
+    borderWidth: 1,
     borderColor: 'rgb(246,245,248)',
     width: '100%',
     backgroundColor: 'white',
     borderRadius: 24,
     paddingHorizontal: 15,
     paddingVertical: 16,
-    marginHorizontal:5
+    marginHorizontal:5,
+    elevation:3
   },
   labelContainer: {
     flexDirection: 'row',
@@ -554,7 +568,7 @@ const styles = StyleSheet.create({
   profilHeader:{
     backgroundColor:'rgba(255,255,255,0.9)',
     height:windowHeight/6,
-    justifyContent:'center',
+    justifyContent:'flex-start',
     alignItems:'center',
     paddingTop:(windowHeight/8)/2,
     borderBottomLeftRadius:10,
@@ -662,7 +676,25 @@ const buttons = StyleSheet.create({
     // alignSelf:'flex-end',
     // borderColor:'white',
     // borderWidth:2
-  }
+  },
+  continuebtn:{
+    backgroundColor:"rgba(107, 179, 51,0.2)",
+    paddingHorizontal:15,
+    paddingVertical:5,
+    marginTop:25,
+    borderRadius:25
+  },
+  float:{
+    backgroundColor:"rgb(107, 179, 51)",
+    // paddingHorizontal:15,
+    // paddingVertical:5,
+    // marginTop:25,
+    borderRadius:25,
+    position:'absolute',
+    bottom:20,
+    right:20
+  },
+
 });
 
 export {styles, buttons};

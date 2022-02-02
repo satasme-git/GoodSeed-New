@@ -8,6 +8,7 @@ import Welcome from '../screens/Welcome'
 import Profile from '../screens/Profile'
 import HomeDrawer from '../drawer/HomeDrawer'
 import ContactNumber from '../screens/ContactNumber';
+import UserType from '../screens/UserType'
 
 const Stack = createStackNavigator();
 
@@ -16,6 +17,12 @@ export default function MyStack() {
     <Stack.Navigator>
       <Stack.Screen 
         name="Welcome" component={Welcome}         
+        options={{
+          headerShown: false,
+        }} 
+      />
+      <Stack.Screen 
+        name="UserType" component={UserType}         
         options={{
           headerShown: false,
         }} 

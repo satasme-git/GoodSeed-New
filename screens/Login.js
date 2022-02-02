@@ -95,6 +95,9 @@ export default function Login() {
                 else if (data=='password'){
                     Message('Error','#e25b5b','Check The Password','Try Again','');
                 }
+                else if (data=='contact'){
+                    Message('Error','#e25b5b','Check The contact number','Try Again','');
+                }
                 else{
                     Message('Success','#6bb333','Logged Successfully','Ok','Welcome!');
                     health.setUser(data)
@@ -162,10 +165,11 @@ export default function Login() {
                     <TouchableHighlight underlayColor={'#DDDDDD'} style={buttons.modalButton} 
                     onPress={()=>{
                     setModelView(false);
-                    parseInt(health.user.position)==3?
+                    parseInt(health.user.position)==4?
                         navigation.navigate('HomeDrawer') 
                         :
-                        navigation.navigate('Profile2',{email:name}) 
+                        // navigation.navigate('Profile2',{email:name}) 
+                        navigation.navigate('UserType',{email:name}) 
                     }}>
                         <Text style={buttons.text}>{buttonText}</Text>
                     </TouchableHighlight>  
@@ -195,7 +199,7 @@ export default function Login() {
                             /> 
                             <TextInput
                                 style={styles.inputText}
-                                placeholder={'E-mail Address'}
+                                placeholder={'E-mail Address or Phone Number'}
                                 value={name}
                                 onChangeText={(text)=>setName(text)}
                                 onFocus={()=>setEVal(false)}

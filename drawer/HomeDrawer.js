@@ -122,7 +122,7 @@ export default function MyDrawer() {
       const jsonValue = await AsyncStorage.getItem('user')
       
         return jsonValue != null ?
-        JSON.parse(jsonValue).position==3?
+        JSON.parse(jsonValue).position==4?
         setScreen(<LoggedDrawer/>):
         setScreen(<UnLoggedDrawer/>)
         // var value = JSON.stringify(jsonValue)

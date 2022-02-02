@@ -16,6 +16,7 @@ export const HealthProvider = ({ children }) => {
   const [userFull, setUserFull] = useState([]);
   const [steps, setSteps] = useState(0);
   const [sleep, setSleep] = useState('');
+  const [userType, setUserType] = useState('');
   const [glasses, setGlasses] = useState(0);
   
   const [propic, setProPic] = useState(null);
@@ -203,7 +204,9 @@ export const HealthProvider = ({ children }) => {
         loading,
         setLoading,
         glasses,
-        setGlasses
+        setGlasses,
+        userType,
+        setUserType
       }}
     >
       {children}
