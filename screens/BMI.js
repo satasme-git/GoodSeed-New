@@ -1,7 +1,7 @@
 import React, { useRef, useState } from "react";
 import { Animated, View, StyleSheet, PanResponder, Image ,Dimensions,Text,Button, TouchableHighlight} from "react-native";
 import { Background } from '../styles/Background';
-import { BlurView } from "@react-native-community/blur";
+// import { BlurView } from "@react-native-community/blur";
 import RnVerticalSlider from 'rn-vertical-slider';
 
 import Ionicons from 'react-native-vector-icons/Ionicons';

@@ -6,7 +6,7 @@ import { buttons, styles } from '../styles/Styles';
 import * as Animatable from 'react-native-animatable';
 import LinearGradient from 'react-native-linear-gradient';
 
-import { BlurView } from "@react-native-community/blur";
+// import { BlurView } from "@react-native-community/blur";
 
 import { Background } from '../styles/Background';
 
