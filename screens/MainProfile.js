@@ -1,5 +1,5 @@
 import React, {useRef, useState,useEffect,useContext} from 'react';
-import { ActivityIndicator, View , Text,ScrollView, ImageBackground,Image,TouchableHighlight,TouchableOpacity} from 'react-native';
+import { ActivityIndicator, View ,Animated, Text,Dimensions,ScrollView, ImageBackground,Image,TouchableHighlight,TouchableOpacity} from 'react-native';
 import { useNavigation , DrawerActions } from '@react-navigation/native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { buttons, styles } from '../styles/Styles';
@@ -18,12 +18,17 @@ import RNFetchBlob from 'rn-fetch-blob'
 
 import LinearGradient from 'react-native-linear-gradient';
 
+
+import StickyParallaxHeader from 'react-native-sticky-parallax-header'
+
 // import * as ImagePicker from "react-native-image-picker"
 // import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 
 import ImagePicker from 'react-native-image-picker';
 
-import AsyncStorage from '@react-native-async-storage/async-storage';
+const windowHeight = Dimensions.get('window').height;
+const windowWidth = Dimensions.get('window').width;
+
 export default function MainProfile() {
 
    
@@ -46,6 +51,8 @@ export default function MainProfile() {
 
     const [singleFile, setSingleFile] = useState('');
 
+    const [percentage, setPercentage] = useState(0);
+
     const BaseUrl = require('../styles/BaseUrl');
 
     const getImages =()=>{
@@ -54,6 +61,8 @@ export default function MainProfile() {
       .then((response) => response.json())
       .then((json) => {
          setData(json)
+         json[1].image==null?
+      health.setProPic(null):
          health.setProPic(BaseUrl.BASE_URL+'/assets/profile_pics/'+json[1].image)
          // console.log(BaseUrl.BASE_URL+'/assets/profile_pics/'+json[1].image)
       })
@@ -147,52 +156,75 @@ export default function MainProfile() {
    fetch(BaseUrl.BASE_URL+'/api/BasicDetails/'+health.user.member_id)
    .then((response) => response.json())
    .then((json) => {
-      setBmi(json.toFixed(1)+'0')
+      console.log(json.bmi)
+      setBmi(json.bmi.toFixed(1)+'0')
       // health.setProPic(BaseUrl.BASE_URL+'/assets/profile_pics/'+json[1].image)
       // console.log(BaseUrl.BASE_URL+'/assets/profile_pics/'+json[1].image)
 
-      json < 18.5?
+      json.bmi < 18.5?
       setBmilevel('UNDERWEIGHT'):
-      json < 24.9?
+      json.bmi < 24.9?
       setBmilevel('NORMAL'):
-      json < 29.9?
+      json.bmi < 29.9?
       setBmilevel('OVERWEIGHT'):
-      json < 34.9?
+      json.bmi < 34.9?
       setBmilevel('OBESE')
       :
       setBmilevel('EXTREMELY OBESE')
 
-      console.log(json.toFixed(1)+'0')
+      // console.log(json.toF.bmiixed(1)+'0')
    })
    .catch((error) => console.error(error))
    .finally(() => setLoading(false));
 
  }
- 
+ const getPersentage = () =>{
+   setPercentage(((health.steps*100)/6000).toFixed(1))
+ }
+
     useEffect(() => {
       getImages()
       getBMI()
+      getPersentage()
     }, []);
+    
+    const scroll = useRef(new Animated.Value(0)).current;
 
-    return (
-      <View style={styles.container}>
-          <View style={[styles.header,{backgroundColor: 'transparent',}]}>
-             <Ionicons 
-                name="menu-outline" 
-                size={30} 
-                color="white" 
-                style={{zIndex:2}}
-                onPress={() => navigation.dispatch(DrawerActions.toggleDrawer())}
-             /> 
-             <Text style={{color:'white',fontSize:22,marginLeft:10}}>Profile</Text>
-          </View>
-         <ScrollView contentContainerStyle={{ flexGrow: 1 }}> 
-          <View style={[styles.innerContainer,{backgroundColor: '#6bb333',flex:1}]}>
+    const renderHeader = () => {
+      const opacity = scroll.interpolate({
+        inputRange: [0, 100, 160],
+        outputRange: [0,0, 1],
+        extrapolate: 'clamp'
+      })
+  
+      return (
+        <View style={{backgroundColor:'rgb(107, 179, 51)',height: windowHeight/10}}>
+          <Animated.View style={{ opacity ,flexDirection:'row',alignItems:'center',padding:10}}>
+              <Ionicons 
+              name="menu-outline" 
+              size={35} 
+              color="rgb(107, 179, 51)" 
+              onPress={() => navigation.dispatch(DrawerActions.toggleDrawer())}
+              /> 
+            <Text style={{paddingLeft:10,color:'white',fontSize:20}}>{health.user.email}</Text>
+          </Animated.View>
+        </View>
+      )
+    }
 
-            
-            
-            <Animatable.View style={styles.bottomSheet} animation={'slideInUp'}>
-            <View style={styles.profileHeader}>
+    const renderForeground = () => {
+      const titleOpacity = scroll.interpolate({
+        inputRange: [0, 106, 154],
+        outputRange: [1, 1, 0],
+        extrapolate: 'clamp'
+      })
+  
+      return (
+        <View style={{paddingLeft:0}}>
+            {/* <Text>{'\n'}</Text> */}
+          <Animated.View style={{ opacity: titleOpacity ,alignItems:'center',backgroundColor:'rgb(107, 179, 51)',borderBottomLeftRadius:20,borderBottomRightRadius:20,width: '100%',}}>
+              
+          <View style={styles.profileHeader}>
                <ImageBackground 
                   source={require('../assets/cover.jpg')}
                   style={styles.imageBg}
@@ -227,11 +259,89 @@ export default function MainProfile() {
 
                      <View style={styles.profilHeader}>
                         <Text style={{fontSize:17}}>{health.user.email}</Text>
-                        {/* <Text style={{fontSize:15,color:'gray'}}>{health.user.email}</Text> */}
+                        <View style={{flexDirection:'row',backgroundColor:'white',borderRadius:5,padding:6,justifyContent:'space-evenly',width:windowWidth-30}}>
+                           <View style={{alignItems:'center'}}>
+                             <Text style={{fontSize:17,fontWeight:'700'}}>{health.user.risk_point}</Text> 
+                             <Text style={{fontSize:11,color:'gray'}}>Risk Points</Text> 
+                           </View>
+                           <View style={{alignItems:'center'}}>
+                             <Text style={{fontSize:17,fontWeight:'700'}}>{bmi}</Text> 
+                             <Text style={{fontSize:11,color:'gray'}}>BMI</Text> 
+                           </View>
+                           <View style={{alignItems:'center'}}>
+                             <Text style={{fontSize:17,fontWeight:'700'}}>{percentage}%</Text> 
+                             <Text style={{fontSize:11,color:'gray'}}>Daily Task</Text> 
+                           </View>
+                           
+                        </View>
                      </View>
+
                   </View>
                </ImageBackground>
+
             </View>
+          </Animated.View>
+        </View>
+      )
+    }
+    const titleOpacity = scroll.interpolate({
+      inputRange: [0, 106, 154],
+      outputRange: [1, 1, 0],
+      extrapolate: 'clamp'
+    })
+
+    return (
+      <View style={styles.container}>
+         <View style={[styles.header,{backgroundColor: 'transparent',}]}>
+             <Ionicons 
+                name="menu-outline" 
+                size={30} 
+                color="white" 
+                style={{zIndex:2}}
+                onPress={() => navigation.dispatch(DrawerActions.toggleDrawer())}
+             /> 
+             <Animated.Text  style={{opacity:titleOpacity,color:'white',fontSize:22,marginLeft:10}}>Profile</Animated.Text>
+          </View>
+
+<StickyParallaxHeader
+        //   headerType={'AvatarHeader'}
+          backgroundColor={'transparent'}
+          bounces={true}
+        foreground={renderForeground()}
+        header={renderHeader()}
+        parallaxHeight={windowHeight/2.5}
+        // image={null}
+        headerHeight={50}
+        headerSize={() => {}}
+        onEndReached={() => {}}
+        scrollEvent={Animated.event([{ nativeEvent: { contentOffset: { y: scroll } } }])}
+        leftTopIcon={require('../assets/menu.png')}
+        leftTopIconOnPress={()=>navigation.dispatch(DrawerActions.toggleDrawer())}
+      //   image={image}
+        rightTopIcon={null}
+        // tabTextStyle={styles.tabText}
+        // tabTextContainerStyle={styles.tabTextContainerStyle}
+        // tabTextContainerActiveStyle={styles.tabTextContainerActiveStyle}
+        // tabsContainerBackgroundColor={'#6bb333'}
+        // title={health.user.email}
+        // snapValue={0}
+        // subtitle={''}
+        // subtitle={'Level '+health.user.level}
+        // tabsWrapperStyle={styles.tabsWrapper}
+      >
+         {/* </StickyParallaxHeader> */}
+
+
+         
+
+
+         {/* <ScrollView contentContainerStyle={{ flexGrow: 1 }}>  */}
+          {/* <View style={[styles.innerContainer,{backgroundColor: '#6bb333',flex:1}]}> */}
+
+            
+            
+            <View>
+            
                <LinearGradient 
               colors={['#6bb333', '#366011']} 
               style={{borderRadius:20,marginTop:10,padding:10,marginHorizontal:10}}>
@@ -240,7 +350,22 @@ export default function MainProfile() {
                
                <Text style={{color:'#6bb333',backgroundColor:'#fff',fontSize:17,paddingHorizontal:10,borderRadius:50}}>{bmilevel}</Text>
             </View>
+            <View style={{flexDirection:'row',justifyContent:'space-evenly',backgroundColor:'rgba(255,255,255,0.5)',padding:5,marginTop:10,borderRadius:10}}>
+               <View>
+                 <Text style={{fontSize:11,color:'black'}}>{`<`}18.5 {<Text style={{color:'#000',fontSize:13,fontWeight:'bold'}}> UNDERWEIGHT</Text>} </Text>
+                  <Text style={{fontSize:11,color:'black'}}>18.6 - 24.9 {<Text style={{color:'#000',fontSize:13,fontWeight:'bold'}}> NORMAL</Text>}  </Text>
+                  <Text style={{fontSize:12,color:'black'}}>25 - 29.9 {<Text style={{color:'#000',fontSize:13,fontWeight:'bold'}}> OVERWEIGHT</Text>} </Text> 
+               </View>
+               <View style={{borderLeftWidth:1,borderColor:'gray',paddingLeft:20}}>
+                  <Text style={{fontSize:11,color:'black'}}>30 - 34.9 {<Text style={{color:'#000',fontSize:13,fontWeight:'bold'}}> OBESE</Text>} </Text> 
+                  <Text style={{fontSize:11,color:'black'}}>35{`<`} {<Text style={{color:'#000',fontSize:13,fontWeight:'bold'}}> EXTREMELY OBESE</Text>}  </Text>                  
+               </View>
+               
+
+              
+            </View>
             </LinearGradient>
+
             <View style={{backgroundColor: 'white',marginTop:0,padding:10,borderTopRightRadius:10,borderTopLeftRadius:10}}>
             
             
@@ -273,7 +398,6 @@ export default function MainProfile() {
                </View>
             </LinearGradient>
 
-               {/* <View style={styles.divider}/> */}
                {RiskData.map((item)=>
                   <View key={item.id} style={{backgroundColor:item.fontColor,marginTop:6,padding:10,borderRadius:10,flexDirection:'row',justifyContent:'space-between'}}>
                      <Text style={{fontSize:16,color:'white'}}>
@@ -285,7 +409,7 @@ export default function MainProfile() {
                   </View>
                )}
                </View>
-            </Animatable.View>
+            </View>
             
             <RBSheet
                ref={refRBSheet}
@@ -303,7 +427,6 @@ export default function MainProfile() {
                }}
                closeOnPressBack={true}
                animationType={'slide'}
-               closeOnPressMask={true}
             >
 
                <Text style={{color:'black',fontSize:20,textAlign:'center'}}>Transformation Progress</Text>
@@ -386,7 +509,6 @@ export default function MainProfile() {
                      />
                :
                      <Image 
-                        // source={{uri:filePath}}
                         source={{uri:BaseUrl.BASE_URL+'/assets/profile_pics/'+item.image}} 
                         style={styles.profilePicBig2}
                      />
@@ -396,13 +518,6 @@ export default function MainProfile() {
                </View>
                </TouchableHighlight>
                )}
-               {/* <View style={[styles.profilePicBig,{backgroundColor: 'rgba(107,179,51,0.2)',}]}>
-                <Image 
-                  source={require('../assets/profile.png')} 
-                  style={styles.profilePicBig}
-               />
-               <Text style={{textAlign:'center',backgroundColor:'rgba(107,179,51,0.4)',padding:2,borderBottomLeftRadius:10,borderBottomRightRadius:10}}>Last Month</Text>  
-               </View> */}
                
                
 
@@ -411,8 +526,12 @@ export default function MainProfile() {
             </RBSheet>
 
 
-          </View>
-          </ScrollView>
+          {/* </View> */}
+
+
+          {/* </ScrollView> */}
+
+          </StickyParallaxHeader>
       </View>
     );
   }

@@ -102,6 +102,7 @@ export default function Login() {
                     Message('Success','#6bb333','Logged Successfully','Ok','Welcome!');
                     health.setUser(data)
                     storeUserData(data)
+                    getSteps(data.id)
                 }
                 // navigation.navigate('SelectStack')
             })
@@ -114,7 +115,17 @@ export default function Login() {
       
     }
 
-
+    const getSteps = async (id) => {
+    
+        fetch(BaseUrl.BASE_URL+'/api/steps/'+id)
+            .then((response) => response.json())
+            .then((json) => {
+            // setRequests(json)
+            health.setSteps(json.steps)
+            })
+            .catch((error) => console.error(error))
+            .finally(() => {});
+      }
 
     useEffect(() => {
         
@@ -166,7 +177,7 @@ export default function Login() {
                     onPress={()=>{
                     setModelView(false);
                     parseInt(health.user.position)==4?
-                        navigation.navigate('HomeDrawer') 
+                        navigation.navigate('Tabs') 
                         :
                         // navigation.navigate('Profile2',{email:name}) 
                         navigation.navigate('UserType',{email:name}) 

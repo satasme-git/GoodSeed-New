@@ -25,6 +25,8 @@ import {Picker} from '@react-native-picker/picker';
 
 import { Activities } from '../styles/Activities';
 
+import Loader from '../components/Loader';
+
 export default function Evaluvate() {
 
     const health = useContext(HealthContext);
@@ -35,7 +37,6 @@ export default function Evaluvate() {
 
     const [ current, setCurrent ] = useState(1);
     const [ current2, setCurrent2 ] = useState(1);
-    const [ current3, setCurrent3 ] = useState(1);
     const [ tab, setTab ] = useState(1);
 
     const [ field, setField ] = useState(1);
@@ -66,15 +67,6 @@ export default function Evaluvate() {
     const [ food, setFood ] = useState(false);
     const [ activity, setActivity ] = useState(false);
 
-    // const route = useRoute();
-    const radio_props = [
-      {label: 'D', value: 'daily' },
-      {label: 'W', value: 'weekly' },
-      {label: 'O', value: 'occationally' }
-    ];
-
-    const [isLoading, setLoading] = useState(true);
-    const [datas, setData] = useState([]);
   
     const [name, setName] = useState('');
     const [dob, setDob] = useState('');
@@ -96,16 +88,10 @@ export default function Evaluvate() {
     const [conperson, setConPerson] = useState('');
     const [email, setEmail] = useState('');
   
-    const [valuebreak, setBreakValue] = React.useState('first');
-    const [valuelunch, setLunchValue] = React.useState('first');
-    const [valuedinner, setDinnerValue] = React.useState('first');
-  
     const [date, setDate] = useState(new Date(1598051730000));
     const [mode, setMode] = useState('date');
     const [show, setShow] = useState(false);
     const [dobs, setDobs] = useState('');
-    const [selectedLanguage, setSelectedLanguage] = useState();
-    const [Enable, setEnable] = useState('courses');
   
     const [mon, setMon] = useState(0);
     const [tue, setTue] = useState(0);
@@ -120,80 +106,39 @@ export default function Evaluvate() {
     const [yes3, setYes3] = useState(true);
     const [yes4, setYes4] = useState(true);
     const [yes5, setYes5] = useState(true);
-    const [yes6, setYes6] = useState(true);
-    
-    const [valueKottu, setKottuValue] = React.useState('first');
-    const [valueEgg, seteggValue] = React.useState('first');
-    const [valueParata, setParataValue] = React.useState('first');
-    const [valueFlavord, setFlavoredValue] = React.useState('first');
-    const [valueInstant, setInstantValue] = React.useState('first');
-    const [valueBurger, setBurgerValue] = React.useState('first');
-    const [valuePitza, setPitzaValue] = React.useState('first');
-    const [valueFrench, setFrenchValue] = React.useState('first');
-    const [valueHeat, setheatValue] = React.useState('first');
-    const [valuePast, setPastaValue] = React.useState('first');
-    const [valueCracker, setCrackerValue] = React.useState('first');
-    const [valueColas, setColasValue] = React.useState('first');
-    const [valueChoco, setchocoValue] = React.useState('first');
-    const [valueSweet, setSweetValue] = React.useState('first');
-    const [valueIceCream, setIceCreamValue] = React.useState('first');
-    const [valueTea, setTeaValue] = React.useState('first');
-  
-  
-    const [valueBuns, setBunsValue] = React.useState('first');
-    const [valuePastry, setPastryValue] = React.useState('first');
-    const [valuBusict, setBusictValue] = React.useState('first');
-    const [valueCookies, setCookiesValue] = React.useState('first');
-    const [valueDonuts, setDonutsValue] = React.useState('first');
-    const [valueCake, setCakeValue] = React.useState('first');
-    const [valueSoya, setSoyaValue] = React.useState('first');
-    const [valuePotato, setPotatoValue] = React.useState('first');
-    const [valueSossage, setSossageValue] = React.useState('first');
-    const [valueMeatboal, setMeatboalValue] = React.useState('first');
-    const [valueFridChickn, setFridChicknValue] = React.useState('first');
-    const [valueCanned, setCannedValue] = React.useState('first');
-    const [valueVegi, setVegiValue] = React.useState('first');
-    const [valueMagarin, setMagarinValue] = React.useState('first');
-    const [valueCerial, setCerialValue] = React.useState('first');
-    const [valueYourgat, setYourgatValue] = React.useState('first');
-    const [valueNutrion, setNutrionValue] = React.useState('first');
-    const [valueSupp, setSuppValue] = React.useState('first');
-  
-    const [valueplayF, setPlayFValue] = React.useState('first');
-    const [valueGym, setGymValue] = React.useState('first');
-    const [valuSwim, setSwimValue] = React.useState('first');
-    const [valueCycle, setCycleValue] = React.useState('first');
-
-    const [valueHaveFriends, setHaveFriendValue] = React.useState('first');
-    const [valuePlayFriends, setPlayFriendsValue] = React.useState('first');
-    const [valueIndoor, setIndoorValue] = React.useState('first');    
-    const [valueaccept, setAcceptValue] = React.useState('first');
-    const [valuTution, setTutionValue] = React.useState('first');
-    const [valueParentWork, setParentWorkValue] = React.useState('first');
-
-    const [value5, setValue5] = useState(null);
-
-    
+    const [yes6, setYes6] = useState(true);    
     
     const [basic, setBasic] = useState(null);
     const [contact, setContact] = useState(null);
     const [stressQ, setStressQ] = useState(null);
 
-    
-    const [ch1, setCh1] = useState(null);
-    const [ch2, setCh2] = useState(null);
-    const [ch3, setCh3] = useState(null);
+    const [title, setTitle] = useState("");
+    const [headerColor, setHeaderColor] = useState("");    
+    const [subTitle, setSubTitle] = useState("");
+    const [message, setMessage] = useState("");
+  
+    const [modalView, setModelView] = useState(false);
 
-    
-    const [ph1, setPh1] = useState(null);
-    const [ph2, setPh2] = useState(null);
+    const Message =(ti,cl,ms,st)=>{
+      setTitle(ti)
+      setHeaderColor(cl)
+      setMessage(ms),
+      setSubTitle(st)
+      setModelView(true)
+    }
 
-  const [items, setItems] = useState([
-    {label: 'Apple', value: 'apple'},
-    {label: 'Banana', value: 'banana'},
-  ]);
-
-  const [selectedValue, setSelectedValue] = useState('java');
+    const CloseMessage =(ti,cl,ms,st,nav)=>{
+      setTitle(ti)
+      setHeaderColor(cl)
+      setMessage(ms),
+      setSubTitle(st)
+      setTimeout(() => {
+        setModelView(false)
+        // if (nav==true){
+        //   navigation.navigate('Profile2')
+        // }
+        }, 1000)      
+      }
 
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
@@ -203,7 +148,6 @@ export default function Evaluvate() {
     setDobs(DateText);
     var age = new Date().getFullYear() - currentDate.getFullYear();
     setAge(age.toString()+" Years")
-    console.log('>>>>>>>>>>>>>>>>>>>> : ' + age);
   };
   const pickerRef = useRef();
 
@@ -240,6 +184,8 @@ export default function Evaluvate() {
     parent,
   ) => {
  
+    Message('Loading','#fff','Please Wait','......');
+
     const formData = new FormData()
 
     formData.append('name', name);
@@ -257,7 +203,34 @@ export default function Evaluvate() {
     formData.append('parent_name', parent);
     formData.append('waist_size', waist);
 
+    if (field == 1){
+      if(name=='' || dob=='' || age == '' || grade == '' || classNumber == '' || height == '' || weight == '' || parent == '' || waist == ''){
+        setTimeout(() => CloseMessage('Error','#e25b5b','All fields are required','Try Again',false), 1500);
+      }
+      else{
+        basicPost(formData)
+      }
+    }
+    else if (field == 2){
+      if(name=='' || dob=='' || age == '' || department == '' || emp_number == '' || height == '' || weight == '' || parent == '' || waist == ''){
+        setTimeout(() => CloseMessage('Error','#e25b5b','All fields are required','Try Again',false), 1500);
+      }
+      else{
+        basicPost(formData)
+      }
+    }
+    else{
+      if(name=='' || dob=='' || age == '' || university == '' || height == '' || weight == '' || parent == '' || waist == ''){
+        setTimeout(() => CloseMessage('Error','#e25b5b','All fields are required','Try Again',false), 1500);
+      }
+      else{
+        basicPost(formData)
+      }
+    }
 
+  };
+
+  const basicPost = (formData,) => {
     fetch(BaseUrl.BASE_URL+'/api/basicDetails/', {
       method: 'POST', 
       body: formData,
@@ -267,16 +240,16 @@ export default function Evaluvate() {
         console.log('Success:', data);
         health.setUser(data);
         setBasic(true)
+        setTimeout(() => CloseMessage('Success','#6bb333','Saved','',true), 300)
         // storeUserData(data)
       })
       .catch(error => {
         console.log('Error:', error);
       });
-  };
-
+  }
 
   const contactDetails = (fphone, mphone, guardphone, conperson, email) => {
-
+    Message('Loading','#fff','Please Wait','......');
     const formData = new FormData()
 
     formData.append('father_mobile', fphone);
@@ -285,6 +258,11 @@ export default function Evaluvate() {
     formData.append('guardian_mobile', guardphone);
     formData.append('contactable_mobile', conperson);
 
+    if(fphone=='' || mphone == '' || email == '' || guardphone == '' || conperson == ''){
+      setTimeout(() => CloseMessage('Error','#e25b5b','All fields are required','Try Again',false), 1500);
+      console.log('clicked')
+    }
+    else{
     fetch(BaseUrl.BASE_URL+'/api/contactDetails/'+health.user.member_id, {
       method: 'POST', // or 'PUT'
       
@@ -296,11 +274,14 @@ export default function Evaluvate() {
         setContact(true)
         // storeUserData(data)
         health.setUser(data);
+        setTimeout(() => CloseMessage('Success','#6bb333','Saved','',true), 300)
       })
       .catch(error => {
         console.error('Error:', error);
       });
+    }
   };
+
 
   const savefoodCunsumptions = () => {
 
@@ -321,6 +302,7 @@ export default function Evaluvate() {
       .then(response => response.json())
       .then(data => {
         console.log('Success:', data);
+        getSteps(data.id)
         // setContact(true)
         // storeUserData(data)
         health.setUser(data);
@@ -363,7 +345,8 @@ export default function Evaluvate() {
         // setPh1(true)
         // storeUserData(data)
         health.setUser(data);
-        
+        getSteps(data.id)
+        reset2()
       })
       .catch(error => {
         // Alert.alert('Insert success');
@@ -371,35 +354,7 @@ export default function Evaluvate() {
       });
   };
   
-  const stressParent = () => {
- 
-     const formData = new FormData()
- 
-     formData.append('home_have_friends', yes1);
-     formData.append('home_play_friends', valuePlayFriends);
-     formData.append('indoor_games', valueIndoor);
-     formData.append('not_friends_accept', valueaccept);
-     formData.append('tution_class', valuTution);
-     formData.append('parents_work', valueParentWork);
- 
-     fetch(BaseUrl.BASE_URL+'/api/stress/'+health.user.member_id, {
-       method: 'POST', // or 'PUT'
-     
-       body: formData,
-     })
-       .then(response => response.json())
-       .then(data => {
-         // Alert.alert('Insert success');
-         console.log('Success:', data);
-         setPh2(true)
-         storeUserData(data)
-         health.setUser(data);
-       })
-       .catch(error => {
-         // Alert.alert('Insert success');
-         console.log('Error:', formData);
-       });
-   };
+
    const stress = () => {
  
      const formData = new FormData()
@@ -426,6 +381,7 @@ export default function Evaluvate() {
         //  storeUserData(data)
 
          health.setUser(data);
+         getSteps(data.id)
        })
        .catch(error => {
          // Alert.alert('Insert success');
@@ -433,95 +389,66 @@ export default function Evaluvate() {
        });
    };
 
-   const position = () => {
-  
 
-    fetch(BaseUrl.BASE_URL+'/api/position/'+health.user.member_id, {
-      method: 'PUT', // or 'PUT'
+
+
+
+    const getSteps = async (id) => {
     
-      // body: formData,
-    })
-      .then(response => response.json())
-      .then(data => {
-        // Alert.alert('Insert success');
-        console.log('Success:', data);
-        // setCh1(true)
-        storeUserData(data)
-        health.setUser(data);
-      })
-      .catch(error => {
-        // Alert.alert('Insert success');
-        console.error('Error:', error);
-      });
-  };
-
-   const storeUserData = async (value) => {
-    try {
-        const jsonValue = JSON.stringify(value)
-        await AsyncStorage.setItem('user', jsonValue)
-    } catch (e) {
-        // saving error
-    }
+      fetch(BaseUrl.BASE_URL+'/api/steps/'+id)
+          .then((response) => response.json())
+          .then((json) => {
+          // setRequests(json)
+          health.setSteps(json.steps)
+          })
+          .catch((error) => console.error(error))
+          .finally(() => {});
     }
 
-
-    useEffect(() => {
-        console.log(health.userType)
-    }, [])
+    // useEffect(() => {
+    //     console.log(health.userType)
+    // }, [])
 
     const reset =()=>{
-        setMeal1(false)
-        setMeal2(false)
-        setMeal3(false)
-        setMeal4(false)
-        setMeal5(false)
-        setMeal6(false)
-        setMeal7(false)
-        setMeal8(false)
-        setMeal9(false)
-        setMeal10(false)
-        setMeal11(false)
-        setMeal12(false)
-        setMeal13(false)
-        setMeal14(false)
-        setMeal15(false)
-        setMeal16(false)
-        setMeal17(false)
-        setMeal18(false)
-        setMeal19(false)
-        setMeal20(false)
-        setMeal21(false)
+        setMeal1(0)
+        setMeal2(0)
+        setMeal3(0)
+        setMeal4(0)
+        setMeal5(0)
+        setMeal6(0)
+        setMeal7(0)
+        setMeal8(0)
+        setMeal9(0)
+        setMeal10(0)
+        setMeal11(0)
+        setMeal12(0)
+        setMeal13(0)
+        setMeal14(0)
+        setMeal15(0)
+        setMeal16(0)
+        setMeal17(0)
+        setMeal18(0)
+        setMeal19(0)
+        setMeal20(0)
+        setMeal21(0)
     }
 
-    // const savefoodCunsumptions = ()=>{
-
-
-    //     setCurrent(current+1)
-    //     reset()
-    // }
-    const savefoodCunsumptionsBack = ()=>{
-        setCurrent(current-1)
-        reset()
-    }
+    const reset2 =()=>{
+      setSun(0)
+      setMon(0)
+      setTue(0)
+      setWed(0)
+      setThu(0)
+      setFri(0)
+      setSat(0)
+  }
+ 
     const nextTab = ()=>{
         setTab(tab+1)
         setBasic(true)
         setContact(true)
     }
 
-    // function calculateAge (birthDate) {
-    //     birthDate = new Date(birthDate);
-    //     otherDate = new Date();
-    
-    //     var years = (otherDate.getFullYear() - birthDate.getFullYear());
-    
-    //     if (otherDate.getMonth() < birthDate.getMonth() || 
-    //         otherDate.getMonth() == birthDate.getMonth() && otherDate.getDate() < birthDate.getDate()) {
-    //         years--;
-    //     }
-    
-    //     return years;
-    // }
 
   return (
     <View style={styles.container}>
@@ -599,7 +526,7 @@ export default function Evaluvate() {
         <ScrollView>
         {
             tab==1?
-            <Animatable.View animation={'fadeIn'} style={{backgroundColor:'#fff',margin:0,marginBottom:55}}>
+            <Animatable.View animation={'fadeIn'} style={{backgroundColor:'#fff',margin:0,marginBottom:65}}>
             <View
         style={[styles.cardcontainer, {width: windowWidth-10}]}
         activeOpacity={0.95}>
@@ -787,7 +714,7 @@ export default function Evaluvate() {
               ]}
               onChangeText={text => setParent(text)}
               value={parent}
-              placeholder="Enter parents here"
+              placeholder="Enter parent name here"
             />
           </View>
 
@@ -989,7 +916,7 @@ export default function Evaluvate() {
         </Animatable.View>
         :
             tab==2?
-            <View style={{alignItems:'center',marginTop:10}}>
+            <View style={{alignItems:'center',marginTop:15}}>
             <Text style={{marginBottom:2,fontSize:12}}>{current} / {foodConsumption.length}</Text>
 
             {
@@ -1031,11 +958,11 @@ export default function Evaluvate() {
                     </View>
                 )
             }
-            <Animatable.View key={current} animation={'slideInRight'} style={{alignItems:'center'}}>
+            <Animatable.View key={current} animation={'slideInRight'} style={{alignItems:'center',justifyContent:'center'}}>
 
-            <View style={{flexDirection:'row',flexWrap:'wrap',margin:0,marginHorizontal:10}}>
+            <View style={{flexDirection:'row',flexWrap:'wrap',margin:0,marginHorizontal:10,justifyContent:'center'}}>
 
-            <View style={{width:windowWidth/5,margin:7,alignItems:'center'}}>
+            <View style={{width:80,margin:7,alignItems:'center'}}>
                 <Text>MON</Text>
                 <TouchableHighlight underlayColor={'rgba(107, 179, 51, 0.7)'} onPress={()=>setMeal1(meal1==1?0:1)} style={{padding:2,paddingHorizontal:5,borderColor:'#6bb333',borderWidth:2,borderRadius:20,margin:2,backgroundColor:meal1==1?'#6bb333':'#fff',}}>
                     <Text style={{color:meal1==1?'#fff':'#000'}}>Breakfast</Text>
@@ -1050,7 +977,7 @@ export default function Evaluvate() {
                 </TouchableHighlight>
             </View>
 
-            <View style={{width:windowWidth/5,margin:7,alignItems:'center'}}>    
+            <View style={{width:80,margin:7,alignItems:'center'}}>    
                 <Text>TUE</Text>
                 <TouchableHighlight underlayColor={'rgba(107, 179, 51, 0.7)'} onPress={()=>setMeal4(meal4==1?0:1)} style={{padding:2,paddingHorizontal:5,borderColor:'#6bb333',borderWidth:2,borderRadius:20,margin:2,backgroundColor:meal4==1?'#6bb333':'#fff',}}>
                     <Text style={{color:meal4==1?'#fff':'#000'}}>Breakfast</Text>
@@ -1065,7 +992,7 @@ export default function Evaluvate() {
                 </TouchableHighlight>
             </View>
                 
-            <View style={{width:windowWidth/5,margin:7,alignItems:'center'}}>    
+            <View style={{width:80,margin:7,alignItems:'center'}}>    
                 <Text>WED</Text>
                 <TouchableHighlight underlayColor={'rgba(107, 179, 51, 0.7)'} onPress={()=>setMeal7(meal7==1?0:1)} style={{padding:2,paddingHorizontal:5,borderColor:'#6bb333',borderWidth:2,borderRadius:20,margin:2,backgroundColor:meal7==1?'#6bb333':'#fff',}}>
                     <Text style={{color:meal7==1?'#fff':'#000'}}>Breakfast</Text>
@@ -1080,7 +1007,7 @@ export default function Evaluvate() {
                 </TouchableHighlight>
             </View>
                 
-            <View style={{width:windowWidth/5,margin:7,alignItems:'center'}}>
+            <View style={{width:80,margin:7,alignItems:'center'}}>
                 <Text>THU</Text>
                 <TouchableHighlight underlayColor={'rgba(107, 179, 51, 0.7)'} onPress={()=>setMeal10(meal10==1?0:1)} style={{padding:2,paddingHorizontal:5,borderColor:'#6bb333',borderWidth:2,borderRadius:20,margin:2,backgroundColor:meal10==1?'#6bb333':'#fff',}}>
                     <Text style={{color:meal10==1?'#fff':'#000'}}>Breakfast</Text>
@@ -1095,7 +1022,7 @@ export default function Evaluvate() {
                 </TouchableHighlight>
             </View>
 
-            <View style={{width:windowWidth/5,margin:7,alignItems:'center'}}>    
+            <View style={{width:80,margin:7,alignItems:'center'}}>    
                 <Text>FRI</Text>
                 <TouchableHighlight underlayColor={'rgba(107, 179, 51, 0.7)'} onPress={()=>setMeal13(meal13==1?0:1)} style={{padding:2,paddingHorizontal:5,borderColor:'#6bb333',borderWidth:2,borderRadius:20,margin:2,backgroundColor:meal13==1?'#6bb333':'#fff',}}>
                     <Text style={{color:meal13==1?'#fff':'#000'}}>Breakfast</Text>
@@ -1110,7 +1037,7 @@ export default function Evaluvate() {
                 </TouchableHighlight>
             </View>
 
-            <View style={{width:windowWidth/5,margin:7,alignItems:'center'}}>    
+            <View style={{width:80,margin:7,alignItems:'center'}}>    
                 <Text>SAT</Text>
                 <TouchableHighlight underlayColor={'rgba(107, 179, 51, 0.7)'} onPress={()=>setMeal16(meal16==1?0:1)} style={{padding:2,paddingHorizontal:5,borderColor:'#6bb333',borderWidth:2,borderRadius:20,margin:2,backgroundColor:meal16==1?'#6bb333':'#fff',}}>
                     <Text style={{color:meal16==1?'#fff':'#000'}}>Breakfast</Text>
@@ -1125,7 +1052,7 @@ export default function Evaluvate() {
                 </TouchableHighlight>
             </View>
 
-            <View style={{width:windowWidth/5,margin:10,alignItems:'center'}}>    
+            <View style={{width:80,margin:10,alignItems:'center'}}>    
                 <Text>SUN</Text>
                 <TouchableHighlight underlayColor={'rgba(107, 179, 51, 0.7)'} onPress={()=>setMeal19(meal19==1?0:1)} style={{padding:2,paddingHorizontal:5,borderColor:'#6bb333',borderWidth:2,borderRadius:20,margin:2,backgroundColor:meal19==1?'#6bb333':'#fff',}}>
                     <Text style={{color:meal19==1?'#fff':'#000'}}>Breakfast</Text>
@@ -1164,7 +1091,7 @@ export default function Evaluvate() {
             </View>
             :
             tab==3?
-            <View style={{alignItems:'center',marginTop:10}}>
+            <View style={{alignItems:'center',marginTop:15}}>
             <Text style={{marginBottom:2,fontSize:12}}>{current2} / {Activities.length}</Text>
 
             {
@@ -1627,7 +1554,7 @@ export default function Evaluvate() {
 </Animatable.View> */}
 
         
-        <Animatable.View style={buttons.float} animation={'zoomIn'}>
+        <Animatable.View duration={500} style={buttons.float} animation={'zoomIn'}>
           {
           tab==1?
           basic==null || contact==null?
@@ -1705,7 +1632,13 @@ export default function Evaluvate() {
 
 
         </View>
-      
+        <Loader 
+                view={modalView}
+                title={title}
+                message={message}
+                headerColor={headerColor}
+                subTitle={subTitle}
+                />
     </View>
   );
 }

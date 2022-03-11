@@ -1,11 +1,15 @@
 import React, { useState, useContext } from 'react'
-import { Button, View , Text, ScrollView,TextInput, TouchableHighlight, Linking, Image} from 'react-native';
+import { Button, View , Text, ScrollView, Dimensions,TextInput, TouchableHighlight, Linking, Image} from 'react-native';
 import { useNavigation , DrawerActions } from '@react-navigation/native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { buttons, styles } from '../styles/Styles';
 import { HealthProvider, HealthContext } from '../context/Context';
 import ResponseModal from '../components/ResponseModal';
+import {Validation} from '../components/Validation'
+
+const windowWidth = Dimensions.get('window').width;
+const windowHeight = Dimensions.get('window').height;
 
 export default function Contact() {
 
@@ -13,7 +17,12 @@ export default function Contact() {
 
     const [name, setName] = useState( ""); 
     const [email, setEmail] = useState(''); 
-    const [message, setMessage] = useState( ""); 
+    const [message, setMessage] = useState( "");
+    
+    
+    const [nv, setNv] = useState(false); 
+    const [ev, setEv] = useState(false); 
+    const [mv, setMv] = useState(false); 
 
     const navigation = useNavigation();
 
@@ -28,6 +37,46 @@ export default function Contact() {
     const [modalView, setModelView] = useState(false);
 
     const send = () =>{
+
+      if(name=='' && email==''&& message==''){
+        setNv(true)
+        setEv(true)
+        setMv(true)
+      }
+      else if(name=='' && email==''){
+        setNv(true)
+        setEv(true)
+        setMv(false)
+      }
+      else if(name=='' && message==''){
+        setNv(true)
+        setEv(false)
+        setMv(true)
+      }
+      else if(email==''&& message==''){
+        setNv(false)
+        setEv(true)
+        setMv(true)
+      }
+      else if(name==''){
+        setNv(true)
+        setEv(false)
+        setMv(false)
+      }
+      else if( email==''){
+        setNv(false)
+        setEv(true)
+        setMv(false)
+      }
+      else if( message==''){
+        setNv(false)
+        setEv(false)
+        setMv(true)
+      }
+      else{
+        setNv(false)
+        setEv(false)
+        setMv(false)
       const formData = new FormData()
 
       formData.append('name', name);
@@ -60,7 +109,7 @@ export default function Contact() {
               
           })   
       }
-
+    }
       const Message =(ti,cl,ms,bt,st)=>{
         setTitle(ti)
         setHeaderColor(cl)
@@ -90,8 +139,9 @@ export default function Contact() {
         </View>
 
         <ScrollView style={styles.scrollContainer} contentContainerStyle={styles.contentContainer}>
-        <Image source={require('../assets/contact.png')} style={{height:120,width:120,resizeMode:'contain',alignSelf:'center',marginTop:50}} />
-        <View style={{flexDirection:'row',justifyContent:'space-around',margin:10}}>
+        <View style={{height:windowHeight/2,justifyContent:'space-between',padding:15}}>
+        <Image source={require('../assets/contact.png')} style={{height:120,width:120,resizeMode:'contain',alignSelf:'center',marginTop:80}} />
+        <View style={{flexDirection:'row',justifyContent:'space-evenly',margin:10}}>
           <View style={{flexDirection:'row'}}>
             <Ionicons
               name="mail-outline"
@@ -117,20 +167,40 @@ export default function Contact() {
           </View>
             
           </View>
+          </View>
 
             <View style={styles.contactView}>
+              <View style={{flexDirection:'row',alignItems:'center'}}>
                 <TextInput
                     style={styles.inputText2}
                     placeholder={'Name'}
                     value={name}
                     onChangeText={(text)=>setName(text)}
                 />
+                {
+                  nv==true?
+                  <Validation text={'Name is Required'} />
+                  :
+                  null
+                }
+                </View>
+
+                <View style={{flexDirection:'row',alignItems:'center'}}>
                 <TextInput
                     style={styles.inputText2}
                     placeholder={'Email'}
                     value={email}
                     onChangeText={(text)=>setEmail(text)}
                 />
+                {
+                  ev==true?
+                  <Validation text={'Email is Required'} />
+                  :
+                  null
+                }
+                </View>
+
+                <View style={{flexDirection:'row',alignItems:'center'}}>
                 <TextInput
                     style={[styles.inputText2,{height:'auto'}]}
                     placeholder={'Message'}
@@ -140,8 +210,14 @@ export default function Contact() {
                     textAlignVertical={'top'}
                     onChangeText={(text)=>setMessage(text)}
                 />
-
-                <TouchableHighlight onPress={()=>send()} style={{backgroundColor:'green',alignSelf:'center',height:45,width:45,borderRadius:50,alignItems:'center',justifyContent:'center'}}>
+                {
+                  mv==true?
+                  <Validation text={'Message is Required'} />
+                  :
+                  null
+                }
+                </View>
+                <TouchableHighlight onPress={()=>send()} style={{backgroundColor:'green',alignSelf:'center',height:45,width:45,borderRadius:50,alignItems:'center',justifyContent:'center',margin:15}}>
                 <FontAwesome 
                     name="send" 
                     size={20} 

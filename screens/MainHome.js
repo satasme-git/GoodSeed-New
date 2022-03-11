@@ -93,7 +93,8 @@ export default function Details() {
       
       fetch(BaseUrl.BASE_URL+'/api/imageUpload/'+health.user.id)
       .then((response) => response.json())
-      .then((json) => {
+      .then((json) => {json[1].image==null?
+        health.setProPic(null):
          health.setProPic(BaseUrl.BASE_URL+'/assets/profile_pics/'+json[1].image)
          // console.log(BaseUrl.BASE_URL+'/assets/profile_pics/'+json[1].image)
       })
@@ -101,7 +102,18 @@ export default function Details() {
       .finally(() => {});
 
     }
-
+    const getName =()=>{
+      
+      fetch(BaseUrl.BASE_URL+'/api/ContactDetails/'+health.user.member_id)
+      .then((response) => response.json())
+      .then((json) => {
+         console.log(json.name)
+          health.setName(json.name)
+      })
+      .catch((error) => console.error(error))
+      .finally(() => {});
+    
+    }
     const getSleptData =()=>{
       
       fetch(BaseUrl.BASE_URL+'/api/sleepData/'+health.user.id)
@@ -170,6 +182,7 @@ export default function Details() {
       getImages()
       getSleptData()
       getPersentage()
+      getName()
       // countSteps()
       // toggleBackground()
       
@@ -245,6 +258,13 @@ export default function Details() {
           
           :
           <View onLayout={()=>getImages()}>
+                      <TouchableOpacity 
+                style={[buttons.profileBitton,{marginRight:10,backgroundColor:'rgba(255,255,255,0.5)'}]} 
+                onPress={()=>{navigation.navigate('Profile')}}>
+                <View >
+                <Image style={buttons.profileBitton} source={require('../assets/propic.jpg')}  />
+                </View>
+              </TouchableOpacity>
           </View>
           
           

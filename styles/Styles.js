@@ -13,6 +13,7 @@ const styles = StyleSheet.create({
   },
   contentContainer:{
     justifyContent:'space-between',
+    height:windowHeight,
   },
   viewContainer: {
     flex: 1,
@@ -24,7 +25,7 @@ const styles = StyleSheet.create({
     marginLeft:0,
     paddingVertical:15,
     borderTopLeftRadius:30,
-    borderTopRightRadius:30
+    borderTopRightRadius:30,
     // shadowColor: "#000",
     // shadowOffset: {
     //   width: 0,
@@ -34,7 +35,8 @@ const styles = StyleSheet.create({
     // shadowRadius: 2.22,
 
     // elevation: 3,
-    // alignSelf:'flex-end'
+    // alignSelf:'flex-end',
+    height:windowHeight/2
   },
   header: {
     height: windowHeight/10,
@@ -105,7 +107,7 @@ const styles = StyleSheet.create({
     // backgroundColor:'#8aa8ae',
     height:40,
     // marginLeft:10,
-    width:windowWidth-50,
+    width:windowWidth-60,
     borderRadius:5,
     paddingLeft:20,
     textAlignVertical:'center',
@@ -310,6 +312,8 @@ const styles = StyleSheet.create({
     // marginLeft:-windowWidth/2,
     zIndex:1,
     paddingVertical:10,
+    justifyContent:'space-between',
+    paddingBottom:windowHeight/8
     // borderBottomLeftRadius:600,
     // borderBottomRightRadius:600
     // left:5
@@ -556,7 +560,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
   },
   imageBg: {
-    height:windowHeight/3,
+    height:windowHeight/2.5,
     width:windowWidth,
     justifyContent:'flex-end'
   },
@@ -567,19 +571,19 @@ const styles = StyleSheet.create({
   },
   profilHeader:{
     backgroundColor:'rgba(255,255,255,0.9)',
-    height:windowHeight/6,
-    justifyContent:'flex-start',
+    height:windowHeight/4,
+    justifyContent:'space-evenly',
     alignItems:'center',
-    paddingTop:(windowHeight/8)/2,
+    paddingTop:(windowHeight/16),
     borderBottomLeftRadius:10,
     borderBottomRightRadius:10
   },
   profilePic:{
-    height:windowHeight/8,
-    width:windowHeight/8,
+    height:windowWidth/4,
+    width:windowWidth/4,
     borderRadius:100,
     alignSelf:'center',
-    zIndex:2
+    zIndex:2,
   },
   profilePicBig:{
     height:windowHeight/3,

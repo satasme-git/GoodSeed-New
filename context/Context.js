@@ -17,7 +17,9 @@ export const HealthProvider = ({ children }) => {
   const [steps, setSteps] = useState(0);
   const [sleep, setSleep] = useState('');
   const [userType, setUserType] = useState('');
+  const [name, setName] = useState('');
   const [glasses, setGlasses] = useState(0);
+  const [id, setId] = useState(0);
   
   const [propic, setProPic] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -65,14 +67,14 @@ export const HealthProvider = ({ children }) => {
     const jsonValue = await AsyncStorage.getItem('user')
 
     // const jsonValue = await AsyncStorage.getItem('user')
-    var id;
+    // var id;
 
-    if(jsonValue == null) {
-      id = user.id
-    }
-    else{
-      id = JSON.parse(jsonValue).id
-    }
+    // if(jsonValue == null) {
+    //   id = user.id
+    // }
+    // else{
+    //   id = JSON.parse(jsonValue).id
+    // }
 
     // const id = JSON.parse(jsonValue).id
 
@@ -92,7 +94,7 @@ export const HealthProvider = ({ children }) => {
       .then(data => {
         // navigation.navigate('profile')
         // console.log('Success:', data);
-        setSteps(parseInt(data.steps))
+        // setSteps(parseInt(data.steps))
         // Message('Nice','#6bb333','You Created Challenge Successfully','Start Walking','');
       })
       .catch(error => {
@@ -105,15 +107,15 @@ export const HealthProvider = ({ children }) => {
 
   const getSteps = async () => {
     const jsonValue = await AsyncStorage.getItem('user')
-    var id;
+    // var id;
 
-    if(jsonValue == null) {
-      id = user.id
-    }
-    else{
-      id = JSON.parse(jsonValue).id
-    }
-    console.log(id)
+    // if(jsonValue == null) {
+    //   id = user.id
+    // }
+    // else{
+    //   id = JSON.parse(jsonValue).id
+    // }
+    console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>  "+id+" <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<")
 
     fetch(BaseUrl.BASE_URL+'/api/steps/'+id)
         .then((response) => response.json())
@@ -122,7 +124,7 @@ export const HealthProvider = ({ children }) => {
         setSteps(json.steps)
 
         const config = {
-          default_threshold: 20.0,
+          default_threshold: 15.0,
           default_delay: 150000000,
           cheatInterval: 3000,
           onStepCountChange: (stepCount) => {backgroundtimer(parseInt(json.steps)+stepCount) },
@@ -151,8 +153,10 @@ export const HealthProvider = ({ children }) => {
     fetch(BaseUrl.BASE_URL+'/api/imageUpload/'+id)
     .then((response) => response.json())
     .then((json) => {
+      json[1].image==null?
+      setProPic(null):
        setProPic(BaseUrl.BASE_URL+'/assets/profile_pics/'+json[1].image)
-       // console.log(BaseUrl.BASE_URL+'/assets/profile_pics/'+json[1].image)
+      //  console.log(json)
     })
     .catch((error) => console.error(error))
     .finally(() => {});
@@ -206,7 +210,11 @@ export const HealthProvider = ({ children }) => {
         glasses,
         setGlasses,
         userType,
-        setUserType
+        setUserType,
+        name,
+        setName,
+        id,
+        setId
       }}
     >
       {children}

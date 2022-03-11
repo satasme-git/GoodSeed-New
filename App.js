@@ -3,6 +3,7 @@ import React, { useEffect, useState ,useContext } from "react";
 import { NavigationContainer } from '@react-navigation/native';
 import HomeDrawer from './drawer/HomeDrawer'
 import { StatusBar ,LogBox} from 'react-native';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import { HealthProvider, HealthContext } from './context/Context';
 
@@ -40,9 +41,11 @@ export default function App() {
 
 
   return (
+    <SafeAreaProvider>
     <HealthProvider>
       <StatusBar backgroundColor={'#6bb333'} barStyle={'light-content'} />
         <HomeDrawer/>
     </HealthProvider>
+    </SafeAreaProvider>
   );
 }

@@ -333,7 +333,7 @@ export default function Login() {
                     buttonText=='Ok'?
                     <TouchableHighlight underlayColor={'#DDDDDD'} style={buttons.modalButton} 
                     onPress={()=>{setModelView(false);
-                      parseInt(health.user.position)==3?
+                      parseInt(health.user.position)==4?
                       navigation.navigate('HomeDrawer') 
                       :
                       navigation.navigate('Profile2',{email:health.user.email}) 
