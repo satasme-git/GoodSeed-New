@@ -26,6 +26,7 @@ import {Picker} from '@react-native-picker/picker';
 import { Activities } from '../styles/Activities';
 
 import Loader from '../components/Loader';
+import { Elimination } from '../styles/Elimination';
 
 export default function Evaluvate() {
 
@@ -37,9 +38,12 @@ export default function Evaluvate() {
 
     const [ current, setCurrent ] = useState(1);
     const [ current2, setCurrent2 ] = useState(1);
+    const [ current3, setCurrent3 ] = useState(1);
     const [ tab, setTab ] = useState(1);
 
     const [ field, setField ] = useState(1);
+
+    const [ not, setNot ] = useState(false);
 
     const [ meal1, setMeal1 ] = useState(0);
     const [ meal2, setMeal2 ] = useState(0);
@@ -71,7 +75,7 @@ export default function Evaluvate() {
     const [name, setName] = useState('');
     const [dob, setDob] = useState('');
     const [grade, setGrade] = useState('');
-    const [className, setClassName] = useState('');
+    const [school, setSchool] = useState('');
     const [dep, setDep] = useState('');
     const [emp, setEmp] = useState('');
     const [campus, setCampus] = useState('');
@@ -112,12 +116,28 @@ export default function Evaluvate() {
     const [contact, setContact] = useState(null);
     const [stressQ, setStressQ] = useState(null);
 
+    const [elemination, setElemination] = useState(null);
+
     const [title, setTitle] = useState("");
     const [headerColor, setHeaderColor] = useState("");    
     const [subTitle, setSubTitle] = useState("");
     const [message, setMessage] = useState("");
   
     const [modalView, setModelView] = useState(false);
+
+    
+    const [e1, setE1] = useState('');
+    const [e2, setE2] = useState('');  
+    const [e3, setE3] = useState(''); 
+    const [e4, setE4] = useState(''); 
+    const [e5, setE5] = useState(''); 
+    const [e6, setE6] = useState(''); 
+    const [e7, setE7] = useState('');
+    const [e8, setE8] = useState([]);
+
+    const [e8key, setE8Key] = useState(1);
+
+    const [points, setPoints] = useState(0);
 
     const Message =(ti,cl,ms,st)=>{
       setTitle(ti)
@@ -182,6 +202,7 @@ export default function Evaluvate() {
     weight,
     waist,
     parent,
+    school
   ) => {
  
     Message('Loading','#fff','Please Wait','......');
@@ -202,7 +223,9 @@ export default function Evaluvate() {
     formData.append('weight', weight);
     formData.append('parent_name', parent);
     formData.append('waist_size', waist);
+    formData.append('school', school);
 
+    if (health.userType=='Parent'){
     if (field == 1){
       if(name=='' || dob=='' || age == '' || grade == '' || classNumber == '' || height == '' || weight == '' || parent == '' || waist == ''){
         setTimeout(() => CloseMessage('Error','#e25b5b','All fields are required','Try Again',false), 1500);
@@ -227,6 +250,33 @@ export default function Evaluvate() {
         basicPost(formData)
       }
     }
+  }
+  else{
+    if (field == 1){
+      if(name=='' || dob=='' || age == '' || grade == '' || classNumber == '' || height == '' || weight == ''  || waist == ''){
+        setTimeout(() => CloseMessage('Error','#e25b5b','All fields are required','Try Again',false), 1500);
+      }
+      else{
+        basicPost(formData)
+      }
+    }
+    else if (field == 2){
+      if(name=='' || dob=='' || age == '' || department == '' || emp_number == '' || height == '' || weight == '' || waist == ''){
+        setTimeout(() => CloseMessage('Error','#e25b5b','All fields are required','Try Again',false), 1500);
+      }
+      else{
+        basicPost(formData)
+      }
+    }
+    else{
+      if(name=='' || dob=='' || age == '' || university == '' || height == '' || weight == ''  || waist == ''){
+        setTimeout(() => CloseMessage('Error','#e25b5b','All fields are required','Try Again',false), 1500);
+      }
+      else{
+        basicPost(formData)
+      }
+    }
+  }
 
   };
 
@@ -311,6 +361,7 @@ export default function Evaluvate() {
         :setCurrent(current+1)
 
         reset()
+        setNot(false)
       })
       .catch(error => {
         console.error('Error:', error);
@@ -391,6 +442,67 @@ export default function Evaluvate() {
 
 
 
+   const elimination_of_toxins = () => {
+    console.log('clicked')
+    var level=""
+     const formData = new FormData()
+
+    if (current3==1){
+      level = e1
+    }
+    else if (current3==2){
+      level = e2
+    }
+    else if (current3==3){
+      level = e3
+    }
+    else if (current3==4){
+      level = e4
+    }
+    else if (current3==5){
+      level = e5
+    }
+    else if (current3==6){
+      level = e6
+    }
+    else if (current3==7){
+      level = e7
+    }
+    else if (current3==8){
+      level = JSON.stringify(e8)
+    }
+
+     formData.append('member_id', health.user.member_id);
+     formData.append('level', level);
+     formData.append('points', points);
+ 
+     fetch(BaseUrl.BASE_URL+'/api/Elimination_of_toxins/'+current3, {
+       method: 'POST', // or 'PUT'
+     
+       body: formData,
+     })
+       .then(response => response.json())
+       .then(data => {
+         // Alert.alert('Insert success');
+         console.log('Success:', data);
+ 
+         if(current3==8){
+           setElemination(true)
+         }
+         else{
+           setCurrent3(current3+1)
+         }
+         // setPh1(true)
+         // storeUserData(data)
+         health.setUser(data);
+         getSteps(data.id)
+        //  reset2()
+       })
+       .catch(error => {
+         // Alert.alert('Insert success');
+         console.log('Error:', formData);
+       });
+   };
 
 
     const getSteps = async (id) => {
@@ -449,6 +561,32 @@ export default function Evaluvate() {
         setContact(true)
     }
 
+    const setElimintion8 = (text)=>{
+      let array = [];
+      array = e8 
+      let index = e8.findIndex(obj => obj === text)
+      
+      if (array.includes(text)){
+        array.splice(index, 1)
+        setE8(array)
+      }
+      else{
+        array.push(text)
+        setE8(array)
+      }
+      console.log(array)
+      setE8Key(e8key+1)
+      if(array.length <= 6){
+        setPoints(1)
+      }
+      else if(array.length <= 12){
+        setPoints(5)
+      }
+      else{
+        setPoints(10)
+      }
+      
+  }
 
   return (
     <View style={styles.container}>
@@ -493,13 +631,13 @@ export default function Evaluvate() {
                         }
                     </View>
                     {
-                        item.id>3?
+                        item.id>4?
                         null
                         :
                         item.id<tab?
-                        <View style={{height:2,width:70,backgroundColor:'#6bb333'}} />
+                        <View style={{height:2,width:windowWidth/6,backgroundColor:'#6bb333'}} />
                         :
-                        <View style={{height:2,width:70,backgroundColor:'#6bb333'}} />
+                        <View style={{height:2,width:windowWidth/6,backgroundColor:'#6bb333'}} />
                     }
                     
                 </View>
@@ -535,7 +673,13 @@ export default function Evaluvate() {
             <View>
               <Text style={styles.mainText}>Basic Information</Text>
             </View>
-            <Text style={styles.labelText}>Full Name</Text>
+            {
+              health.userType=='Parent'?
+              <Text style={styles.labelText}>Child Full Name</Text>
+              :
+              <Text style={styles.labelText}>Full Name</Text>
+            }
+            
             <TextInput
               style={[
                 styles.labelTextContainer,
@@ -601,6 +745,18 @@ export default function Evaluvate() {
             {
               field==1?
               <View>
+
+                <Text style={styles.labelText}>School Name</Text>
+            <TextInput
+              style={[
+                styles.labelTextContainer,
+                {padding: 10, width: windowWidth - 43, marginBottom: 5},
+              ]}
+              onChangeText={text => setSchool(text)}
+              value={school}
+              placeholder="Enter school name here"
+            /> 
+
               <Text style={styles.labelText}>Grade</Text>
             <TextInput
               style={[
@@ -704,7 +860,11 @@ export default function Evaluvate() {
               value={waist}
               placeholder="Enter waist here"
             />
-            <Text style={styles.labelText}>
+
+              {
+                health.userType=='Parent'?
+                <View>
+                <Text style={styles.labelText}>
               Name Of Parents / Guardian
             </Text>
             <TextInput
@@ -716,6 +876,13 @@ export default function Evaluvate() {
               value={parent}
               placeholder="Enter parent name here"
             />
+            </View>
+            :
+            null
+              }
+            
+
+
           </View>
 
           <View>
@@ -772,6 +939,7 @@ export default function Evaluvate() {
               weight,
               waist,
               parent,
+              school
             )
           }>
           <Text style={{color: 'white', alignItems: 'center'}}>
@@ -781,6 +949,9 @@ export default function Evaluvate() {
         }
       </View>
 
+        {
+          health.userType=='Parent'?
+        
       <View
         style={[styles.cardcontainer, {width: windowWidth-10}]}
         activeOpacity={0.95}>
@@ -886,6 +1057,9 @@ export default function Evaluvate() {
         </TouchableOpacity>
         }
       </View>
+      :
+      null
+    }
 
           {/* {basic==null || contact==null?
           <View style={{alignSelf:'flex-end',margin:10,padding:7,paddingHorizontal:15,backgroundColor:'rgba(107,179,51,0.1)',borderRadius:20}}>
@@ -959,8 +1133,15 @@ export default function Evaluvate() {
                 )
             }
             <Animatable.View key={current} animation={'slideInRight'} style={{alignItems:'center',justifyContent:'center'}}>
+            <TouchableHighlight underlayColor={'rgba(107, 179, 51, 0.7)'} onPress={()=>{setNot(!not);reset()}} style={{padding:5,paddingHorizontal:10,borderColor:'#6bb333',borderWidth:2,borderRadius:20,margin:10,backgroundColor:not?'#6bb333':'#fff',}}>
+                    <Text style={{color:not?'#fff':'#000'}}>Not Consumed</Text>
+                </TouchableHighlight>
+              {
 
+              not?null:
             <View style={{flexDirection:'row',flexWrap:'wrap',margin:0,marginHorizontal:10,justifyContent:'center'}}>
+            
+
 
             <View style={{width:80,margin:7,alignItems:'center'}}>
                 <Text>MON</Text>
@@ -1068,6 +1249,7 @@ export default function Evaluvate() {
             </View>
             
                 </View>
+                }  
             </Animatable.View>
 
               
@@ -1182,6 +1364,7 @@ export default function Evaluvate() {
 
             </View>
             :
+            tab==4?
             health.userType=='Parent'?
             <View style={{alignItems:'center',marginTop:10}}>
             {/* <Text style={{marginBottom:2,fontSize:12}}>{current3} / {StressC.length}</Text> */}
@@ -1330,14 +1513,14 @@ export default function Evaluvate() {
             </Animatable.View>
             </View>
             :
-            <View style={{alignItems:'center',marginTop:10,marginRight:10}}>
+            <View style={{alignItems:'center',marginTop:20,marginRight:10}}>
             {/* <Text style={{marginBottom:2,fontSize:12}}>{current3} / {StressP.length}</Text> */}
             {StressP.map((item)=>
             // item.id==current3?
             <Animatable.View key={current} animation={'slideInRight'}>
                 <View style={{flexDirection:'row',width:windowWidth-35}}>
                     <Text style={{fontSize:16}}>{item.id<10?'0':''}{item.id}. </Text>
-                    <Text style={{fontSize:16}}>{item.title}</Text>                                
+                    <Text style={{fontSize:16,width:windowWidth-70}}>{item.title}</Text>                                
                 </View>
             {
               item.id==1?
@@ -1480,84 +1663,287 @@ export default function Evaluvate() {
 
             </Animatable.View>
               </View>
+
+              :
+              
+            <View style={{alignItems:'center',marginTop:15}}>
+            <Text style={{marginBottom:2,fontSize:12}}>{current3} / {Elimination.length}</Text>
+
+            {
+                Elimination.map((item)=>
+                    <View>
+                        {
+                            item.id==current3?
+                            <Animatable.View key={current3} animation={'slideInRight'}>
+                                <View style={{flexDirection:'row',width:windowWidth-35}}>
+                                    <Text style={{fontSize:16}}>{item.id<10?'0':''}{item.id}. </Text>
+                                    <Text style={{fontSize:16}}>{item.title}</Text>                                
+                                </View>
+
+                              
+                                {
+                                  item.id==1?
+                                  <View style={{flexDirection:'row',justifyContent:'space-evenly',padding:20}}>
+
+                                    <TouchableHighlight underlayColor={'rgba(107, 179, 51, 0.7)'} onPress={()=>{setE1('DAILY');setPoints(1)}} style={{padding:2,paddingHorizontal:10,borderColor:'#6bb333',borderWidth:2,borderRadius:20,margin:2,backgroundColor:e1=='DAILY'?'#6bb333':'#fff',}}>
+                                        <Text style={{color:e1=='DAILY'?'#fff':'#000'}}>DAILY</Text>                                                    
+                                    </TouchableHighlight>
+
+                                    <TouchableHighlight underlayColor={'rgba(107, 179, 51, 0.7)'} onPress={()=>{setE1('WEEKLY');setPoints(5)}} style={{padding:2,paddingHorizontal:10,borderColor:'#6bb333',borderWidth:2,borderRadius:20,margin:2,backgroundColor:e1=='WEEKLY'?'#6bb333':'#fff',}}>
+                                        <Text style={{color:e1=='WEEKLY'?'#fff':'#000'}}>WEEKLY</Text>                                                    
+                                    </TouchableHighlight>
+                                    
+                                    <TouchableHighlight underlayColor={'rgba(107, 179, 51, 0.7)'} onPress={()=>{setE1('OCCATIONALLY');setPoints(10)}} style={{padding:2,paddingHorizontal:10,borderColor:'#6bb333',borderWidth:2,borderRadius:20,margin:2,backgroundColor:e1=='OCCATIONALLY'?'#6bb333':'#fff',}}>
+                                        <Text style={{color:e1=='OCCATIONALLY'?'#fff':'#000'}}>OCCATIONALLY</Text>                                                    
+                                    </TouchableHighlight>
+
+                                  </View>
+                                  :
+                                  item.id==2?
+                                  <View style={{flexDirection:'row',justifyContent:'space-evenly',padding:20}}>
+
+                                    <TouchableHighlight underlayColor={'rgba(107, 179, 51, 0.7)'} onPress={()=>{setE2('hourly');setPoints(1)}} style={{padding:2,paddingHorizontal:10,borderColor:'#6bb333',borderWidth:2,borderRadius:20,margin:2,backgroundColor:e2=='hourly'?'#6bb333':'#fff',}}>
+                                        <Text style={{color:e2=='hourly'?'#fff':'#000'}}>Hourly</Text>                                                    
+                                    </TouchableHighlight>
+
+                                    <TouchableHighlight underlayColor={'rgba(107, 179, 51, 0.7)'} onPress={()=>{setE2('day');setPoints(5)}} style={{padding:2,paddingHorizontal:10,borderColor:'#6bb333',borderWidth:2,borderRadius:20,margin:2,backgroundColor:e2=='day'?'#6bb333':'#fff',}}>
+                                        <Text style={{color:e2=='day'?'#fff':'#000'}}>Once a day</Text>                                                    
+                                    </TouchableHighlight>
+                                    
+                                    <TouchableHighlight underlayColor={'rgba(107, 179, 51, 0.7)'} onPress={()=>{setE2('OCCATIONALLY');setPoints(10)}} style={{padding:2,paddingHorizontal:10,borderColor:'#6bb333',borderWidth:2,borderRadius:20,margin:2,backgroundColor:e2=='OCCATIONALLY'?'#6bb333':'#fff',}}>
+                                        <Text style={{color:e2=='OCCATIONALLY'?'#fff':'#000'}}>Occationally</Text>                                                    
+                                    </TouchableHighlight>
+
+                                  </View>
+                                  :
+                                  item.id==3?
+                                  <View style={{flexDirection:'row',justifyContent:'space-evenly',padding:20}}>
+
+                                    <TouchableHighlight underlayColor={'rgba(107, 179, 51, 0.7)'} onPress={()=>{setE3('2l');setPoints(1)}} style={{padding:2,paddingHorizontal:10,borderColor:'#6bb333',borderWidth:2,borderRadius:20,margin:2,backgroundColor:e3=='2l'?'#6bb333':'#fff',}}>
+                                        <Text style={{color:e3=='2l'?'#fff':'#000'}}>Above 2L</Text>                                                    
+                                    </TouchableHighlight>
+
+                                    <TouchableHighlight underlayColor={'rgba(107, 179, 51, 0.7)'} onPress={()=>{setE3('1l');setPoints(5)}} style={{padding:2,paddingHorizontal:10,borderColor:'#6bb333',borderWidth:2,borderRadius:20,margin:2,backgroundColor:e3=='1l'?'#6bb333':'#fff',}}>
+                                        <Text style={{color:e3=='1l'?'#fff':'#000'}}>1L</Text>                                                    
+                                    </TouchableHighlight>
+                                    
+                                    <TouchableHighlight underlayColor={'rgba(107, 179, 51, 0.7)'} onPress={()=>{setE3('less1l');setPoints(10)}} style={{padding:2,paddingHorizontal:10,borderColor:'#6bb333',borderWidth:2,borderRadius:20,margin:2,backgroundColor:e3=='less1l'?'#6bb333':'#fff',}}>
+                                        <Text style={{color:e3=='less1l'?'#fff':'#000'}}>Less than 1L</Text>                                                    
+                                    </TouchableHighlight>
+
+                                  </View>
+                                  :
+                                  item.id==4?
+                                  <View style={{flexDirection:'row',justifyContent:'space-evenly',padding:20}}>
+
+                                    <TouchableHighlight underlayColor={'rgba(107, 179, 51, 0.7)'} onPress={()=>{setE4('3-6');setPoints(1)}} style={{padding:2,paddingHorizontal:10,borderColor:'#6bb333',borderWidth:2,borderRadius:20,margin:2,backgroundColor:e4=='3-6'?'#6bb333':'#fff',}}>
+                                        <Text style={{color:e4=='3-6'?'#fff':'#000'}}>3-6 times a day</Text>                                                    
+                                    </TouchableHighlight>
+
+                                    <TouchableHighlight underlayColor={'rgba(107, 179, 51, 0.7)'} onPress={()=>{setE4('twice');setPoints(5)}} style={{padding:2,paddingHorizontal:10,borderColor:'#6bb333',borderWidth:2,borderRadius:20,margin:2,backgroundColor:e4=='twice'?'#6bb333':'#fff',}}>
+                                        <Text style={{color:e4=='twice'?'#fff':'#000'}}>twice a day</Text>                                                    
+                                    </TouchableHighlight>
+                                    
+                                    <TouchableHighlight underlayColor={'rgba(107, 179, 51, 0.7)'} onPress={()=>{setE4('once');setPoints(10)}} style={{padding:2,paddingHorizontal:10,borderColor:'#6bb333',borderWidth:2,borderRadius:20,margin:2,backgroundColor:e4=='once'?'#6bb333':'#fff',}}>
+                                        <Text style={{color:e4=='once'?'#fff':'#000'}}>once a day</Text>                                                    
+                                    </TouchableHighlight>
+
+                                  </View>
+                                  :
+                                  item.id==5?
+                                  <View style={{flexDirection:'row',justifyContent:'space-evenly',padding:20}}>
+
+                                    <TouchableHighlight underlayColor={'rgba(107, 179, 51, 0.7)'} onPress={()=>{setE5('1-2');setPoints(1)}} style={{padding:2,paddingHorizontal:10,borderColor:'#6bb333',borderWidth:2,borderRadius:20,margin:2,backgroundColor:e5=='1-2'?'#6bb333':'#fff',}}>
+                                        <Text style={{color:e5=='1-2'?'#fff':'#000'}}>1-2 times a day</Text>                                                    
+                                    </TouchableHighlight>
+
+                                    <TouchableHighlight underlayColor={'rgba(107, 179, 51, 0.7)'} onPress={()=>{setE5('2days');setPoints(5)}} style={{padding:2,paddingHorizontal:10,borderColor:'#6bb333',borderWidth:2,borderRadius:20,margin:2,backgroundColor:e5=='2days'?'#6bb333':'#fff',}}>
+                                        <Text style={{color:e5=='2days'?'#fff':'#000'}}>Once in 2 days</Text>                                                    
+                                    </TouchableHighlight>
+                                    
+                                    <TouchableHighlight underlayColor={'rgba(107, 179, 51, 0.7)'} onPress={()=>{setE5('3days');setPoints(10)}} style={{padding:2,paddingHorizontal:10,borderColor:'#6bb333',borderWidth:2,borderRadius:20,margin:2,backgroundColor:e5=='3days'?'#6bb333':'#fff',}}>
+                                        <Text style={{color:e5=='3days'?'#fff':'#000'}}>Once in 3 days</Text>                                                    
+                                    </TouchableHighlight>
+
+                                  </View>
+                                  :
+                                  item.id==6?
+                                  <View style={{flexDirection:'row',justifyContent:'space-evenly',padding:20}}>
+
+                                    <TouchableHighlight underlayColor={'rgba(107, 179, 51, 0.7)'} onPress={()=>{setE6('yes');setPoints(1)}} style={{padding:2,paddingHorizontal:10,borderColor:'#6bb333',borderWidth:2,borderRadius:20,margin:2,backgroundColor:e6=='yes'?'#6bb333':'#fff',}}>
+                                        <Text style={{color:e6=='yes'?'#fff':'#000'}}>Yes</Text>                                                    
+                                    </TouchableHighlight>
+
+                                    <TouchableHighlight underlayColor={'rgba(107, 179, 51, 0.7)'} onPress={()=>{setE6('no');setPoints(10)}} style={{padding:2,paddingHorizontal:10,borderColor:'#6bb333',borderWidth:2,borderRadius:20,margin:2,backgroundColor:e6=='no'?'#6bb333':'#fff',}}>
+                                        <Text style={{color:e6=='no'?'#fff':'#000'}}>No</Text>                                                    
+                                    </TouchableHighlight>
+
+                                  </View>
+                                  :
+                                  item.id==7?
+                                  <View style={{flexDirection:'row',justifyContent:'space-evenly',padding:20}}>
+
+                                    <TouchableHighlight underlayColor={'rgba(107, 179, 51, 0.7)'} onPress={()=>{setE7('7-9');setPoints(1)}} style={{padding:2,paddingHorizontal:10,borderColor:'#6bb333',borderWidth:2,borderRadius:20,margin:2,backgroundColor:e7=='7-9'?'#6bb333':'#fff',}}>
+                                        <Text style={{color:e7=='7-9'?'#fff':'#000'}}>7-9 hours</Text>                                                    
+                                    </TouchableHighlight>
+
+                                    <TouchableHighlight underlayColor={'rgba(107, 179, 51, 0.7)'} onPress={()=>{setE7('4-5');setPoints(5)}} style={{padding:2,paddingHorizontal:10,borderColor:'#6bb333',borderWidth:2,borderRadius:20,margin:2,backgroundColor:e7=='4-5'?'#6bb333':'#fff',}}>
+                                        <Text style={{color:e7=='4-5'?'#fff':'#000'}}>4-5 hours</Text>                                                    
+                                    </TouchableHighlight>
+                                    
+                                    <TouchableHighlight underlayColor={'rgba(107, 179, 51, 0.7)'} onPress={()=>{setE7('2-3');setPoints(10)}} style={{padding:2,paddingHorizontal:10,borderColor:'#6bb333',borderWidth:2,borderRadius:20,margin:2,backgroundColor:e7=='2-3'?'#6bb333':'#fff',}}>
+                                        <Text style={{color:e7=='2-3'?'#fff':'#000'}}>2-3 hours</Text>                                                    
+                                    </TouchableHighlight>
+
+                                  </View>
+                                  :
+                                  item.id==8?
+                                  <View key={e8key} style={{paddingVertical:10}}>
+
+                                    <TouchableHighlight underlayColor={'rgba(107, 179, 51, 0.7)'} onPress={()=>setElimintion8('1')} style={{padding:2,paddingHorizontal:10,borderColor:'#6bb333',borderWidth:2,borderRadius:20,margin:2,backgroundColor:e8.includes('1')?'#6bb333':'#fff',}}>
+                                        <Text style={{color:e8.includes('1')?'#fff':'#000'}}>01. Abdominal obesity</Text>                                                    
+                                    </TouchableHighlight>
+                                    
+                                    <TouchableHighlight underlayColor={'rgba(107, 179, 51, 0.7)'} onPress={()=>setElimintion8('2')} style={{padding:2,paddingHorizontal:10,borderColor:'#6bb333',borderWidth:2,borderRadius:20,margin:2,backgroundColor:e8.includes('2')?'#6bb333':'#fff',}}>
+                                        <Text style={{color:e8.includes('2')?'#fff':'#000'}}>02. Non Alcoholic Fatty Liver / Alcoholic fatty liver</Text>                                                    
+                                    </TouchableHighlight>
+
+                                    
+                                    <TouchableHighlight underlayColor={'rgba(107, 179, 51, 0.7)'} onPress={()=>setElimintion8('3')} style={{padding:2,paddingHorizontal:10,borderColor:'#6bb333',borderWidth:2,borderRadius:20,margin:2,backgroundColor:e8.includes('3')?'#6bb333':'#fff',}}>
+                                        <Text style={{color:e8.includes('3')?'#fff':'#000'}}>03. Type 11 Diabetes</Text>                                                    
+                                    </TouchableHighlight>
+
+                                    
+                                    <TouchableHighlight underlayColor={'rgba(107, 179, 51, 0.7)'} onPress={()=>setElimintion8('4')} style={{padding:2,paddingHorizontal:10,borderColor:'#6bb333',borderWidth:2,borderRadius:20,margin:2,backgroundColor:e8.includes('4')?'#6bb333':'#fff',}}>
+                                        <Text style={{color:e8.includes('4')?'#fff':'#000'}}>04. Coronary Artery Disease</Text>                                                    
+                                    </TouchableHighlight>
+
+                                    <TouchableHighlight underlayColor={'rgba(107, 179, 51, 0.7)'} onPress={()=>setElimintion8('5')} style={{padding:2,paddingHorizontal:10,borderColor:'#6bb333',borderWidth:2,borderRadius:20,margin:2,backgroundColor:e8.includes('5')?'#6bb333':'#fff',}}>
+                                        <Text style={{color:e8.includes('5')?'#fff':'#000'}}>05. Peripheral Artery Disease</Text>                                                    
+                                    </TouchableHighlight>
+
+                                    <TouchableHighlight underlayColor={'rgba(107, 179, 51, 0.7)'} onPress={()=>setElimintion8('6')} style={{padding:2,paddingHorizontal:10,borderColor:'#6bb333',borderWidth:2,borderRadius:20,margin:2,backgroundColor:e8.includes('6')?'#6bb333':'#fff',}}>
+                                        <Text style={{color:e8.includes('6')?'#fff':'#000'}}>06. Ischemic Stroke</Text>                                                    
+                                    </TouchableHighlight>
+
+
+                                    <TouchableHighlight underlayColor={'rgba(107, 179, 51, 0.7)'} onPress={()=>setElimintion8('7')} style={{padding:2,paddingHorizontal:10,borderColor:'#6bb333',borderWidth:2,borderRadius:20,margin:2,backgroundColor:e8.includes('7')?'#6bb333':'#fff',}}>
+                                        <Text style={{color:e8.includes('7')?'#fff':'#000'}}>07. Cancer </Text>                                                    
+                                    </TouchableHighlight>
+
+
+                                    <TouchableHighlight underlayColor={'rgba(107, 179, 51, 0.7)'} onPress={()=>setElimintion8('8')} style={{padding:2,paddingHorizontal:10,borderColor:'#6bb333',borderWidth:2,borderRadius:20,margin:2,backgroundColor:e8.includes('8')?'#6bb333':'#fff',}}>
+                                        <Text style={{color:e8.includes('8')?'#fff':'#000'}}>08. Arthritis</Text>                                                    
+                                    </TouchableHighlight>
+                                    
+                                    <TouchableHighlight underlayColor={'rgba(107, 179, 51, 0.7)'} onPress={()=>setElimintion8('9')} style={{padding:2,paddingHorizontal:10,borderColor:'#6bb333',borderWidth:2,borderRadius:20,margin:2,backgroundColor:e8.includes('9')?'#6bb333':'#fff',}}>
+                                        <Text style={{color:e8.includes('9')?'#fff':'#000'}}>09. Depression</Text>                                                    
+                                    </TouchableHighlight>
+                                    
+                                    <TouchableHighlight underlayColor={'rgba(107, 179, 51, 0.7)'} onPress={()=>setElimintion8('10')} style={{padding:2,paddingHorizontal:10,borderColor:'#6bb333',borderWidth:2,borderRadius:20,margin:2,backgroundColor:e8.includes('10')?'#6bb333':'#fff',}}>
+                                        <Text style={{color:e8.includes('10')?'#fff':'#000'}}>10. Hypertension</Text>                                                    
+                                    </TouchableHighlight>
+
+                                    
+                                    <TouchableHighlight underlayColor={'rgba(107, 179, 51, 0.7)'} onPress={()=>setElimintion8('11')} style={{padding:2,paddingHorizontal:10,borderColor:'#6bb333',borderWidth:2,borderRadius:20,margin:2,backgroundColor:e8.includes('11')?'#6bb333':'#fff',}}>
+                                        <Text style={{color:e8.includes('11')?'#fff':'#000'}}>11. PCOS (Polly cystic ovarian syndrome)</Text>                                                    
+                                    </TouchableHighlight>
+
+                                    
+                                    <TouchableHighlight underlayColor={'rgba(107, 179, 51, 0.7)'} onPress={()=>setElimintion8('12')} style={{padding:2,paddingHorizontal:10,borderColor:'#6bb333',borderWidth:2,borderRadius:20,margin:2,backgroundColor:e8.includes('12')?'#6bb333':'#fff',}}>
+                                        <Text style={{color:e8.includes('12')?'#fff':'#000'}}>12. Kidney Diseases</Text>                                                    
+                                    </TouchableHighlight>
+
+                                    <TouchableHighlight underlayColor={'rgba(107, 179, 51, 0.7)'} onPress={()=>setElimintion8('13')} style={{padding:2,paddingHorizontal:10,borderColor:'#6bb333',borderWidth:2,borderRadius:20,margin:2,backgroundColor:e8.includes('13')?'#6bb333':'#fff',}}>
+                                        <Text style={{color:e8.includes('13')?'#fff':'#000'}}>13. Retinopathy</Text>                                                    
+                                    </TouchableHighlight>
+                                    
+                                    <TouchableHighlight underlayColor={'rgba(107, 179, 51, 0.7)'} onPress={()=>setElimintion8('14')} style={{padding:2,paddingHorizontal:10,borderColor:'#6bb333',borderWidth:2,borderRadius:20,margin:2,backgroundColor:e8.includes('14')?'#6bb333':'#fff',}}>
+                                        <Text style={{color:e8.includes('14')?'#fff':'#000'}}>14. Cataract</Text>                                                    
+                                    </TouchableHighlight>
+
+                                    
+                                    <TouchableHighlight underlayColor={'rgba(107, 179, 51, 0.7)'} onPress={()=>setElimintion8('15')} style={{padding:2,paddingHorizontal:10,borderColor:'#6bb333',borderWidth:2,borderRadius:20,margin:2,backgroundColor:e8.includes('15')?'#6bb333':'#fff',}}>
+                                        <Text style={{color:e8.includes('15')?'#fff':'#000'}}>15. Demyelinating disease </Text>                                                    
+                                    </TouchableHighlight>
+
+                                    
+                                    <TouchableHighlight underlayColor={'rgba(107, 179, 51, 0.7)'} onPress={()=>setElimintion8('16')} style={{padding:2,paddingHorizontal:10,borderColor:'#6bb333',borderWidth:2,borderRadius:20,margin:2,backgroundColor:e8.includes('16')?'#6bb333':'#fff',}}>
+                                        <Text style={{color:e8.includes('16')?'#fff':'#000'}}>16. Foot ulcers</Text>                                                    
+                                    </TouchableHighlight>
+
+                                    <TouchableHighlight underlayColor={'rgba(107, 179, 51, 0.7)'} onPress={()=>setElimintion8('17')} style={{padding:2,paddingHorizontal:10,borderColor:'#6bb333',borderWidth:2,borderRadius:20,margin:2,backgroundColor:e8.includes('17')?'#6bb333':'#fff',}}>
+                                        <Text style={{color:e8.includes('17')?'#fff':'#000'}}>17. Parkinson</Text>                                                    
+                                    </TouchableHighlight>
+                                    
+                                    <TouchableHighlight underlayColor={'rgba(107, 179, 51, 0.7)'} onPress={()=>setElimintion8('18')} style={{padding:2,paddingHorizontal:10,borderColor:'#6bb333',borderWidth:2,borderRadius:20,margin:2,backgroundColor:e8.includes('18')?'#6bb333':'#fff',}}>
+                                        <Text style={{color:e8.includes('18')?'#fff':'#000'}}>18. Dementia</Text>                                                    
+                                    </TouchableHighlight>
+
+                                    
+                                    <TouchableHighlight underlayColor={'rgba(107, 179, 51, 0.7)'} onPress={()=>setElimintion8('19')} style={{padding:2,paddingHorizontal:10,borderColor:'#6bb333',borderWidth:2,borderRadius:20,margin:2,backgroundColor:e8.includes('19')?'#6bb333':'#fff',}}>
+                                        <Text style={{color:e8.includes('19')?'#fff':'#000'}}>19. Hemorrhoids</Text>                                                    
+                                    </TouchableHighlight>
+
+                                  </View>
+                                  :
+                                  null
+                                }
+                                
+                            </Animatable.View>
+                            :
+                            null
+                        }
+
+                    </View>
+                )
+            }           
+
+            <TouchableOpacity
+                style={{
+                  backgroundColor: 'red',
+                  borderRadius: 25,
+                  width: 100,
+                  padding: 7,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+                onPress={() =>
+                  elimination_of_toxins()
+                }>
+                <Text style={{color: 'white', alignItems: 'center'}}>
+                  Save
+                </Text>
+              </TouchableOpacity>
+
+
+            </View>
         }
 
 </ScrollView>
-
-{/* <Animatable.View key={tab} animation={'slideInUp'} style={{position:'absolute',bottom:0,flexDirection:'row',width:windowWidth,alignItems:'center',justifyContent:'space-evenly',backgroundColor:'#fff',padding:basic==null || contact==null?0:10,elevation:20}}>
-
- {
-   tab==1?
-          basic==null || contact==null?
-          null
-          :
-          <View style={{alignItems:'center',justifyContent:'space-evenly',width:windowWidth,flexDirection:'row'}}>
-            <TouchableHighlight style={[buttons.continuebtn,{marginTop:0,backgroundColor:'#fff'}]}>
-          <View>
-              <Text style={{color:'white',fontSize:16}}>Next</Text>
-          </View>
-      </TouchableHighlight>
-      <TouchableHighlight style={[buttons.continuebtn,{marginTop:0,backgroundColor:'#fff'}]}>
-          <View>
-              <Text style={{color:'white',fontSize:16}}>Next</Text>
-          </View>
-      </TouchableHighlight>
-          <TouchableHighlight underlayColor={'#6bb333'} style={[buttons.continuebtn,{marginTop:0}]} onPress={()=>nextTab()}>
-              <View>
-                  <Text style={{color:'#000',fontSize:16}}>Next</Text>
-              </View>
-          </TouchableHighlight>
-          </View>
-   :
-<View style={{flexDirection:'row',width:windowWidth,alignItems:'center',justifyContent:'space-evenly'}}>
-{
-        current>=2?
-        <TouchableHighlight underlayColor={'#6bb333'} style={[buttons.continuebtn,{marginTop:0}]} onPress={()=>savefoodCunsumptionsBack()}>
-            <View>
-                <Text style={{color:'#000',fontSize:16}}>Back</Text>
-            </View>
-        </TouchableHighlight>
-        :
-        <TouchableHighlight style={[buttons.continuebtn,{marginTop:0,backgroundColor:'#fff'}]}>
-            <View>
-                <Text style={{color:'white',fontSize:16}}>Next</Text>
-            </View>
-        </TouchableHighlight>
-    }
-    
-    <TouchableHighlight underlayColor={'#6bb333'} style={[buttons.continuebtn,{marginTop:0,color:'#000'}]} onPress={()=>savefoodCunsumptions()}>
-        <View>
-            <Text style={{fontSize:16,color:'#000'}}>Continue</Text>
-        </View>
-    </TouchableHighlight>
-    
-    {
-        current>=35?
-        <TouchableHighlight underlayColor={'#6bb333'} style={[buttons.continuebtn,{marginTop:0}]} onPress={()=>nextTab()}>
-            <View>
-                <Text style={{color:'#000',fontSize:16}}>Next</Text>
-            </View>
-        </TouchableHighlight>
-        :
-        <TouchableHighlight style={[buttons.continuebtn,{marginTop:0,backgroundColor:'#fff'}]}>
-            <View>
-                <Text style={{color:'white',fontSize:16}}>Next</Text>
-            </View>
-        </TouchableHighlight>
-        
-    }
-    </View>
- }   
-
-    
-
-</Animatable.View> */}
 
         
         <Animatable.View duration={500} style={buttons.float} animation={'zoomIn'}>
           {
           tab==1?
+          health.userType=='Parent'?
           basic==null || contact==null?
+          null
+          :
+          <TouchableOpacity onPress={()=>{nextTab()}}>
+            <View style={{flexDirection:'row',justifyContent:'center', alignItems:'center',padding:5,paddingHorizontal:10}}>
+              <Text style={{fontSize:17}}>Next</Text>
+              <Ionicons
+                    name="chevron-forward"
+                    size={20}
+                    color="black"
+                    style={{paddingLeft:5,marginRight:-5}}
+                />
+            </View>
+            
+          </TouchableOpacity>
+          :
+          basic==null?
           null
           :
           <TouchableOpacity onPress={()=>{nextTab()}}>
@@ -1609,6 +1995,23 @@ export default function Evaluvate() {
           :
           tab==4?
           stressQ == null?
+          null
+          :
+          <TouchableOpacity onPress={()=>{nextTab()}}>
+            <View style={{flexDirection:'row',justifyContent:'center', alignItems:'center',padding:5,paddingHorizontal:10}}>
+              <Text style={{fontSize:17}}>Next</Text>
+              <Ionicons
+                    name="chevron-forward"
+                    size={20}
+                    color="black"
+                    style={{paddingLeft:5,marginRight:-5}}
+                />
+            </View>
+            
+          </TouchableOpacity>
+          :
+          tab==5?
+          elemination == null?
           null
           :
           <TouchableOpacity onPress={()=>{navigation.navigate('Select')}}>

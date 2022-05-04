@@ -24,5 +24,10 @@ export const EveluationType = [
       title: 'Stress',
       subtitle:'Please give approximately correct answers for acurate evaluation.',
     },
+    {
+      id:'5',
+      title: 'Elimination of toxins',
+      subtitle:'Please give approximately correct answers for acurate evaluation.',
+    },
     
   ]

@@ -1,5 +1,5 @@
 import React, { useEffect, useState ,useRef} from "react";
-import {TouchableHighlight, Text, View, Dimensions} from 'react-native';
+import {TouchableHighlight, Text, View, Dimensions, ActivityIndicator} from 'react-native';
 import Modal from 'react-native-modal';
 import {buttons, styles} from '../styles/Styles'
 
@@ -36,7 +36,10 @@ const ResponseModal = ({
     >
         <View style={{backgroundColor:headerColor,height:50,width:windowWidth-40,borderTopRightRadius:10,borderTopLeftRadius:10,marginBottom:-10,zIndex:2,alignItems:'center',justifyContent: 'center',}} >
             {/* <Text style={{color:'white',fontSize:17}}>{title}</Text> */}
-            {title=='Error'?
+            {title=='Please wait'?
+            <ActivityIndicator color={'#6bb333'} size={35} />
+            :
+            title=='Error'?
             <Ionicons 
                 name="close-circle-outline" 
                 size={35} 

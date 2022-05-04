@@ -84,6 +84,7 @@ function CustomDrawerContent(props) {
       storeUserData([])
       props.navigation.navigate('Welcome')
       health.setUser([])
+      health.backgroundStop()
     }
   // const getImages =()=>{
       
@@ -118,9 +119,9 @@ function CustomDrawerContent(props) {
     .finally(() => {});
   
   }
-  useEffect(() => {
-    getName()
-  });
+  // useEffect(() => {
+  //   getName()
+  // });
 
   return (
     <DrawerContentScrollView {...props} contentContainerStyle={{flex:1,justifyContent:'space-between'}}>
@@ -245,9 +246,10 @@ export default function MyDrawer() {
       const jsonValue = await AsyncStorage.getItem('user')
       
         return jsonValue != null ?
+        [health.backgroundStart(),
         JSON.parse(jsonValue).position==4?
         setScreen(<LoggedDrawer/>):
-        setScreen(<UnLoggedDrawer/>)
+        setScreen(<UnLoggedDrawer/>)]
         // var value = JSON.stringify(jsonValue)
         // console.log("json value "+JSON.parse(jsonValue).position)
       
@@ -384,6 +386,13 @@ function LoggedDrawer() {
       }} 
       />
 
+    {/* <Drawer.Screen 
+        name="Login" 
+        component={LoginStack}    
+        options={{ drawerLabel: 'Login' ,
+        drawerIcon: ({ focused, color, size }) => <AntDesign color={color} size={20} name={'login'} />
+      }}
+      /> */}
     <Drawer.Screen 
         name="Login" 
         component={LoginStack}    

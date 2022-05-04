@@ -67,6 +67,8 @@ export default function Avatar() {
             health.setUser(data)
             storeUserData(data)
             navigation.navigate('profile')
+            health.getName()
+            health.getBMI()
             // console.log('Success:', data);
           })
           .catch(error => {

@@ -83,8 +83,8 @@ export default function LoadingScreen () {
         //       )}
         //    )
         // setContacts(array)
-        setGames(json)
-        console.log(json)
+        health.setGames(json)
+        // console.log(json)
         })
         .catch((error) => console.error(error))
         .finally(() => {setRefreshing(false)});
@@ -105,7 +105,7 @@ export default function LoadingScreen () {
       //       )}
       //    )
       // setContacts(array)
-      setRequests(json)
+      health.setRequests(json)
       // console.log(json)
       })
       .catch((error) => console.error(error))
@@ -131,6 +131,7 @@ export default function LoadingScreen () {
             // navigation.navigate('profile')
             console.log('Success:', data);
             getData()
+            getGameData()
            //  setRequests(data)
            if(response=='yes'){
               Message('Nice','#6bb333','You Join game '+challengeId,'Start Walking','');
@@ -233,7 +234,7 @@ export default function LoadingScreen () {
                 color="black" 
               
              />    */}
-             <Text style={{backgroundColor:'red',color:'white',width:17,height:17,borderRadius:25,textAlignVertical:'center',textAlign:'center',fontSize:12,marginBottom:-10,zIndex:6}}>{requests.length}</Text>
+             <Text style={{backgroundColor:'red',color:'white',width:17,height:17,borderRadius:25,textAlignVertical:'center',textAlign:'center',fontSize:12,marginBottom:-10,zIndex:6}}>{health.requests.length}</Text>
              <Text style={{color:"#6bb333",backgroundColor:"rgba(255,255,255,0.8)",padding:5,paddingHorizontal:10,borderRadius:20}}>Requests</Text>
             {/* </View> */}
             
@@ -343,11 +344,11 @@ export default function LoadingScreen () {
                 refreshing==true?
                 null
                 :
-                games.length==0?
+                health.games.length==0?
                      null
                      
                      :
-                     games.map((rq)=>
+                     health.games.map((rq)=>
                         
                       <TouchableOpacity onPress={()=>navigation.navigate('Home',{challengId:rq.challengId})} key={rq.id} style={{backgroundColor: 'white',paddingHorizontal:15,paddingVertical:10,borderRadius:10,flexDirection:'row',alignItems:'center',justifyContent:'space-between',borderWidth:1,borderColor:'white',margin:10,elevation:3}}>
                      
@@ -376,7 +377,7 @@ export default function LoadingScreen () {
       
 <SwipeablePanel {...panelProps} isActive={isPanelActive} style={{zIndex:3,elevation:20,padding: 20,}}>
                   <View>
-                  {requests.length==0?
+                  {health.requests.length==0?
                   <View style={{alignItems:'center'}}>
                     <MaterialIcons 
                             name="error-outline" 
@@ -386,7 +387,7 @@ export default function LoadingScreen () {
                      <Text style={{fontSize:17,color:'#e25b5b',textAlign:'center'}}>No Challenges Found</Text>
                      </View>
                      :
-                        requests.map((rq)=>
+                     health.requests.map((rq)=>
                         
                       <View key={rq.id} style={{backgroundColor: 'rgba(255, 255, 255,0.5)',paddingHorizontal:15,paddingVertical:10,width:'90%',borderRadius:10,flexDirection:'row',alignItems:'center',justifyContent:'space-between',borderWidth:1,borderColor:'white',marginBottom:10}}>
                      

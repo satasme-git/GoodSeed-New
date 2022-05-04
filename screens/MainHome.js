@@ -57,10 +57,10 @@ export default function Details() {
   const getPersentage = () =>{
     var heartHeight = (windowWidth/2.5)-7
     var now =((health.steps*100)/6000).toFixed(1)
-    setPercentage(((health.steps*100)/6000).toFixed(1))
+    health.setPercentage(((health.steps*100)/6000).toFixed(1))
     setKey(key+1)
 
-    setHeight((now/100)*heartHeight)
+    health.setHeight((now/100)*heartHeight)
   }
 
 
@@ -178,11 +178,11 @@ export default function Details() {
     }
     
     useEffect(() => {
-      getData()
-      getImages()
-      getSleptData()
-      getPersentage()
-      getName()
+      // getData()
+      // getImages()
+      // getSleptData()
+      // getPersentage()
+      // getName()
       // countSteps()
       // toggleBackground()
       
@@ -246,6 +246,15 @@ export default function Details() {
              /> 
              
              {
+          health.loading?
+          <TouchableOpacity 
+          style={[buttons.profileBitton,{marginRight:10,backgroundColor:'rgba(255,255,255,0.5)'}]} 
+          >
+          <View >
+          <Image style={buttons.profileBitton} source={{uri:health.propic}}  />
+          </View>
+        </TouchableOpacity>
+          :     
           health.propic!=null?
           <TouchableOpacity 
                 style={[buttons.profileBitton,{marginRight:10,backgroundColor:'rgba(255,255,255,0.5)'}]} 
@@ -273,6 +282,8 @@ export default function Details() {
           {/* <Background> */}
           <ScrollView>
           <View style={{alignItems:'center'}}>
+
+            
             <LinearGradient 
               colors={['#6bb333','#6bb333', '#438e05']} 
               style={[styles.heartBg]}>
@@ -295,15 +306,18 @@ export default function Details() {
                 <View style={[styles.heartempty]} >
                 <Image source={require('../assets/heartNew.png')} style={[styles.heart,{tintColor:'white'}]} />
                 {
-                  percentage==0?
-                  <View key={key} onLayout={()=>getPersentage()}></View>
-                  :
-              <Text style={{position:'absolute',top:30,fontSize:35,color:'white'}}>{percentage}%</Text>
+                health.loading?
+                  <Text style={{position:'absolute',top:30,fontSize:35,color:'white'}}>--</Text>
+                :
+                health.percentage==0?
+                  <Text style={{position:'absolute',top:30,fontSize:35,color:'white'}}>0.0%</Text>
+                :
+                  <Text style={{position:'absolute',top:30,fontSize:35,color:'white'}}>{health.percentage}%</Text>
                 }
                 
                   
                   <Image source={require('../assets/watering2.gif')} style={{height:20,width:'100%',tintColor:'#72ff00',opacity:0.6}}/>
-                  <View style={{backgroundColor:'#72ff00',height:height,width:'100%',opacity:0.6}} />
+                  <View style={{backgroundColor:'#72ff00',height:health.height,width:'100%',opacity:0.6}} />
                 </View>
               </MaskedView>
 
@@ -311,7 +325,13 @@ export default function Details() {
                 <TouchableOpacity style={buttons.homebuttons}>
                   <View style={{flexDirection:'row',alignItems:'center'}}>
                     <FontAwesome5 name={'walking'} size={17} color={'#6bb333'}/>
-                  <Text style={{fontSize:16,color:'#6bb333'}}>  {health.steps}</Text>
+                    {
+                      health.loading?
+                      <Text style={{fontSize:16,color:'#6bb333'}}>  -- </Text>
+                      :
+                      <Text style={{fontSize:16,color:'#6bb333'}}>  {health.steps}</Text>
+                    }
+                  
                   </View>
                 </TouchableOpacity>
 
@@ -319,8 +339,11 @@ export default function Details() {
                 <View style={{flexDirection:'row',alignItems:'center'}}>
                     <MaterialCommunityIcons name={'power-sleep'} size={17}  color={'#6bb333'}/>
                   {
+                    health.loading?
+                    <Text style={{fontSize:16,color:'#6bb333'}}> -- </Text>
+                    :
                     health.sleep==''?
-                    <View onLayout={()=>getSleptData()}></View>
+                    <View onLayout={()=>health.getSleptData()}></View>
                     :
                     <Text style={{fontSize:16,color:'#6bb333'}}> {health.sleep} </Text>
                   }
@@ -332,8 +355,11 @@ export default function Details() {
                   <View style={{flexDirection:'row',alignItems:'center'}}>
                     <MaterialCommunityIcons name={'glass-pint-outline'} size={17} color={'#6bb333'}/>
                   {
+                  health.loading?
+                  <Text style={{fontSize:16,color:'#6bb333'}}>  -- </Text>
+                  :
                     health.glasses==0?
-                    <View onLayout={()=>getData()}></View>
+                    <View onLayout={()=>health.getElimination()}></View>
                     :
                     <Text style={{fontSize:16,color:'#6bb333'}}>  {health.glasses}</Text>
                   }
@@ -351,7 +377,7 @@ export default function Details() {
                   style={{backgroundColor:'#6bb333',marginHorizontal:5,marginVertical:5,borderRadius:15,width:windowWidth-30,justifyContent:'space-between',alignSelf:'flex-start',alignItems:'center',flexDirection:'row',padding:12}} 
                   onPress={()=>{navigation.navigate(item.screen)}}>
                     <View style={{flexDirection:'row',alignItems:'center'}}>
-                  <Image source={item.png} style={{width:40,height:40,tintColor:'white',margin:5,resizeMode:'contain'}} />
+                  <Image source={item.png} style={{width:35,height:35,tintColor:'white',margin:5,resizeMode:'contain'}} />
                     <View style={{width:'70%'}}>
                     <Text style={{color:'white',paddingHorizontal:5,fontSize:17}}>{item.title}</Text>
                     <Text style={{color:'white',paddingHorizontal:5,fontSize:10}}>{item.desc}</Text>

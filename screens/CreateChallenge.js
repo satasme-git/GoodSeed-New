@@ -7,7 +7,7 @@ import { HealthContext } from '../context/Context';
 import RBSheet from "react-native-raw-bottom-sheet";
 import Contacts from "react-native-contacts";
 import ResponseModal from '../components/ResponseModal';
-
+import * as Animatable from 'react-native-animatable';
 
 import { AvatarImages } from '../styles/AvatarImages';
 import { Background } from '../styles/Background';
@@ -26,6 +26,7 @@ import {
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 import { ScrollView } from 'react-native-gesture-handler';
+import { SwipeablePanel } from 'rn-swipeable-panel';
 
 import {LevelData} from '../styles/LevelData'
 
@@ -42,12 +43,16 @@ export default function CreateChallenge() {
     const [contacts, setContacts] = useState([]);
     const [logins, setLogins] = useState([]);
     const [players, setPlayers] = useState([health.user.id]);
+    const [not, setNot] = useState([]);
     const [loading, setLoading] = useState(true);
+
+    const [group, setGroup] = useState(true);
 
     const [target, setTarget] = useState(1000);
     const [challengId, setChallengId] = useState(0);
     
     const [key, setKey] = useState(0);
+    const [key2, setKey2] = useState(1000);
 
     const [modalView, setModelView] = useState(false);
 
@@ -65,9 +70,28 @@ export default function CreateChallenge() {
       // getLogins()
       // setKey(1)
       generateChallengeId()
-   },[]);
+   },[]);   
 
-   
+  const [isPanelActive, setIsPanelActive] = useState(false);
+  const openPanel = () => {
+   setIsPanelActive(true);
+ };
+
+ const closePanel = () => {
+   setIsPanelActive(false);
+ }; 
+
+ const [panelProps, setPanelProps] = useState({
+   fullWidth: true,
+   showCloseButton: true,
+   noBackgroundOpacity:false,
+   closeRootStyle:{backgroundColor:'gray',width: 20,height:20,},
+   closeIconStyle:{width: 10},
+   // noBar:true,
+   onClose: () => closePanel(),
+   onPressCloseButton: () => closePanel(),
+   // ...or any prop you want
+ });
 
    const generateChallengeId =()=>{
     var v = Date.now().toString();
@@ -78,23 +102,35 @@ export default function CreateChallenge() {
    const arrayPush = (id)=>{
        
     var array = players
-    
+    var array2 = not
     array.push(id)
+    array2.push(id)
     setPlayers(array)
+    setNot(array2)
     console.log(array)
    }
 
 
 
    const createChallenge = () => {
+      Message('Please wait','#fff','','','')
+      setModelView(true)
+      // var arr =JSON.stringify(players)
+   //    let not  = players.filter(function(item) {
+   //       return item !== health.user.id
+   //   })
+     console.log(not,players)
+   //   var arr = ;
     const formData = new FormData()
 
     formData.append('host_id', health.user.id);
     formData.append('players', JSON.stringify(players));
     formData.append('challengId', challengId);
     formData.append('target', target);
+    formData.append('not', JSON.stringify(not));
 
-    players.length==1?
+    if(group==true){
+      players.length==1?
       Message('Error','#e25b5b','Add Atleast 1 Friend','Try Again','')
     :
     fetch(BaseUrl.BASE_URL+'/api/challenge/', {
@@ -109,7 +145,27 @@ export default function CreateChallenge() {
       })
       .catch(error => {
         console.log('Error:', formData);
+        Message('Error','#e25b5b','Something went wrong','Try Again','')
       });
+    }
+    else{
+      fetch(BaseUrl.BASE_URL+'/api/challenge/', {
+         method: 'POST',
+         body: formData,
+       })
+         .then(response => response.json())
+         .then(data => {
+           // navigation.navigate('profile')
+           console.log('Success:', data);
+           Message('Nice','#6bb333','You Created Challenge Successfully','Start Walking','');
+            health.getGameData(health.user.id)
+         })
+         .catch(error => {
+           console.log('Error:', formData);
+           Message('Error','#e25b5b','Something went wrong','Try Again','')
+         });
+    }
+
 
   };
 
@@ -156,7 +212,6 @@ export default function CreateChallenge() {
       setMessage(ms),
       setButtonText(bt)
       setSubTitle(st)
-      setModelView(true)
     }
 
    const addContact = () => {
@@ -193,9 +248,9 @@ export default function CreateChallenge() {
         }
     }
     return (
-      <SafeAreaView  style={[styles.container,{backgroundColor:'#f4f4f4 '}]} onLayout={()=>{requestContactsPermission()}}>
+      <SafeAreaView  style={[styles.container,{backgroundColor:'#fff '}]} onLayout={()=>{requestContactsPermission()}}>
          <StatusBar backgroundColor={'#6bb333'} barStyle={'light-content'} />
-         <View style={[styles.header,{backgroundColor:'#6bb333',padding:0,flexDirection:'column',height:185,borderBottomLeftRadius:25,borderBottomRightRadius:25}]}>
+         <View style={[styles.header,{backgroundColor:'#6bb333',padding:0,flexDirection:'column',height:185,borderBottomLeftRadius:25,borderBottomRightRadius:25,zIndex:1}]}>
              <View style={{flexDirection:'row',justifyContent:'space-between',alignItems:'center',alignSelf:'flex-start',width:windowWidth}}>
              <Ionicons 
                 name="arrow-back" 
@@ -245,6 +300,8 @@ export default function CreateChallenge() {
                   }
               </View>
                </View>
+
+
           </View>
           
           {/* <Background> */}
@@ -253,18 +310,37 @@ export default function CreateChallenge() {
 {/* <ScrollView style={{marginHorizontal: 0}}
 // contentContainerStyle={{flexGrow:1,alignItems:'center',justifyContent:'center'}}
 > */}
-   <View style={{flex:1,justifyContent:'space-between'}}>
+   <View style={{flex:1,justifyContent:'space-between',backgroundColor:'white',zIndex:-1}}>
                <View style={{flex:1,alignItems:'center',justifyContent:'flex-start'}}>
-               <View style={{backgroundColor: 'rgba(255, 255, 255,0.7)',marginTop:70,paddingHorizontal:15,paddingVertical:10,width:'90%',borderRadius:10,flexDirection:'row',alignItems:'center',justifyContent:'space-between'}}>
+               {/* <View style={{backgroundColor: 'rgba(255, 255, 255,0.7)',marginTop:70,paddingHorizontal:15,paddingVertical:10,width:'90%',borderRadius:10,flexDirection:'row',alignItems:'center',justifyContent:'space-between'}}>
                
                
                  
-               </View>
+               </View> */}
                {/* <View style={{paddingVertical:50}}>
                    <Text style={{fontSize:17}}>Challenge Id  {challengId}</Text>
                </View> */}
 
-               <View style={{backgroundColor: '#6bb333',marginVertical:10,paddingHorizontal:15,paddingVertical:10,width:'90%',borderRadius:10,flexDirection:'row',alignItems:'center',justifyContent:'space-between',marginTop:110}}>
+               <View style={{flexDirection:'row',marginTop:180,justifyContent:'space-evenly',width:windowWidth,zIndex:1,backgroundColor:'white',padding:10,paddingTop:20}}>
+                  
+                  <TouchableOpacity onPress={()=>{setGroup(true);setKey2(key2+1)}} style={{backgroundColor:group?'#6bb333':'white',borderWidth:2,alignSelf:'flex-end',paddingVertical:5,paddingHorizontal:20,borderRadius:20,borderColor:'#6bb333'}}>
+                     <View>
+                        <Text style={{fontSize:16,color:!group?'black':'white'}}>Group</Text>
+                     </View>
+                  </TouchableOpacity>
+
+                  <TouchableOpacity onPress={()=>{setGroup(false);setKey2(key2+1)}} style={{backgroundColor:group?'white':'#6bb333',borderWidth:2,alignSelf:'flex-end',paddingVertical:5,paddingHorizontal:20,borderRadius:20,borderColor:'#6bb333'}}>
+                     <View>
+                        <Text style={{fontSize:16,color:!group?'white':'black'}}>Individual</Text>
+                     </View>
+                  </TouchableOpacity>
+
+               </View>
+
+               {
+                  group?
+                  <Animatable.View key={key2} animation={'fadeInDown'} duration={300} style={{flex:1,alignItems:'center',justifyContent:'flex-start',width:windowWidth,zIndex:1}}>
+               <View style={{backgroundColor: '#6bb333',marginVertical:10,paddingHorizontal:15,paddingVertical:10,width:'90%',borderRadius:10,flexDirection:'row',alignItems:'center',justifyContent:'space-between'}}>
                <View>
                   <Text style={{fontSize:16,alignSelf:'center',color:'white'}}>Add Friends</Text>
                   <View style={{flexDirection:'row',alignSelf:'flex-start',paddingVertical:5}}>              
@@ -281,7 +357,10 @@ export default function CreateChallenge() {
                   }
                   </View> 
                </View>   
-               <TouchableOpacity onPress={()=>refRBSheet.current.open()} style={{backgroundColor:'#fff',paddingHorizontal:20,paddingVertical:5,borderRadius:30,alignItems:'center',justifyContent:'center'}}>
+               <TouchableOpacity 
+               // onPress={()=>refRBSheet.current.open()}
+               onPress={()=>openPanel()} 
+               style={{backgroundColor:'#fff',paddingHorizontal:20,paddingVertical:5,borderRadius:30,alignItems:'center',justifyContent:'center'}}>
                            <Text style={{fontSize:16,alignSelf:'center',color:'#6bb333'}}>Add</Text>
                 </TouchableOpacity>
                  
@@ -304,6 +383,12 @@ export default function CreateChallenge() {
                 </View>
 
                 </View>
+                </Animatable.View>
+                :
+                null
+                }
+
+
                </View>
 
                   <View style={{marginBottom:15,alignItems:'center'}}>
@@ -313,6 +398,7 @@ export default function CreateChallenge() {
                 </View>
 
                {/* <Image source={require('../assets/run.png')} style={{height:160,resizeMode:'contain',margin:15}} /> */}
+               
                <RBSheet
                ref={refRBSheet}
                closeOnDragDown={true}
@@ -329,7 +415,7 @@ export default function CreateChallenge() {
                }}
                closeOnPressBack={true}
                animationType={'slide'}
-               closeOnPressMask={true}
+               // closeOnPressMask={true}
             >
 
                <Text style={{color:'black',fontSize:20,textAlign:'center'}}>Friends You Know</Text>
@@ -406,6 +492,8 @@ export default function CreateChallenge() {
                </ScrollView>
             </RBSheet>
 
+
+
             <ResponseModal 
                 view={modalView}
                 title={title}
@@ -445,8 +533,83 @@ export default function CreateChallenge() {
                 />
               
                   </View>
-
-
+                  {/* <View style={{zIndex:1}}> */}
+<SwipeablePanel onClose={()=>{setIsPanelActive(false),setTimeout(() => {setIsPanelActive(true)}, 100)}} onlySmall={false}  smallPanelHeight={windowHeight/2} {...panelProps} isActive={isPanelActive} style={{zIndex:5,elevation:20,paddingHorizontal: 20,}}>
+                  <Text style={{color:'black',fontSize:20,textAlign:'center'}}>Friends You Know</Text>
+               <ScrollView style={{marginBottom:35}}>
+               <View style={{backgroundColor:'white',width:'100%',paddingHorizontal:20,paddingVertical:20,borderTopLeftRadius:50,borderTopRightRadius:50,minHeight:200}}>
+                  {/* <Text style={{width: '90%',paddingVertical:10,fontSize:20}}></Text> */}
+                  
+                  {
+                  contacts == []?
+                  <Text>No Friends Found </Text>
+                  :
+                  loading==true?
+                  <View style={{flex:1}}>
+                     <DotIndicator color={'rgb(107, 179, 51)'} size={7}/>
+                  </View>
+                  :
+                     contacts.map((con,index)=>
+                     <View key={index} style={{backgroundColor:'rgba(107, 179, 51,0.1)',width:'100%',padding:5,paddingVertical:10,margin:2,borderRadius:5,flexDirection:'row',alignItems:'center',justifyContent:'space-between'}}>
+                        {/* <Text>{con.avatar}</Text> */}
+                        <View style={{flexDirection:'row',alignItems:'center'}}>
+                        {con.avatar==null?
+                           <View key={1} style={{backgroundColor:'rgba(0,0,0,0.2)',width: 27,height:27,borderRadius:25,marginHorizontal:7}} />
+                           :
+                           AvatarImages.map((av)=>
+                           
+                              av.id==con.avatar?
+                              <Image key={av.id} source={av.png} style={{width: 27,height:27,borderRadius:25,marginHorizontal:7}} />
+                              :null
+                           )
+                        }
+                        
+                        <Text style={{fontSize:16}}>{con.displayName}</Text>
+                        </View>
+                            
+                         {/* { 
+                         players==[]?<TouchableOpacity onPress={()=>arrayPush(con.id)} style={{backgroundColor:'rgb(107, 179, 51)',paddingHorizontal:15,paddingVertical:5,marginRight:5,borderRadius:20}}>
+                            <View>
+                            <Text style={{color:'white'}}>Invite</Text>
+                            </View>
+                        </TouchableOpacity>
+                        :
+                         players.map((pl)=>
+                         pl==con.id? */}
+                         {
+                            players.includes(con.id)?
+                           //  <TouchableOpacity onPress={()=>arrayPush(con.id)}>
+                              <View style={{backgroundColor:'gray',paddingHorizontal:15,paddingVertical:5,marginRight:5,borderRadius:20}}>
+                                 <Text style={{color:'white'}}>Invite sent</Text>
+                              </View>
+                           // </TouchableOpacity>
+                            :
+                            <TouchableOpacity key={key} onPress={()=>{arrayPush(con.id),setKey(key+1)}} style={{backgroundColor:'rgb(107, 179, 51)',paddingHorizontal:15,paddingVertical:5,marginRight:5,borderRadius:20}}>
+                              <View>
+                                 <Text style={{color:'white'}}>Invite</Text>
+                              </View>
+                           </TouchableOpacity>
+                         }
+                         {/* <TouchableOpacity onPress={()=>arrayPush(con.id)} style={{backgroundColor:'rgb(107, 179, 51)',paddingHorizontal:15,paddingVertical:5,marginRight:5,borderRadius:20}}>
+                            <View>
+                            <Text style={{color:'white'}}>Invite</Text>
+                            </View>
+                        </TouchableOpacity> */}
+                         {/* ) */}
+                             
+                             
+                     {/* }     */}
+                    
+                       
+                     </View>
+                     )
+                  }
+                  
+                  </View>
+               </ScrollView>
+     </SwipeablePanel>
+     {/* </View> */}
+                  
                   {/* </ScrollView> */}
                   
             {/* </ScrollView> */}

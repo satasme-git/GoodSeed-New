@@ -1,5 +1,5 @@
 import React, { useState , useEffect , useContext, useRef , useMemo } from 'react';
-import { StatusBar, View , BackHandler , Dimensions,Text,Image,TouchableOpacity, ScrollView, LogBox } from 'react-native';
+import { StatusBar, View , BackHandler ,AppState, Dimensions,Text,Image,TouchableOpacity, ScrollView, LogBox } from 'react-native';
 import { useNavigation , DrawerActions ,useRoute } from '@react-navigation/native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { buttons, styles } from '../styles/Styles';
@@ -80,107 +80,72 @@ export default function Home() {
       // error reading value
     }
   }
-
+  const appState = useRef(AppState.currentState);
+  const [appStateVisible, setAppStateVisible] = useState(appState.current);
+ 
   useEffect(() => {
     getUserData()
     setTimeout(() => {setLoading(false)}, 1500)
 
     setTimeout(() => {navigation.navigate('LeaderBoard',{challengId:route.params.challengId})}, 19000)
-    // // setTimeout(() => {refRBSheet.current.open()}, 9000)
-
-    // getData()
-    // getWinData()
-    // getUser()
     
-  },[]);
+    var sound3 = new Sound(require('../assets/sound/drum5.mp3'),
+    (error, sound) => {
+      if (error) {
+        // alert('error' + error.message);
+        return;
+      }
+      sound3.play(() => {
+        // sound3.setVolume(1)
+        sound3.release();
+      });
+      setTimeout(() => {
+        sound3.play(() => {
+          // sound3.setVolume(1)
+          sound3.release();
+        });}, 1000)
 
-  const getData = () => {
-    var array =[]
-    fetch(BaseUrl.BASE_URL+'/api/LeaderBoard/'+route.params.challengId)
-    .then((response) => response.json())
-    .then((json) => {
-    setUsers(json)
-    // console.log(json)
-    })
-    .catch((error) => console.error(error))
-    .finally(() => {});
- 
-  }
-  const getWinData = () => {
-    var array =[]
-    fetch(BaseUrl.BASE_URL+'/api/Win/'+route.params.challengId+"/"+next)
-    .then((response) => response.json())
-    .then((json) => {
+      const subscription = AppState.addEventListener("change", nextAppState => {
+        if (
+          appState.current.match(/inactive|background/) &&
+          nextAppState === "active"
+        ) {
+          console.log("App has come to the foreground!");
+        }
+        appState.current = nextAppState;      
+        nextAppState=='background'?
+        sound3.setVolume(0)
+        :
+        setTimeout(() => {sound3.setVolume(0)}, 18000)
 
-    setWins(json)
-    // console.log(json)
-      // if(json.win !=0){
-      //   setModalVisible(true)
-      // }
-    })
-    .catch((error) => console.error(error))
-    .finally(() => {});
- 
-  }
 
-  
-  const getUser = () => {
-    var array =[]
-    fetch(BaseUrl.BASE_URL+'/api/Login/'+health.user.id)
-    .then((response) => response.json())
-    .then((json) => {
+      
+        // setAppStateVisible(appState.current);
+        console.log("AppState", appState.current);
 
-      health.setUser(json)
-    // setWins(json)
-    // console.log(json)
-      // if(json.win !=0){
-      //   setModalVisible(true)
-      // }
-    })
-    .catch((error) => console.error(error))
-    .finally(() => {});
- 
-  }
 
-  const [panelProps, setPanelProps] = useState({
-    fullWidth: true,
-    showCloseButton: false,
-    noBackgroundOpacity:true,
-    noBar:true,
-    // onClose: () => closePanel(),
-    onPressCloseButton: () => closePanel(),
-    // ...or any prop you want
-  });  
-  
-  const [panelProps2, setPanelProps2] = useState({
-    fullWidth: true,
-    showCloseButton: false,
-    noBackgroundOpacity:true,
-    noBar:true,
-    onClose: () => closePanel(),
-    onPressCloseButton: () => closePanel(),
-    // ...or any prop you want
-  });
+      });
 
-  const [isPanelActive, setIsPanelActive] = useState(false);
+        setTimeout(() => {sound3.setVolume(0)}, 18000)
+    });
 
-  const [isPanelActive2, setIsPanelActive2] = useState(false);
 
-  const openPanel = () => {
-    setIsPanelActive(true);
-  };
+    const backAction = () => {
+      return true;
+    };
+    
 
-  const closePanel = () => {
-    setIsPanelActive(false);
-  };  
-  
-  const openPanel2 = () => {
-    setIsPanelActive2(true);
-  };
+    const backHandler = BackHandler.addEventListener(
+      "hardwareBackPress",
+      backAction
+    );
 
-  const closePanel2 = () => {
-    setIsPanelActive2(false);
-  };
+    return () => {
+      backHandler.remove()
+      sound3.setVolume(0)
+    };
+    
+  },[])
   
     // const modifier = Math.min(1, Math.max(-1, pivotPoint));
 
@@ -321,68 +286,65 @@ export default function Home() {
     };
 
     const playSound=()=>{
-      var sound3 = new Sound(require('../assets/sound/drum5.mp3'),
-      (error, sound) => {
-        if (error) {
-          // alert('error' + error.message);
-          return;
-        }
-        sound3.play(() => {
-          // sound3.setVolume(1)
-          sound3.release();
-        });
+
+
+
+      // var sound3 = new Sound(require('../assets/sound/drum5.mp3'),
+      // (error, sound) => {
+      //   if (error) {
+      //     // alert('error' + error.message);
+      //     return;
+      //   }
+      //   sound3.play(() => {
+      //     // sound3.setVolume(1)
+      //     sound3.release();
+      //   });
+
+      //   const subscription = AppState.addEventListener("change", nextAppState => {
+      //     if (
+      //       appState.current.match(/inactive|background/) &&
+      //       nextAppState === "active"
+      //     ) {
+      //       console.log("App has come to the foreground!");
+      //     }
+      //     appState.current = nextAppState;      
+      //     nextAppState=='background'?
+      //     sound3.setVolume(0)
+      //     :
+      //     setTimeout(() => {sound3.setVolume(0)}, 18000)
+
 
         
-        setTimeout(() => {sound3.setVolume(0)}, 18000)
+      //     // setAppStateVisible(appState.current);
+      //     console.log("AppState", appState.current);
 
-        // if (this.state.checked2==true){
-        //   sound3.setVolume(0);
-        // }
-        // else if(this.state.checked2==false){
-        //   sound3.setVolume(0.1);
-        // }
-      });
+
+      //   });
+
+      //     setTimeout(() => {sound3.setVolume(0)}, 18000)
+      // });
     }
-    // const bottomSheetRef = useRef(null);
 
-    // variables
-    // const snapPoints = useMemo(() => ['25%', '50%'], []);
-  
-    // callbacks
-    // const handleSheetChanges = useCallback((index: number) => {
-    //   console.log('handleSheetChanges', index);
-    // }, []);
-
+    
     return (
       <View style={styles.container}>
         {/* <View style={[styles.header,{justifyContent:'space-between',backgroundColor:'red',position: 'absolute',zIndex:10,elevation:7,}]}> */}
           <View style={{position: 'absolute',zIndex:10,top:10,left:10}}>
-            <TouchableHighlight style={{borderRadius:50}} underlayColor={'rgba(107, 179, 51,0.7)'} onPress={() => navigation.goBack()}>  
+            {/* <TouchableHighlight style={{borderRadius:50}} underlayColor={'rgba(107, 179, 51,0.7)'} onPress={() => navigation.goBack()}>  
              <Ionicons 
                 name="arrow-back" 
                 size={30} 
                 color="black" 
                 
              />
-            </TouchableHighlight>
+            </TouchableHighlight> */}
             {/* <Text>{route.params.challengId}</Text> */}
             
           </View>
-
-
-          {/* <View style={{position: 'absolute',zIndex:10,top:10,right:10}}>
-            <TouchableHighlight style={{borderRadius:50}} underlayColor={'rgba(107, 179, 51,0.7)'} onPress={() => navigation.goBack()}>  
-             
-            </TouchableHighlight>
-            <Text style={{backgroundColor:'white',color:'#6bb333',paddingVertical:2,paddingHorizontal:7,borderRadius:20,fontSize:15}}>Target - {win.target} steps</Text>
-            
-          </View> */}
-          
-            
-             
-          {/* </View> */}
         {loading==true ?(
-        <View style={{position:'absolute',height:windowHeight,width:windowWidth,zIndex:1,top:0,backgroundColor: 'white',elevation:6,justifyContent:'center',alignItems:'center'}} onLayout={()=>setTimeout(() => {playSound()}, 1000)}>
+        <View style={{position:'absolute',height:windowHeight,width:windowWidth,zIndex:1,top:0,backgroundColor: 'white',elevation:6,justifyContent:'center',alignItems:'center'}} 
+        // onLayout={()=>setTimeout(() => {playSound()}, 1000)}
+        >
           <View style={{alignSelf:'center',alignItems:'center',justifyContent: 'center',height:120,width:120}}>
             <Image source={require('../assets/logoicon.png')} style={{tintColor:'#000',width:70,height:70}} />
             <DotIndicator color={'#000'} size={7}/>

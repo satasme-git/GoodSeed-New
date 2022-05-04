@@ -332,8 +332,17 @@ export default function Login() {
                     :
                     buttonText=='Ok'?
                     <TouchableHighlight underlayColor={'#DDDDDD'} style={buttons.modalButton} 
-                    onPress={()=>{setModelView(false);
+                    onPress={()=>{
+                      setModelView(false); 
+                      health.backgroundStart();
+                      health.getPersentage()
+                      health.getElimination()
+                      health.getSleptData()
+                      // health.getSleptData()
+                      health.getImages()
+
                       parseInt(health.user.position)==4?
+                      
                       navigation.navigate('HomeDrawer') 
                       :
                       navigation.navigate('Profile2',{email:health.user.email}) 
@@ -342,7 +351,15 @@ export default function Login() {
                     </TouchableHighlight> 
                     :
                     <TouchableHighlight underlayColor={'#DDDDDD'} style={buttons.modalButton} 
-                    onPress={()=>{setModelView(false);navigation.navigate('ContactNumber') 
+                    onPress={()=>{
+                      setModelView(false);
+                      health.backgroundStart();
+                      health.getPersentage()
+                      health.getElimination()
+                      health.getSleptData()
+                      // health.getSleptData()
+                      health.getImages()
+                      navigation.navigate('ContactNumber') 
                     }}>
                         <Text style={buttons.text}>{buttonText}</Text>
                     </TouchableHighlight>   

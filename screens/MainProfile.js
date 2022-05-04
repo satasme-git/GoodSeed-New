@@ -19,7 +19,11 @@ import RNFetchBlob from 'rn-fetch-blob'
 import LinearGradient from 'react-native-linear-gradient';
 
 
+import { SwipeablePanel } from 'rn-swipeable-panel';
+
 import StickyParallaxHeader from 'react-native-sticky-parallax-header'
+
+import Modal from "react-native-modal";
 
 // import * as ImagePicker from "react-native-image-picker"
 // import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
@@ -49,12 +53,35 @@ export default function MainProfile() {
 
     const [filePath, setFilePath] = useState({});
 
-    const [singleFile, setSingleFile] = useState('');
+    const [color, setColor] = useState('black');
+    const [color2, setColor2] = useState('#fff');
 
     const [percentage, setPercentage] = useState(0);
 
     const BaseUrl = require('../styles/BaseUrl');
 
+    const [panelProps, setPanelProps] = useState({
+      fullWidth: true,
+      showCloseButton: true,
+      noBackgroundOpacity:true,
+      closeRootStyle:{backgroundColor:'gray',width: 20,height:20,},
+      closeIconStyle:{width: 10},
+      // noBar:true,
+      onClose: () => closePanel(),
+      onPressCloseButton: () => closePanel(),
+      // ...or any prop you want
+    });
+    
+    const [isPanelActive, setIsPanelActive] = useState(true);
+    
+    const openPanel = () => {
+      setIsPanelActive(true);
+      console.log(isPanelActive)
+    };
+  
+    const closePanel = () => {
+      setIsPanelActive(false);
+    };
     const getImages =()=>{
       
       fetch(BaseUrl.BASE_URL+'/api/imageUpload/'+health.user.id)
@@ -153,24 +180,27 @@ export default function MainProfile() {
 
   const getBMI =()=>{
       
-   fetch(BaseUrl.BASE_URL+'/api/BasicDetails/'+health.user.member_id)
+   fetch(BaseUrl.BASE_URL+'/api/bmi/'+health.user.member_id)
    .then((response) => response.json())
    .then((json) => {
-      console.log(json.bmi)
-      setBmi(json.bmi.toFixed(1)+'0')
+      console.log(json)
+      setBmi(parseFloat(json.bmi).toFixed(1))
       // health.setProPic(BaseUrl.BASE_URL+'/assets/profile_pics/'+json[1].image)
       // console.log(BaseUrl.BASE_URL+'/assets/profile_pics/'+json[1].image)
 
-      json.bmi < 18.5?
-      setBmilevel('UNDERWEIGHT'):
-      json.bmi < 24.9?
-      setBmilevel('NORMAL'):
-      json.bmi < 29.9?
-      setBmilevel('OVERWEIGHT'):
-      json.bmi < 34.9?
-      setBmilevel('OBESE')
+      json.bmi < 18.5?(
+      setBmilevel('UNDERWEIGHT'),setColor('#26abe4'),setColor2('#5ac9f4'))
       :
-      setBmilevel('EXTREMELY OBESE')
+      json.bmi < 24.9?(
+      setBmilevel('NORMAL'),setColor('#6b7f38'),setColor2('#9eb33a'))
+      :
+      json.bmi < 29.9?(
+      setBmilevel('OVERWEIGHT'),setColor('#eeab2a'),setColor2('#f9c90d'))
+      :
+      json.bmi < 34.9?(
+      setBmilevel('OBESE'),setColor('#e9752c'),setColor2('#f38a2f'))
+      :
+      (setBmilevel('EXTREMELY OBESE'),setColor('#ec1f26'),setColor2('#f85e63'))
 
       // console.log(json.toF.bmiixed(1)+'0')
    })
@@ -184,8 +214,8 @@ export default function MainProfile() {
 
     useEffect(() => {
       getImages()
-      getBMI()
-      getPersentage()
+      health.getBMI()
+      health.getPersentage()
     }, []);
     
     const scroll = useRef(new Animated.Value(0)).current;
@@ -265,11 +295,11 @@ export default function MainProfile() {
                              <Text style={{fontSize:11,color:'gray'}}>Risk Points</Text> 
                            </View>
                            <View style={{alignItems:'center'}}>
-                             <Text style={{fontSize:17,fontWeight:'700'}}>{bmi}</Text> 
+                             <Text style={{fontSize:17,fontWeight:'700',color:color}}>{health.bmi}</Text> 
                              <Text style={{fontSize:11,color:'gray'}}>BMI</Text> 
                            </View>
                            <View style={{alignItems:'center'}}>
-                             <Text style={{fontSize:17,fontWeight:'700'}}>{percentage}%</Text> 
+                             <Text style={{fontSize:17,fontWeight:'700'}}>{health.percentage}%</Text> 
                              <Text style={{fontSize:11,color:'gray'}}>Daily Task</Text> 
                            </View>
                            
@@ -343,12 +373,12 @@ export default function MainProfile() {
             <View>
             
                <LinearGradient 
-              colors={['#6bb333', '#366011']} 
+              colors={[health.color2, health.color]} 
               style={{borderRadius:20,marginTop:10,padding:10,marginHorizontal:10}}>
             <View style={{flexDirection:'row',justifyContent:'space-between'}}>
-               <Text style={{color:'#dfd',fontSize:17}}>Your BMI  Index {<Text style={{color:'#fff',fontSize:19,fontWeight:'bold'}}>{bmi}</Text>}</Text>
+               <Text style={{color:'#dfd',fontSize:17}}>Your BMI  Index {<Text style={{color:'#fff',fontSize:19,fontWeight:'bold'}}>{health.bmi}</Text>}</Text>
                
-               <Text style={{color:'#6bb333',backgroundColor:'#fff',fontSize:17,paddingHorizontal:10,borderRadius:50}}>{bmilevel}</Text>
+               <Text style={{color:health.color,backgroundColor:'#fff',fontSize:16,paddingHorizontal:10,borderRadius:50}}>{health.bmilevel}</Text>
             </View>
             <View style={{flexDirection:'row',justifyContent:'space-evenly',backgroundColor:'rgba(255,255,255,0.5)',padding:5,marginTop:10,borderRadius:10}}>
                <View>
@@ -411,7 +441,7 @@ export default function MainProfile() {
                </View>
             </View>
             
-            <RBSheet
+            {/* <RBSheet
                ref={refRBSheet}
                closeOnDragDown={true}
                closeOnPressMask={false}
@@ -427,8 +457,47 @@ export default function MainProfile() {
                }}
                closeOnPressBack={true}
                animationType={'slide'}
-            >
+            > */}
+            {/* <SwipeablePanel {...panelProps} isActive={isPanelActive} style={{zIndex:3,padding: 20,}}> */}
+            
+               {/* </SwipeablePanel> */}
+            {/* </RBSheet> */}
 
+
+          {/* </View> */}
+
+
+          {/* </ScrollView> */}
+
+          </StickyParallaxHeader>
+             
+          {/* <Modal 
+          isVisible={isPanelActive}
+          animationIn={'fadeInUp'}
+          animationOut={'fadeOutDown'}
+         //  onBackButtonPress={()=>setModalVisible2(false)}
+         //  onBackdropPress={()=>setModalVisible2(false)}
+          avoidKeyboard={true}
+          style={{width:windowWidth,height:windowHeight,alignItems:'center',alignSelf:'center',justifyContent:'flex-end',bottom:0}}
+        > */}
+            <RBSheet
+                           ref={refRBSheet}
+                           closeOnDragDown={true}
+                           closeOnPressMask={true}
+                           customStyles={{
+                              wrapper: {
+                                 backgroundColor: "rgba(0,0,0,0.15)",
+                                 zIndex:1
+                              },
+                              draggableIcon: {
+                                 backgroundColor: "#000"
+                              },
+                              container:styles.bottomSheet
+                           }}
+                           closeOnPressBack={true}
+                           animationType={'slide'}
+                        >
+               <View>
                <Text style={{color:'black',fontSize:20,textAlign:'center'}}>Transformation Progress</Text>
                
                <View style={{flexDirection:'row',justifyContent: 'space-evenly',margin:10}}>
@@ -523,15 +592,9 @@ export default function MainProfile() {
 
                </View>
 
-            </RBSheet>
-
-
-          {/* </View> */}
-
-
-          {/* </ScrollView> */}
-
-          </StickyParallaxHeader>
+               </View>
+               {/* </Modal> */}
+               </RBSheet>
       </View>
     );
   }

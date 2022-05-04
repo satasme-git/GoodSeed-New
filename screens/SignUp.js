@@ -56,6 +56,27 @@ export default function SignUp() {
         formData.append('password', key);
         formData.append('re_password', rp);
 
+        if (em==''){
+            setEVal(true)
+        }
+        if (cn==''){
+            setCVal(true)
+        }
+        if (key==''){
+            setPVal(true)
+        }
+        if (rp==''){
+            setRPVal(true)
+        }
+        if (rp != key){
+            setRPVal(true)
+            setPVal(true)
+        }
+        if(em !='' && key!='' && rp!='' && cn!='' && rp == key )
+        {
+            setModelView(true)
+            Message('Please wait','#fff','','','');
+            
         fetch(BaseUrl.BASE_URL+'/api/signUp', {
             method: 'POST', // or 'PUT'
             body: formData
@@ -68,100 +89,101 @@ export default function SignUp() {
             // if(data='already'){
             //     Message('Error','red','User Already Registerd','Try Again')
             // } 
-            if(data.email=='' && data.password=='' && data.re_password=='' && data.contact=='' ){
-                setEVal(true)
-                setPVal(true)
-                setRPVal(true)
-                setCVal(true)
-            }
-            else if (data.password=='' && data.re_password=='' && data.contact==''){
-                setEVal(false)
-                setPVal(true)
-                setRPVal(true)
-                setCVal(true)
-            }
-            else if (data.email=='' && data.re_password=='' && data.contact==''){
-                setEVal(true)
-                setPVal(false)
-                setRPVal(true)
-                setCVal(true)
-            }
-            else if (data.email=='' && data.password=='' && data.contact==''){
-                setEVal(true)
-                setPVal(true)
-                setRPVal(false)
-                setCVal(true)
-            }
-            else if (data.email=='' && data.password=='' && data.re_password==''){
-                setEVal(true)
-                setPVal(true)
-                setRPVal(true)
-                setCVal(false)
-            }
+            // if(data.email=='' && data.password=='' && data.re_password=='' && data.contact=='' ){
+            //     setEVal(true)
+            //     setPVal(true)
+            //     setRPVal(true)
+            //     setCVal(true)
+            // }
+            // else if (data.password=='' && data.re_password=='' && data.contact==''){
+            //     setEVal(false)
+            //     setPVal(true)
+            //     setRPVal(true)
+            //     setCVal(true)
+            // }
+            // else if (data.email=='' && data.re_password=='' && data.contact==''){
+            //     setEVal(true)
+            //     setPVal(false)
+            //     setRPVal(true)
+            //     setCVal(true)
+            // }
+            // else if (data.email=='' && data.password=='' && data.contact==''){
+            //     setEVal(true)
+            //     setPVal(true)
+            //     setRPVal(false)
+            //     setCVal(true)
+            // }
+            // else if (data.email=='' && data.password=='' && data.re_password==''){
+            //     setEVal(true)
+            //     setPVal(true)
+            //     setRPVal(true)
+            //     setCVal(false)
+            // }
             
-            else if (data.password=='' && data.re_password==''){
-                setEVal(false)
-                setPVal(true)
-                setRPVal(true)
-                setCVal(false)
-            }
-            else if (data.password=='' && data.contact==''){
-                setEVal(false)
-                setPVal(true)
-                setRPVal(false)
-                setCVal(true)
-            }
-            else if (data.email=='' && data.re_password==''){
-                setEVal(true)
-                setPVal(false)
-                setRPVal(true)
-                setCVal(false)
-            }
-            else if (data.contact=='' && data.re_password==''){
-                setEVal(false)
-                setPVal(false)
-                setRPVal(true)
-                setCVal(true)
-            }
-            else if (data.email=='' && data.password==''){
-                setEVal(true)
-                setPVal(true)
-                setRPVal(false)
-                setCVal(false)
-            }
-            else if (data.email=='' && data.contact==''){
-                setEVal(true)
-                setPVal(false)
-                setRPVal(false)
-                setCVal(true)
-            }
+            // else if (data.password=='' && data.re_password==''){
+            //     setEVal(false)
+            //     setPVal(true)
+            //     setRPVal(true)
+            //     setCVal(false)
+            // }
+            // else if (data.password=='' && data.contact==''){
+            //     setEVal(false)
+            //     setPVal(true)
+            //     setRPVal(false)
+            //     setCVal(true)
+            // }
+            // else if (data.email=='' && data.re_password==''){
+            //     setEVal(true)
+            //     setPVal(false)
+            //     setRPVal(true)
+            //     setCVal(false)
+            // }
+            // else if (data.contact=='' && data.re_password==''){
+            //     setEVal(false)
+            //     setPVal(false)
+            //     setRPVal(true)
+            //     setCVal(true)
+            // }
+            // else if (data.email=='' && data.password==''){
+            //     setEVal(true)
+            //     setPVal(true)
+            //     setRPVal(false)
+            //     setCVal(false)
+            // }
+            // else if (data.email=='' && data.contact==''){
+            //     setEVal(true)
+            //     setPVal(false)
+            //     setRPVal(false)
+            //     setCVal(true)
+            // }
 
-            else if (data.email==''){
-                setEVal(true)
-                setPVal(false)
-                setRPVal(false)
-                setCVal(false)
-            }
-            else if (data.password==''){
-                setEVal(false)
-                setPVal(true)
-                setRPVal(false)
-                setCVal(false)
-            }
-            else if (data.re_password==''){
-                setEVal(false)
-                setPVal(false)
-                setRPVal(true)
-                setCVal(false)
-            }
-            else if (data.contact==''){
-                setEVal(false)
-                setPVal(false)
-                setRPVal(false)
-                setCVal(true)
-            } 
+            // else if (data.email==''){
+            //     setEVal(true)
+            //     setPVal(false)
+            //     setRPVal(false)
+            //     setCVal(false)
+            // }
+            // else if (data.password==''){
+            //     setEVal(false)
+            //     setPVal(true)
+            //     setRPVal(false)
+            //     setCVal(false)
+            // }
+            // else if (data.re_password==''){
+            //     setEVal(false)
+            //     setPVal(false)
+            //     setRPVal(true)
+            //     setCVal(false)
+            // }
+            // else if (data.contact==''){
+            //     setEVal(false)
+            //     setPVal(false)
+            //     setRPVal(false)
+            //     setCVal(true)
+            // } 
 
-            else if(data=='already'){
+            // else 
+            if(data=='already'){
                 Message('Error','#e25b5b','User Already Registerd','Try Again','')
                 setEVal(false)
                 setPVal(false)
@@ -183,6 +205,7 @@ export default function SignUp() {
             console.log(error);
             })
         }
+        }
 
 
 
@@ -199,7 +222,7 @@ export default function SignUp() {
         setMessage(ms),
         setButtonText(bt)
         setSubTitle(st)
-        setModelView(true)
+        
       }
 
     const navigation = useNavigation();

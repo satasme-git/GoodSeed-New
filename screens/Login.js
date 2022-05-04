@@ -34,6 +34,7 @@ export default function Login() {
     const [pVal, setPVal] = useState(false);
 
     const [ps, setPS] = useState(true); 
+    const [loading, setLoading] = useState(false); 
      
     const [pView, setPView] = useState(false); 
 
@@ -51,9 +52,13 @@ export default function Login() {
         setMessage(ms),
         setButtonText(bt)
         setSubTitle(st)
-        setModelView(true)
+        // setModelView(true)
       }
 
+      const reset = ()=>{
+        setName('')
+        setPw('')
+      }
     const storeUserData = async (value) => {
     try {
         const jsonValue = JSON.stringify(value)
@@ -63,6 +68,9 @@ export default function Login() {
     }
     }
     const login = (em,key) =>{
+        setLoading(true)
+        Message('Please wait','#fff','','','');
+        setModelView(true)
         const formData = new FormData()
         // const data = { email: em,password: key,re_password:rp};
 
@@ -175,9 +183,20 @@ export default function Login() {
                     :
                     <TouchableHighlight underlayColor={'#DDDDDD'} style={buttons.modalButton} 
                     onPress={()=>{
+                    health.setLoading(true)
                     setModelView(false);
+                    health.backgroundStart();
+                    health.getPersentage()
+                    health.getElimination()
+                    health.getSleptData()
+                    // health.getSleptData()
+                    health.getImages()
+                    health.notificationConfig(health.user.id)
+                    health.getGameData(health.user.id)
+                    reset()
+                    // health.setLoading(false)
                     parseInt(health.user.position)==4?
-                        navigation.navigate('Tabs') 
+                        [navigation.navigate('Tabs'),health.getName(),health.getBMI()] 
                         :
                         // navigation.navigate('Profile2',{email:name}) 
                         navigation.navigate('UserType',{email:name}) 

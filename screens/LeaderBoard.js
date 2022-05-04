@@ -179,7 +179,7 @@ export default function Home() {
       <View style={styles.container}>
         {/* <View style={[styles.header,{justifyContent:'space-between',backgroundColor:'red',position: 'absolute',zIndex:10,elevation:7,}]}> */}
           <View style={{position: 'absolute',zIndex:10,top:10,left:10}}>
-            <TouchableHighlight style={{borderRadius:50}} underlayColor={'rgba(107, 179, 51,0.7)'} onPress={() => navigation.goBack()}>  
+            <TouchableHighlight style={{borderRadius:50}} underlayColor={'rgba(107, 179, 51,0.7)'} onPress={() => navigation.navigate('LoadingScreen')}>  
              <Ionicons 
                 name="arrow-back" 
                 size={30} 

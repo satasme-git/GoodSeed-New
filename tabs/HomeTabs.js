@@ -2,6 +2,7 @@ import * as React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
+import { HealthContext } from '../context/Context';
 
 const Tab = createMaterialBottomTabNavigator();
 
@@ -12,6 +13,7 @@ import Habbits from '../screens/Habbits'
 // const Tab = createBottomTabNavigator();
 
 export default function HomeTabs() {
+  const health = React.useContext(HealthContext);
   return (
 
     <Tab.Navigator
@@ -37,6 +39,7 @@ export default function HomeTabs() {
             tabBarIcon: ({ color, size }) => (
               <Ionicons name="game-controller-outline" color={color} size={25} />
             ),
+            tabBarBadge:health.requests.length==0?false:health.requests.length
         }}
     />
       <Tab.Screen name="Habbits" component={Habbits} 
