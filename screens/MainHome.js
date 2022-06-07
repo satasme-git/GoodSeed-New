@@ -187,7 +187,7 @@ export default function Details() {
       // toggleBackground()
       
     // }
-      
+      // health.getAsyncDailyData()
     
     },[]);
     

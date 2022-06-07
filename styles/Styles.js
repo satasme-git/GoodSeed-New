@@ -626,7 +626,55 @@ const styles = StyleSheet.create({
     margin:10
   },
   
+  summary: {
+    backgroundColor: 'white',
+    width: windowWidth-30,
+    // padding:15,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.22,
+    shadowRadius: 2.22,
+    
+    elevation: 3,
+    margin:15,
+    borderRadius:15,
+    flexDirection:'column',
+    alignItems:'flex-end',
+
+    paddingTop:15,
+    marginVertical:10
+    // justifyContent:'flex-end'
+  },
   
+  summarybtn: {
+    backgroundColor: 'white',
+    padding:5,
+    paddingHorizontal:10,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.22,
+    shadowRadius: 2.22,
+    
+    elevation: 3,
+    borderRadius:10,
+    flexDirection:'row',
+    alignItems:'center',
+    justifyContent:'space-between',
+    margin:7
+    // alignSelf:'flex-end'
+  },
+  hr:{
+    borderStyle: 'dashed',
+    borderWidth: 1,
+    borderRadius: 1,
+    width:'90%'
+  }
 });
 
 const buttons = StyleSheet.create({

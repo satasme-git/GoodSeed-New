@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "1096883138091",
+    "firebase_url": "https://goodseed-app-1621860475799-default-rtdb.firebaseio.com",
     "project_id": "goodseed-app-1621860475799",
     "storage_bucket": "goodseed-app-1621860475799.appspot.com"
   },
@@ -13,6 +14,22 @@
         }
       },
       "oauth_client": [
+        {
+          "client_id": "1096883138091-5j9gfplgf50s2a9qc6hggk44nil3teco.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.goodseed",
+            "certificate_hash": "1e42123e4187f486f09a991347b5cd4cb3a23f52"
+          }
+        },
+        {
+          "client_id": "1096883138091-uajos5gelm26gai63ler4dg0fc1s9hn6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.goodseed",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
         {
           "client_id": "1096883138091-4sk5e1iqngedcdec8kn6606obev8m77f.apps.googleusercontent.com",
           "client_type": 3
@@ -29,6 +46,13 @@
             {
               "client_id": "1096883138091-4sk5e1iqngedcdec8kn6606obev8m77f.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "1096883138091-c546j9horq6fv62g6n4of173337s2g8n.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "org.reactjs.native.example.GoodSeed"
+              }
             }
           ]
         }

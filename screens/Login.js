@@ -115,7 +115,7 @@ export default function Login() {
                 // navigation.navigate('SelectStack')
             })
             .catch((error) => {
-                
+                Message('Error','#e25b5b','Something went wrong','Try Again','');
                 console.error('Error:', error);
                 
             })   
@@ -187,16 +187,18 @@ export default function Login() {
                     setModelView(false);
                     health.backgroundStart();
                     health.getPersentage()
-                    health.getElimination()
-                    health.getSleptData()
+                    health.getElimination(health.user.id)
+                    health.getSleptData(health.user.id)
+                    health.getChallengeData(health.user.id)
                     // health.getSleptData()
-                    health.getImages()
+                    health.getImages(health.user.id)
                     health.notificationConfig(health.user.id)
                     health.getGameData(health.user.id)
+                    health.checkDockAvailable()
                     reset()
                     // health.setLoading(false)
                     parseInt(health.user.position)==4?
-                        [navigation.navigate('Tabs'),health.getName(),health.getBMI()] 
+                        [navigation.navigate('Tabs'),health.getName(health.user.member_id),health.getBMI(health.user.member_id)] 
                         :
                         // navigation.navigate('Profile2',{email:name}) 
                         navigation.navigate('UserType',{email:name}) 

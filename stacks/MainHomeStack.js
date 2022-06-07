@@ -7,6 +7,7 @@ import Sleeping from '../screens/Sleeping'
 import Illumination from '../screens/Illumination'
 import Meditation from '../screens/Meditation'
 import Step from '../screens/Step'
+import Summary from '../screens/Summary';
 
 
 const Stack = createStackNavigator();
@@ -61,6 +62,13 @@ export default function MyStack() {
         options={{
           headerShown: false,
         }}
+      />
+      
+      <Stack.Screen 
+        name="Summary" component={Summary}         
+        options={{
+          headerShown: false,
+        }} 
       />
     </Stack.Navigator>
   );

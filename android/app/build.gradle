@@ -134,8 +134,8 @@ android {
         applicationId "com.goodseed"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 6
-        versionName "1.0.2"
+        versionCode 8
+        versionName "1.0.4"
     }
     splits {
         abi {
@@ -201,7 +201,7 @@ dependencies {
 
     implementation 'com.facebook.fresco:animated-gif:2.0.0'
 
-    implementation 'com.google.firebase:firebase-analytics:17.3.0'
+    implementation 'com.google.firebase:firebase-analytics:18.0.2'
 
     implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.23'
     

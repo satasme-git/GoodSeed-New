@@ -1,7 +1,7 @@
 import React, { createContext, useState , useEffect , useRef } from "react";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 // import { GoogleSignin , GoogleSigninButton , statusCodes, } from '@react-native-google-signin/google-signin';
-
+import firestore from '@react-native-firebase/firestore';
 import BackgroundJob from 'react-native-background-actions';
 import { startCounter, stopCounter } from 'react-native-accurate-step-counter';
 import {
@@ -24,12 +24,14 @@ import PushNotification from "react-native-push-notification";
 export const HealthContext = createContext();
 
 import moment from 'moment';
+import { DailyData } from "../styles/DailyData";
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
 export const HealthProvider = ({ children }) => {
 
   const [user, setUser] = useState([]);
+  const [todayData, setTodayData] = useState(DailyData);
   const [userSteps, setUserSteps] = useState([]);
   const [state, setState] = useState("home");
   const [complete, setComplete] = useState(0);
@@ -55,7 +57,7 @@ export const HealthProvider = ({ children }) => {
   
   const [color, setColor] = useState('black');
   const [color2, setColor2] = useState('#fff');
-  const [games, setGames] = useState([]);
+  const [games, setGames] = useState(DailyData);
 
   const getData = async () => {
     setLoading(true)
@@ -80,7 +82,7 @@ export const HealthProvider = ({ children }) => {
       const value = await AsyncStorage.getItem('steps')
       if(value !== null) {
         setSteps(parseInt(value))
-        console.log(value)
+        // console.log(value)
         // value previously stored
       }
     } catch(e) {
@@ -94,7 +96,9 @@ export const HealthProvider = ({ children }) => {
       // saving error
     }
   }
-  const setStepCount = async (steps,ids) => {
+  const setStepCount = async (steps,ids,todayDatas) => {
+    const current = moment().format('H')
+    // var nowStep = todayData[current-1]
 
     const jsonValue = await AsyncStorage.getItem('user')
 
@@ -102,9 +106,10 @@ export const HealthProvider = ({ children }) => {
 
     formData.append('member_id', ids);
     formData.append('steps', steps);
+    formData.append('today', JSON.stringify(todayDatas));
 
     
-    // console.log('id = '+ids)
+    // console.log(JSON.parse(todayDatas[14]))
     
     fetch(BaseUrl.BASE_URL+'/api/steps/', {
       method: 'POST',
@@ -112,19 +117,21 @@ export const HealthProvider = ({ children }) => {
     })
       .then(response => response.json())
       .then(data => { 
-        console.log(data)
+        // console.log(data.today[current-1])
+        // setSteps(data.steps)
+        // setTodayData(JSON.parse(data.today))
       })
       .catch(error => { });
     
 
   };
-  const getElimination =()=>{
+  const getElimination =(id)=>{
 
-    fetch(BaseUrl.BASE_URL+'/api/Elimination/'+user.id)
+    fetch(BaseUrl.BASE_URL+'/api/Elimination/'+id)
     .then((response) => response.json())
     .then((json) => {
        // health.setProPic(BaseUrl.BASE_URL+'/assets/profile_pics/'+json[1].image)
-       console.log(json)
+      //  console.log(json)
        setGlasses(parseInt(json.glasses))
        // console.log(BaseUrl.BASE_URL+'/assets/profile_pics/'+json[1].image)
     })
@@ -133,9 +140,9 @@ export const HealthProvider = ({ children }) => {
 
   }
 
-  const getSleptData =()=>{
+  const getSleptData =(id)=>{
       
-    fetch(BaseUrl.BASE_URL+'/api/sleepData/'+user.id)
+    fetch(BaseUrl.BASE_URL+'/api/sleepData/'+id)
     .then((response) => response.json())
     .then((json) => {
       
@@ -161,22 +168,12 @@ export const HealthProvider = ({ children }) => {
     .finally(() => {});
 
   }
-  // const getName =()=>{
-      
-  //   fetch(BaseUrl.BASE_URL+'/api/ContactDetails/'+user.member_id)
-  //   .then((response) => response.json())
-  //   .then((json) => {
-  //      console.log(json.name)
-  //       setName(json.name)
-  //   })
-  //   .catch((error) => console.error(error))
-  //   .finally(() => {});
-  
-  // }
 
-  const getName =async()=>{
-    const jsonValue = await AsyncStorage.getItem('user')
-  fetch(BaseUrl.BASE_URL+'/api/ContactDetails/'+user.member_id)
+
+  const getName =async(member_id)=>{
+    // const jsonValue = await AsyncStorage.getItem('user')
+
+  fetch(BaseUrl.BASE_URL+'/api/ContactDetails/'+member_id)
   .then((response) => response.json())
   .then((json) => {
      console.log(json.name)
@@ -198,16 +195,16 @@ export const HealthProvider = ({ children }) => {
     setHeight((now/100)*heartHeight)
   }
 
-  const getImages = async () => {
-    const jsonValue = await AsyncStorage.getItem('user')
-    var id;
+  const getImages = async (id) => {
+    // const jsonValue = await AsyncStorage.getItem('user')
+    // var id;
 
-    if(jsonValue == null) {
-      id = user.id
-    }
-    else{
-      id = JSON.parse(jsonValue).id
-    }
+    // if(jsonValue == null) {
+    //   id = user.id
+    // }
+    // else{
+    //   id = JSON.parse(jsonValue).id
+    // }
 
     fetch(BaseUrl.BASE_URL+'/api/imageUpload/'+id)
     .then((response) => response.json())
@@ -222,17 +219,17 @@ export const HealthProvider = ({ children }) => {
 
   }
 
-  const getBMI = async ()=>{
+  const getBMI = async (member_id)=>{
 
-    const jsonValue = await AsyncStorage.getItem('user')
-    var member_id;
+    // const jsonValue = await AsyncStorage.getItem('user')
+    // var member_id;
 
-    if(jsonValue == null) {
-      member_id = user.member_id
-    }
-    else{
-       console.log(jsonValue)
-      member_id = JSON.parse(jsonValue).member_id
+    // if(jsonValue == null) {
+    //   member_id = user.member_id
+    // }
+    // else{
+    //    console.log(jsonValue)
+    //   member_id = JSON.parse(jsonValue).member_id
     
 
     fetch(BaseUrl.BASE_URL+'/api/bmi/'+member_id)
@@ -261,11 +258,12 @@ export const HealthProvider = ({ children }) => {
     .catch((error) => console.error(error))
     .finally(() => {setLoading(false)});
  
-  }}
+  // }
+}
 
-  const getChallengeData = () => {
+  const getChallengeData = (id) => {
     var array =[]
-    fetch(BaseUrl.BASE_URL+'/api/challenge/'+user.id)
+    fetch(BaseUrl.BASE_URL+'/api/challenge/'+id)
     .then((response) => response.json())
     .then((json) => {
     setRequests(json)
@@ -277,18 +275,18 @@ export const HealthProvider = ({ children }) => {
   }
 
   const getGameData =async (id) => {
-    const jsonValue = await AsyncStorage.getItem('user')
-    var array =[]
-    // setRefreshing(true)
-    var member_id;
+    // const jsonValue = await AsyncStorage.getItem('user')
+    // var array =[]
+    // // setRefreshing(true)
+    // var member_id;
 
-    if (id !==undefined){
-      member_id=id
-    }
-    else {
-      member_id = JSON.parse(jsonValue).id
-    }
-    fetch(BaseUrl.BASE_URL+'/api/games/'+member_id)
+    // if (id !==undefined){
+    //   member_id=id
+    // }
+    // else {
+    //   member_id = JSON.parse(jsonValue).id
+    // }
+    fetch(BaseUrl.BASE_URL+'/api/games/'+id)
     .then((response) => response.json())
     .then((json) => {
     setGames(json)
@@ -297,42 +295,81 @@ export const HealthProvider = ({ children }) => {
     .catch((error) => console.error(error))
     .finally(() => {});
   }
+  
+  const checkDockAvailable =()=>{
+    const doc = moment(new Date()).format('YYYY-MM-DD')
+    firestore()
+      .collection('steps')
+      .doc(doc)
+      .get()
+      .then(documentSnapshot => {
+        console.log('User exists: ', documentSnapshot.exists);
+    
+        if (documentSnapshot.exists) {
+          console.log('User data: ', documentSnapshot.data());
+        }
+        else{
+          createDoc(doc)
+        }
+      });
 
+
+  }
+
+  const createDoc = (doc)=>{
+    firestore()
+    .collection('steps')
+    .doc(doc)
+    .set({
+      [user.email]: 0,
+    })
+    .then(() => {
+      console.log('User added!');
+    });
+  }
+
+  const updateSteps =async (steps)=>{
+    checkDockAvailable()
+
+    const jsonValue = await AsyncStorage.getItem('user')
+    var array =[]
+    // setRefreshing(true)
+    var useremail;
+
+    if (user.email !==undefined){
+      useremail=user.email
+    }
+    else {
+      useremail = JSON.parse(jsonValue).email
+    }
+
+    const doc = moment(new Date()).format('YYYY-MM-DD')
+
+    firestore()
+    .collection('steps')
+    .doc(doc)
+    .update({
+      [useremail]: steps,
+    })
+    .then(() => {
+      console.log('User updated!');
+    });
+
+  }
   const appState = useRef(AppState.currentState);
   const [appStateVisible, setAppStateVisible] = useState(appState.current);
   
   useEffect(() => {
     setLoading(true)
     getData()
-    getImages()
-    getElimination()
-    getSleptData()
-    getName()
-    getBMI()
-    getChallengeData()
-    getGameData()
-    // setLoading(false)
-    // getSteps()
-    // backgroundStart()
-    // getStepData()
-    // getSteps()
-
-    const subscription = AppState.addEventListener("change", nextAppState => {
-      if (
-        appState.current.match(/inactive|background/) &&
-        nextAppState === "active"
-      ) {
-        console.log("App has come to the foreground!");
-      }
-
-      appState.current = nextAppState;
-      setAppStateVisible(appState.current);
-      console.log("AppState", appState.current);
-    });
-
-    // return () => {
-    //   subscription.remove();
-    // };
+    // getImages()
+    // getElimination()
+    // getSleptData()
+    // getName()
+    // getBMI()
+    // getChallengeData()
+    // getGameData()
+    // getPersentage()
     notificationConfig()
 
   }, []);
@@ -454,24 +491,27 @@ export const HealthProvider = ({ children }) => {
       var ids;
       var step2 =0;
       var step =0;
-      // var member =0;
+      var todayData = [];
+      
+    if (user.id !==undefined){
+      ids=user.id
+    }
+    else {
+      ids = JSON.parse(jsonValue).id
+    }
 
-     if(id == 0) {
-       ids = JSON.parse(jsonValue).id
-     }
-     else{
-       ids = user.id
-     }
-     console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>  "+ids+" <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<")
+    
  
         fetch(BaseUrl.BASE_URL+'/api/steps/'+ids)
          .then((response) => response.json())
          .then((json) => {
 
-           step2 = parseInt(json.steps)
-           step = parseInt(json.steps)
-          console.log(json)
-          setSteps(json.steps)
+            step2 = parseInt(json.steps)
+            step = parseInt(json.steps)
+
+            todayData =JSON.parse(json.today)
+            setTodayData(todayData)
+            setSteps(json.steps)
          })
          .catch((error) => console.error(error))
          .finally(() => {});
@@ -485,27 +525,24 @@ export const HealthProvider = ({ children }) => {
             default_delay: 150000000,
             cheatInterval: 3000,
             onStepCountChange: (stepCount) => {
+              const current = moment().format('H')
+              var nowStep = parseInt(todayData[current-1].height)
               step=(stepCount+step2) 
-              setStepCount(stepCount+step2,ids)
+              todayData[current-1].height=nowStep+1
+              // console.log(todayData[current-1])
+              setStepCount(stepCount+step2,ids,todayData)
+              updateSteps(stepCount+step2)
+              setSteps(step)
+              setTodayData(todayData)
+              storeData(step.toString())
             },
             onCheat: () => { }
           }
           startCounter(config);
-
-         console.log(BackgroundJob.isRunning(), delay)
-
+        
          for (let i = 0; BackgroundJob.isRunning(); i++) {
-     
-            //  console.log('Runned -> ', step);
-            //  setStepCount(step,ids)
-            //  storeData(step.toString())
-            //  setSteps(step)
-            //  await BackgroundJob.updateNotification({ taskDesc: step+ ' / 6000 Steps' ,progressBar:{max:6000,value:step} });
-            //  await sleep2(delay);
-
-            // setStepCount(step,ids)
-              storeData(step.toString())
-              setSteps(step)
+           
+              
               await BackgroundJob.updateNotification({ taskDesc: step+ ' / 6000 Steps' ,progressBar:{max:6000,value:step} });
               await sleep2(delay);
 
@@ -517,7 +554,7 @@ export const HealthProvider = ({ children }) => {
  const options = {
      taskName: 'Example',
      taskTitle: 'Keep Going!',
-     taskDesc: 'ExampleTask desc',
+     taskDesc: '0/0',
      taskIcon: {
          name: 'ic_notification',
          type: 'mipmap',
@@ -525,7 +562,7 @@ export const HealthProvider = ({ children }) => {
      color: '#6bb333',
      linkingURI: 'goodseed://screens/Step',
      parameters: {
-         delay: 1000,
+         delay: 2000,
      },
      progressBar: {
          max: 6000,
@@ -533,13 +570,13 @@ export const HealthProvider = ({ children }) => {
      },
  };
  
- function handleOpenURL(evt) {
-     console.log(evt.url);
-    //  Linking.openURL(evt.url)
-     // do something with the url
- }
+//  function handleOpenURL(evt) {
+//      console.log(evt.url);
+//     //  Linking.openURL(evt.url)
+//      // do something with the url
+//  }
  
- Linking.addEventListener('url', handleOpenURL);
+//  Linking.addEventListener('url', handleOpenURL);
 
   const backgroundStart = async () => {
     await BackgroundJob.start(taskRandom, options);
@@ -597,17 +634,22 @@ export const HealthProvider = ({ children }) => {
         setToken,
         games,
         setGames,
+        todayData,
+        setTodayData,
 
         getPersentage,
         backgroundStart,
         backgroundStop,
         getElimination,
         getSleptData,
+        getChallengeData,
         getName,
         getImages,
         getBMI,
         notificationConfig,
-        getGameData
+        getGameData,
+        checkDockAvailable
+        // getAsyncDailyData
       }}
     >
       {children}

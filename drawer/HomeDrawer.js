@@ -244,11 +244,23 @@ export default function MyDrawer() {
   const getData = async () => {
     try {
       const jsonValue = await AsyncStorage.getItem('user')
+      const user = JSON.parse(jsonValue)
       
         return jsonValue != null ?
-        [health.backgroundStart(),
-        JSON.parse(jsonValue).position==4?
-        setScreen(<LoggedDrawer/>):
+        [
+          health.backgroundStart(),
+          health.getImages(user.id),
+          health.getElimination(user.id),
+          health.getSleptData(user.id),
+          health.getChallengeData(user.id),
+          health.getGameData(user.id),
+          health.getPersentage(),
+
+        JSON.parse(jsonValue).position==4?[
+        setScreen(<LoggedDrawer/>),
+        health.getBMI(user.member_id),
+        health.getName(user.member_id)
+      ]:
         setScreen(<UnLoggedDrawer/>)]
         // var value = JSON.stringify(jsonValue)
         // console.log("json value "+JSON.parse(jsonValue).position)
